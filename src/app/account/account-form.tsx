@@ -142,13 +142,13 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
 
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Profile</CardTitle>
-          <CardDescription>This is how others will see you on the site.</CardDescription>
-        </CardHeader>
-        <Form {...profileForm}>
-          <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
+      <Form {...profileForm}>
+        <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Profile</CardTitle>
+              <CardDescription>This is how others will see you on the site.</CardDescription>
+            </CardHeader>
             <CardContent className="space-y-4">
               <FormField
                 control={profileForm.control}
@@ -179,7 +179,7 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                 )}
               />
             </CardContent>
-            <CardFooter className="border-t px-6 py-4 justify-between">
+            <CardFooter className="justify-between">
               <Button onClick={handleGenerateBackground} disabled={isGenerating || isPending} variant="outline" type="button">
                 {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                 Generate Background
@@ -189,17 +189,17 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                 Save Profile
               </Button>
             </CardFooter>
-          </form>
-        </Form>
-      </Card>
+          </Card>
+        </form>
+      </Form>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Links</CardTitle>
-          <CardDescription>Add, edit, and reorder your links.</CardDescription>
-        </CardHeader>
-        <Form {...linksForm}>
-          <form onSubmit={linksForm.handleSubmit(onLinksSubmit)}>
+      <Form {...linksForm}>
+        <form onSubmit={linksForm.handleSubmit(onLinksSubmit)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Links</CardTitle>
+              <CardDescription>Add, edit, and reorder your links.</CardDescription>
+            </CardHeader>
             <CardContent className="space-y-4">
               {fields.map((field, index) => (
                 <div key={field.id} className="flex items-center gap-2 group">
@@ -248,15 +248,15 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                 Add Link
               </Button>
             </CardContent>
-            <CardFooter className="border-t px-6 py-4 justify-end">
+            <CardFooter className="justify-end">
               <Button type="submit" disabled={isPending}>
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Save Links
               </Button>
             </CardFooter>
-          </form>
-        </Form>
-      </Card>
+          </Card>
+        </form>
+      </Form>
     </div>
   )
 }
