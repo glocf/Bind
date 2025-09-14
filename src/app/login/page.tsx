@@ -40,6 +40,12 @@ export default function LoginPage() {
             }
         })
     }
+
+    const handleDiscordSignIn = async () => {
+        startDiscordTransition(async () => {
+          await signInWithDiscord();
+        });
+    };
     
     return (
         <div className="flex flex-col min-h-screen bg-background">
@@ -59,13 +65,11 @@ export default function LoginPage() {
                                 </AlertDescription>
                             </Alert>
                         )}
-                        <form action={() => startDiscordTransition(async () => await signInWithDiscord())}>
-                             <Button type="submit" variant="outline" className="w-full group" disabled={isDiscordPending || isPasswordPending}>
-                                {isDiscordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                <DiscordIcon />
-                                Continue with Discord
-                            </Button>
-                        </form>
+                        <Button type="button" variant="outline" className="w-full group" disabled={isDiscordPending || isPasswordPending} onClick={handleDiscordSignIn}>
+                           {isDiscordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                           <DiscordIcon />
+                           Continue with Discord
+                       </Button>
 
                         <div className="my-4 flex items-center">
                             <div className="flex-grow border-t border-muted"></div>
@@ -82,7 +86,7 @@ export default function LoginPage() {
                                 <Label htmlFor="password">Password</Label>
                                 <Input id="password" name="password" type="password" required disabled={isPasswordPending || isDiscordPending} />
                             </div>
-                            <Button type="submit" className="w-full" disabled={isPasswordPending || isDiscordPending}>
+                            <Button type="submit" className="w-full" disabled={isPasswordPending || isPasswordPending}>
                                 {isPasswordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Sign In
                             </Button>
