@@ -45,11 +45,12 @@ export default function LoginPage() {
                 setMessage({ type: 'error', text: result.error })
             } else if (result?.success) {
                 router.push('/account')
+                router.refresh()
             }
         })
     }
 
-    const handleDiscordSignIn = async (formData: FormData) => {
+    const handleDiscordSignIn = async () => {
         startTransition(async () => {
             await signInWithDiscord()
         })
@@ -75,6 +76,7 @@ export default function LoginPage() {
                         )}
                         <form action={handleDiscordSignIn}>
                             <Button type="submit" variant="outline" className="w-full group" disabled={isPending}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 <DiscordIcon />
                                 Continue with Discord
                             </Button>
@@ -112,5 +114,3 @@ export default function LoginPage() {
         </div>
     )
 }
-
-    

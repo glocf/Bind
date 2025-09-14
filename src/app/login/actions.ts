@@ -10,11 +10,11 @@ export async function signInWithPassword(formData: FormData) {
   const password = formData.get('password') as string
   const supabase = createClient()
 
-  if (!username) {
-    return { error: 'Username is required.' }
+  if (!username || !password) {
+    return { error: 'Username and password are required.' }
   }
 
-  // Find user by username
+  // Find user by username to get their email
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('id')
@@ -22,17 +22,21 @@ export async function signInWithPassword(formData: FormData) {
     .single()
 
   if (profileError || !profile) {
+    // Generic error to prevent username enumeration
     return { error: 'Invalid login credentials.' }
   }
-
+  
+  // Now get the user's email from the auth.users table
+  // This requires an admin client, which is what createServerClient should be using with the service_role key
   const { data: user, error: userError } = await supabase.auth.admin.getUserById(profile.id)
 
   if (userError || !user.user.email) {
     return { error: 'Could not retrieve user information.' }
   }
-
+  
   const email = user.user.email
 
+  // Sign in with the found email and provided password
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
