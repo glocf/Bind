@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export async function signInWithPassword(formData: FormData) {
+export async function signInWithPassword(prevState: any, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const supabase = createClient()
@@ -44,3 +44,5 @@ export async function signInWithDiscord() {
 
   return redirect(data.url)
 }
+
+    
