@@ -1,3 +1,4 @@
+
 'use server'
 
 import { revalidatePath } from 'next/cache'
@@ -89,20 +90,46 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
     }
   }
 
-  const linksToUpsert = links.map((link, index) => ({
-    id: link.id?.startsWith('new-') ? undefined : link.id,
-    user_id: user.id,
-    title: link.title,
-    url: link.url,
-    order: index,
-  })).filter(link => link.title && link.url);
+  const newLinks = links.filter(link => link.id?.startsWith('new-'));
+  const existingLinks = links.filter(link => !link.id?.startsWith('new-'));
 
-  if (linksToUpsert.length > 0) {
-    const { error: upsertError } = await supabase.from('links').upsert(linksToUpsert, { onConflict: 'id' });
-    if (upsertError) {
-      console.error('Error upserting links:', upsertError);
-      return { error: 'Failed to update links.' };
-    }
+  if (newLinks.length > 0) {
+      const linksToInsert = newLinks.map((link, index) => ({
+        user_id: user.id,
+        title: link.title,
+        url: link.url,
+        order: links.findIndex(l => l.id === link.id),
+      })).filter(link => link.title && link.url);
+
+      if (linksToInsert.length > 0) {
+        const { error: insertError } = await supabase.from('links').insert(linksToInsert);
+        if (insertError) {
+            console.error('Error inserting new links:', insertError);
+            return { error: 'Failed to add new links.' };
+        }
+      }
+  }
+
+  if (existingLinks.length > 0) {
+      const linksToUpdate = existingLinks.map((link, index) => ({
+        id: link.id,
+        title: link.title,
+        url: link.url,
+        order: links.findIndex(l => l.id === link.id),
+      }));
+
+      for (const link of linksToUpdate) {
+        const { error: updateError } = await supabase
+            .from('links')
+            .update({ title: link.title, url: link.url, order: link.order })
+            .eq('id', link.id)
+            .eq('user_id', user.id); // Ensure user can only update their own links
+
+        if (updateError) {
+            console.error(`Error updating link ${link.id}:`, updateError);
+            return { error: 'Failed to update links.' };
+        }
+      }
   }
   
   const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
