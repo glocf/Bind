@@ -8,7 +8,7 @@ import { GunIcon } from '@/components/gun-icon'
 import { type User } from '@supabase/supabase-js'
 
 export function MobileNav({ user }: { user: User | null }) {
-  const { openMobile, setOpenMobile } = useSidebar()
+  const { setOpenMobile } = useSidebar()
   
   if (!user) {
     return (
