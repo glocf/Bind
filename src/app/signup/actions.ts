@@ -2,8 +2,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 export async function signUp(formData: FormData) {
@@ -27,7 +25,6 @@ export async function signUp(formData: FormData) {
     
     const supabase = createClient()
 
-    // Check if username is already taken
     const { data: existingProfile } = await supabase
         .from('profiles')
         .select('id')
@@ -38,7 +35,7 @@ export async function signUp(formData: FormData) {
         return { error: 'Username is already taken.' }
     }
 
-    const { data: { user }, error: signUpError } = await supabase.auth.signUp({
+    const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -50,24 +47,11 @@ export async function signUp(formData: FormData) {
     })
 
     if (signUpError) {
-      if (signUpError.message.includes('duplicate key value violates unique constraint')) {
-        return { error: 'This username is already taken. Please choose another one.'}
-      }
       return { error: signUpError.message }
     }
 
-    if (!user) {
-      return { error: "Could not create user." }
-    }
-    
-    // Manually sign in the user after successful sign up
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (signInError) {
-        return { error: "Account created, but failed to log in. Please try logging in manually." };
+    if (!data.user) {
+      return { error: "Account created, but failed to log in. Please try logging in manually." };
     }
 
     return { success: true }
@@ -75,6 +59,7 @@ export async function signUp(formData: FormData) {
 
 export async function signInWithDiscord() {
     const supabase = createClient()
+    const { headers } = await import('next/headers')
     const origin = headers().get('origin')
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
@@ -84,8 +69,10 @@ export async function signInWithDiscord() {
     })
 
     if (error) {
+        const { redirect } = await import('next/navigation')
         return redirect(`/login?message=Could not authenticate with Discord: ${error.message}`)
     }
-
+    
+    const { redirect } = await import('next/navigation')
     return redirect(data.url)
 }
