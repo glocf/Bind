@@ -51,8 +51,7 @@ export async function signUp(formData: FormData) {
       return { error: signUpError.message }
     }
 
-    // Redirect to login page with a success message
-    return redirect('/login?message=Account created! Please log in.')
+    return { success: true }
 }
 
 export async function signInWithDiscord() {
