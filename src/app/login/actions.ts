@@ -26,11 +26,11 @@ export async function signInWithPassword(formData: FormData) {
     return { error: 'Invalid login credentials.' }
   }
   
-  // Now get the user's email from the auth.users table
-  // This requires an admin client, which is what createServerClient should be using with the service_role key
+  // This is a protected call that requires the service_role key to be set in Supabase server client.
+  // It's safe to use in Server Actions.
   const { data: user, error: userError } = await supabase.auth.admin.getUserById(profile.id)
 
-  if (userError || !user.user.email) {
+  if (userError || !user?.user?.email) {
     return { error: 'Could not retrieve user information.' }
   }
   
