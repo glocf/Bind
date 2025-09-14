@@ -62,7 +62,6 @@ export async function signInWithDiscord() {
         provider: 'discord',
         options: {
             scopes: 'identify email',
-            redirectTo: `https://9000-firebase-bind-1757827583567.cluster-udxxdyopu5c7cwhhtg6mmadhvs.cloudworkstations.dev/auth/callback`,
         }
     })
 
@@ -72,3 +71,4 @@ export async function signInWithDiscord() {
     
     return redirect(data.url)
 }
+
