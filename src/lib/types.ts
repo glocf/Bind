@@ -93,6 +93,8 @@ export type Database = {
           role: string | null
           updated_at: string | null
           username: string | null
+          unlocked_badges: string[] | null
+          equipped_badges: string[] | null
         }
         Insert: {
           avatar_url?: string | null
@@ -103,6 +105,8 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
+          unlocked_badges?: string[] | null
+          equipped_badges?: string[] | null
         }
         Update: {
           avatar_url?: string | null
@@ -113,6 +117,8 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
+          unlocked_badges?: string[] | null
+          equipped_badges?: string[] | null
         }
         Relationships: [
           {

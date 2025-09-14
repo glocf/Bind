@@ -11,12 +11,24 @@ import { Suspense, useEffect } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { Link as LinkType } from '@/lib/types'
 import { trackLinkClick, trackProfileView } from '../account/actions'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Crown, Ghost, Gem, ShieldCheck, Sparkles, User } from "lucide-react";
 
 type ProfilePageProps = {
   params: {
     username: string
   }
 }
+
+const badgeMap: { [key: string]: { name: string, icon: React.ReactNode } } = {
+  pioneer: { name: 'Pioneer', icon: <Crown className="h-4 w-4 text-amber-400" /> },
+  verified: { name: 'Verified', icon: <ShieldCheck className="h-4 w-4 text-blue-500" /> },
+  supporter: { name: 'Supporter', icon: <Gem className="h-4 w-4 text-purple-500" /> },
+  creator: { name: 'Creator', icon: <User className="h-4 w-4 text-green-500" /> },
+  'ai-enthusiast': { name: 'AI Enthusiast', icon: <Sparkles className="h-4 w-4 text-pink-500" /> },
+  haunted: { name: 'Haunted', icon: <Ghost className="h-4 w-4 text-gray-400" /> },
+};
+
 
 function UserLinks({ links, userId }: { links: LinkType[], userId: string }) {
   const router = useRouter();
@@ -109,6 +121,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     ? { backgroundImage: `url(${profile.background_image_data_uri})` }
     : {};
 
+  const equippedBadges = profile.equipped_badges || [];
+
   return (
     <>
       <div
@@ -127,7 +141,28 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
                 {(profile.full_name || profile.username || 'U').charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <h1 className="text-2xl font-bold font-headline">{profile.full_name || `@${profile.username}`}</h1>
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-2xl font-bold font-headline">{profile.full_name || `@${profile.username}`}</h1>
+              {equippedBadges.length > 0 && (
+                <div className="flex items-center gap-1.5">
+                  <TooltipProvider>
+                    {equippedBadges.map(badgeId => {
+                      const badge = badgeMap[badgeId];
+                      if (!badge) return null;
+                      return (
+                        <Tooltip key={badgeId}>
+                          <TooltipTrigger>{badge.icon}</TooltipTrigger>
+                          <TooltipContent>
+                            <p>{badge.name}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )
+                    })}
+                  </TooltipProvider>
+                </div>
+              )}
+            </div>
+
             {profile.full_name && <p className="text-muted-foreground mb-4">@{profile.username}</p>}
             <p className="text-muted-foreground mt-2 mb-6">{profile.bio}</p>
 
