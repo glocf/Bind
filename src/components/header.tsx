@@ -5,7 +5,7 @@ import { MainNav } from './main-nav';
 import { UserNav } from './user-nav';
 import { MobileNav } from './mobile-nav';
 
-export async function Header() {
+export default async function Header() {
   const supabase = createClient();
   const {
     data: { user },
@@ -18,7 +18,7 @@ export async function Header() {
         <MobileNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            <UserNav user={user} />
+            {user ? <UserNav user={user} /> : null}
           </nav>
         </div>
       </div>
