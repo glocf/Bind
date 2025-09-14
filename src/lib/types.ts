@@ -54,7 +54,6 @@ export type Database = {
           role: string | null
           updated_at: string | null
           username: string | null
-          temp_col_to_bust_cache: string | null // This is the change
         }
         Insert: {
           avatar_url?: string | null
@@ -65,7 +64,6 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
-          temp_col_to_bust_cache?: string | null // This is the change
         }
         Update: {
           avatar_url?: string | null
@@ -76,7 +74,6 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
-          temp_col_to_bust_cache?: string | null // This is the change
         }
         Relationships: [
           {
