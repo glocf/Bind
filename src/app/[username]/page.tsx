@@ -3,17 +3,13 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { getIconForUrl } from '@/components/icons'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import { Header } from '@/components/header'
 import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { Link as LinkType } from '@/lib/types'
 import { trackProfileView } from '../account/actions'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Crown, Ghost, Gem, ShieldCheck, Sparkles, User } from "lucide-react";
 import UserLinks from './user-links'
-import { cn } from '@/lib/utils'
 
 type ProfilePageProps = {
   params: {
@@ -111,7 +107,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="absolute inset-0 w-full h-screen bg-black/30 -z-10" />
       
       <div className="flex flex-col min-h-screen text-white">
-        <Header />
         <main className="flex-grow flex items-center justify-center p-4">
           <div 
             className="w-full max-w-md mx-auto rounded-2xl shadow-2xl border border-white/20 p-8 text-center text-card-foreground"
