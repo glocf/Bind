@@ -13,6 +13,7 @@ import { trackProfileView } from '../account/actions'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Crown, Ghost, Gem, ShieldCheck, Sparkles, User } from "lucide-react";
 import UserLinks from './user-links'
+import { cn } from '@/lib/utils'
 
 type ProfilePageProps = {
   params: {
@@ -94,6 +95,13 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   const equippedBadges = profile.equipped_badges || [];
 
+  const profileOpacity = profile.profile_opacity ?? 80;
+  const profileBlur = profile.profile_blur ?? 10;
+  
+  const cardBackgroundColor = `hsla(var(--card), ${profileOpacity / 100})`;
+  const cardBlur = `blur(${profileBlur}px)`;
+
+
   return (
     <>
       <div
@@ -105,7 +113,14 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
       <div className="flex flex-col min-h-screen text-white">
         <Header />
         <main className="flex-grow flex items-center justify-center p-4">
-          <div className="w-full max-w-md mx-auto bg-card/80 backdrop-blur-sm rounded-2xl shadow-2xl border border-white/20 p-8 text-center text-card-foreground">
+          <div 
+            className="w-full max-w-md mx-auto rounded-2xl shadow-2xl border border-white/20 p-8 text-center text-card-foreground"
+            style={{ 
+              backgroundColor: cardBackgroundColor,
+              backdropFilter: cardBlur,
+              WebkitBackdropFilter: cardBlur 
+            }}
+          >
             <Avatar className="w-24 h-24 mx-auto mb-4 border-4 border-primary">
               <AvatarImage src={profile.avatar_url || avatarPlaceholder?.imageUrl} alt={profile.full_name || profile.username || 'User avatar'} />
               <AvatarFallback className="text-3xl bg-primary text-primary-foreground">

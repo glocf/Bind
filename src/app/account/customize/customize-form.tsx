@@ -8,12 +8,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Image as ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X } from 'lucide-react';
+import { ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Sparkles, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { type Profile } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { updateCustomization, removeBackground } from '../actions';
+import { updateCustomization, removeBackground, generateAndUpdateBackground, updateAvatar } from '../actions';
 import { useDebouncedCallback } from 'use-debounce';
 import { useRouter } from 'next/navigation';
 
@@ -31,6 +31,11 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
     const { toast } = useToast();
     const router = useRouter();
     const [isRemoving, setIsRemoving] = React.useState(false);
+    const [isGenerating, setIsGenerating] = React.useState(false);
+    const [isUploading, setIsUploading] = React.useState(false);
+    const avatarInputRef = React.useRef<HTMLInputElement>(null);
+
+    const [currentBio, setCurrentBio] = React.useState(profile.bio || '');
 
     const debouncedUpdate = useDebouncedCallback(async (data: Partial<Profile>) => {
         const result = await updateCustomization(data);
@@ -38,7 +43,7 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
             toast({ title: "Error", description: result.error, variant: "destructive" });
         } else {
             toast({ title: "Saved!", description: "Your customization has been saved." });
-            router.refresh(); // Re-fetch server-side props to update other parts of the UI if needed
+            router.refresh();
         }
     }, 1000);
 
@@ -53,6 +58,42 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
         }
         setIsRemoving(false);
     }
+
+    const handleGenerateBackground = async () => {
+        setIsGenerating(true);
+        if (!currentBio) {
+            toast({ title: "Please enter a bio first.", description: "The AI uses your bio to generate the background.", variant: "destructive" });
+            setIsGenerating(false);
+            return;
+        }
+        const result = await generateAndUpdateBackground(currentBio);
+        if (result.error) {
+            toast({ title: "Error generating background", description: result.error, variant: "destructive" });
+        } else {
+            toast({ title: "Background generated and saved!" });
+        }
+        setIsGenerating(false);
+        router.refresh();
+    };
+
+    const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const result = await updateAvatar(formData);
+
+        if (result.error) {
+            toast({ title: "Error uploading avatar", description: result.error, variant: "destructive" });
+        } else {
+            toast({ title: "Avatar updated successfully!" });
+            router.refresh();
+        }
+        setIsUploading(false);
+    };
     
     return (
         <div className="container mx-auto py-12 px-4 space-y-12 text-white">
@@ -78,9 +119,11 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
                                     </div>
                                 </div>
                             ) : (
-                                <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer">
-                                    <ImageIcon className="h-8 w-8 mb-2" />
-                                    <span className="text-sm text-center">Generate a background on the Account page.</span>
+                                <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors">
+                                     <Button onClick={handleGenerateBackground} disabled={isGenerating} variant="ghost" className="w-full h-full flex-col gap-2">
+                                        {isGenerating ? <Loader2 className="h-8 w-8 animate-spin" /> : <Sparkles className="h-8 w-8" />}
+                                        <span className="text-sm text-center font-normal">Generate Background</span>
+                                    </Button>
                                 </div>
                             )}
                         </CardContent>
@@ -95,16 +138,29 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
                     <Card className="bg-card/50 border-white/10 aspect-video flex flex-col">
                          <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm">Profile Avatar</p>
-                            {profile.avatar_url ? (
-                                <div className="relative flex-grow rounded-md overflow-hidden bg-zinc-900 flex items-center justify-center">
+                             <div 
+                                className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer relative"
+                                onClick={() => avatarInputRef.current?.click()}
+                            >
+                                {isUploading ? (
+                                    <Loader2 className="h-8 w-8 animate-spin" />
+                                ) : profile.avatar_url ? (
                                     <Image src={profile.avatar_url} alt="Avatar Preview" layout="fill" objectFit="cover" className="rounded-md"/>
-                                </div>
-                            ) : (
-                                <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer">
-                                    <ImageIcon className="h-8 w-8 mb-2" />
-                                    <span className="text-sm">Click to upload a file</span>
-                                </div>
-                            )}
+                                ) : (
+                                    <>
+                                        <ImageIcon className="h-8 w-8 mb-2" />
+                                        <span className="text-sm">Click to upload a file</span>
+                                    </>
+                                )}
+                            </div>
+                            <input 
+                                type="file" 
+                                ref={avatarInputRef} 
+                                className="hidden" 
+                                accept="image/png, image/jpeg, image/gif"
+                                onChange={handleAvatarUpload}
+                                disabled={isUploading}
+                            />
                         </CardContent>
                     </Card>
                     <Card className="bg-card/50 border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">
@@ -130,8 +186,11 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
                         <Input 
                             className="bg-zinc-800 border-zinc-700" 
                             placeholder="Maybe we'll see each other in an..." 
-                            defaultValue={profile.bio || ''}
-                            onChange={(e) => debouncedUpdate({ bio: e.target.value })}
+                            defaultValue={currentBio}
+                            onChange={(e) => {
+                                setCurrentBio(e.target.value);
+                                debouncedUpdate({ bio: e.target.value });
+                            }}
                         />
                     </CustomizationControl>
                     

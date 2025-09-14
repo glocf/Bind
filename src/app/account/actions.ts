@@ -238,3 +238,51 @@ export async function removeBackground() {
 
     return { success: true };
 }
+
+export async function updateAvatar(formData: FormData) {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'You must be logged in.' };
+    }
+
+    const file = formData.get('avatar') as File;
+    if (!file) {
+        return { error: 'No file selected.' };
+    }
+
+    const filePath = `avatars/${user.id}/${Date.now()}`;
+    const { error: uploadError } = await supabase.storage
+        .from('profiles')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error('Error uploading avatar:', uploadError);
+        return { error: 'Failed to upload avatar.' };
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+        .from('profiles')
+        .getPublicUrl(filePath);
+
+    const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl })
+        .eq('id', user.id);
+
+    if (updateError) {
+        console.error('Error updating profile with new avatar:', updateError);
+        // Attempt to delete the orphaned file from storage
+        await supabase.storage.from('profiles').remove([filePath]);
+        return { error: 'Failed to update profile with new avatar.' };
+    }
+    
+    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
+    revalidatePath('/account/customize');
+    if (profile?.username) {
+        revalidatePath(`/${profile.username}`);
+    }
+
+    return { success: true, url: publicUrl };
+}

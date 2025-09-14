@@ -10,11 +10,11 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
-import { updateProfile, generateAndUpdateBackground } from "./actions"
+import { updateProfile } from "./actions"
 import { type User } from "@supabase/supabase-js"
 import { type Profile } from "@/lib/types"
-import { Loader2, Sparkles } from "lucide-react"
-import { useState, useTransition } from "react"
+import { Loader2 } from "lucide-react"
+import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 
 const profileFormSchema = z.object({
@@ -35,7 +35,6 @@ export function AccountForm({ user, profile }: AccountFormProps) {
   const { toast } = useToast()
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [isGenerating, setIsGenerating] = useState(false)
   
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -69,24 +68,6 @@ export function AccountForm({ user, profile }: AccountFormProps) {
         router.refresh()
       }
     })
-  }
-
-  const handleGenerateBackground = async () => {
-    setIsGenerating(true)
-    const bio = profileForm.getValues('bio')
-    if (!bio) {
-      toast({ title: "Please enter a bio first.", variant: "destructive" })
-      setIsGenerating(false)
-      return
-    }
-    const result = await generateAndUpdateBackground(bio)
-    if (result.error) {
-      toast({ title: "Error generating background", description: result.error, variant: "destructive" })
-    } else {
-      toast({ title: "Background generated and saved!" })
-    }
-    setIsGenerating(false)
-    router.refresh()
   }
 
   return (
@@ -131,11 +112,7 @@ export function AccountForm({ user, profile }: AccountFormProps) {
             </div>
           </div>
           <Separator />
-          <div className="flex items-center justify-between p-6">
-            <Button onClick={handleGenerateBackground} disabled={isGenerating || isPending} variant="outline" type="button">
-              {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-              Generate Background
-            </Button>
+          <div className="flex items-center justify-end p-6">
             <Button type="submit" disabled={isPending}>
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Profile
