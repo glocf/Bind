@@ -11,33 +11,34 @@ export type Database = {
     Tables: {
       links: {
         Row: {
-          id: string
           created_at: string
+          id: string
+          order: number
           title: string
           url: string
           user_id: string
-          order: number
         }
         Insert: {
-          id?: string
           created_at?: string
+          id?: string
+          order?: number
           title: string
           url: string
           user_id: string
-          order?: number
         }
         Update: {
-          id?: string
           created_at?: string
+          id?: string
+          order?: number
           title?: string
           url?: string
           user_id?: string
-          order?: number
         }
         Relationships: [
           {
             foreignKeyName: "links_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           }
@@ -45,39 +46,40 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_url: string | null
+          background_image_data_uri: string | null
+          bio: string | null
+          full_name: string | null
           id: string
+          role: string | null
           updated_at: string | null
           username: string | null
-          full_name: string | null
-          avatar_url: string | null
-          bio: string | null
-          background_image_data_uri: string | null
-          role: string | null
         }
         Insert: {
+          avatar_url?: string | null
+          background_image_data_uri?: string | null
+          bio?: string | null
+          full_name?: string | null
           id: string
+          role?: string | null
           updated_at?: string | null
           username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          background_image_data_uri?: string | null
-          role?: string | null
         }
         Update: {
+          avatar_url?: string | null
+          background_image_data_uri?: string | null
+          bio?: string | null
+          full_name?: string | null
           id?: string
+          role?: string | null
           updated_at?: string | null
           username?: string | null
-          full_name?: string | null
-          avatar_url?: string | null
-          bio?: string | null
-          background_image_data_uri?: string | null
-          role?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "profiles_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
