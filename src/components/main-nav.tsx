@@ -1,12 +1,7 @@
 
-'use client';
+'use client'
 
-import * as React from 'react';
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, X } from 'lucide-react';
+import Link from "next/link"
 
 const GunIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary-foreground">
@@ -18,14 +13,13 @@ export function MainNav() {
   return (
     <div className="mr-4 hidden md:flex">
       <Link href="/" className="mr-6 flex items-center space-x-2">
-        <div className="p-2 bg-primary rounded-md">
+        <div className="p-1.5 rounded-md bg-primary">
             <GunIcon />
         </div>
-        <span className="hidden font-bold sm:inline-block">Bind</span>
+        <span className="hidden font-bold sm:inline-block">
+          Bind
+        </span>
       </Link>
-      <nav className="flex items-center gap-6 text-sm">
-        {/* Add nav links here if needed */}
-      </nav>
     </div>
-  );
+  )
 }

@@ -1,11 +1,16 @@
 
-'use client';
+'use client'
 
-import * as React from 'react';
-import Link from 'next/link';
-import { Button } from './ui/button';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Menu, X } from 'lucide-react';
+import * as React from "react"
+import Link from "next/link"
+
+import { Button } from "@/components/ui/button"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { Menu } from "lucide-react"
 
 const GunIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary-foreground">
@@ -14,37 +19,36 @@ const GunIcon = () => (
 )
 
 export function MobileNav() {
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false)
 
   return (
-    <div className="md:hidden">
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <Menu className="h-5 w-5" />
-            <span className="sr-only">Toggle Menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left">
-          <div className="flex justify-between items-center py-2 px-4 border-b">
-             <Link href="/" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
-                <div className="p-2 bg-primary rounded-md">
-                    <GunIcon />
-                </div>
-                <span className="font-bold">Bind</span>
-            </Link>
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(false)}>
-              <X className="h-5 w-5" />
-              <span className="sr-only">Close Menu</span>
-            </Button>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+        >
+          <Menu className="h-5 w-5" />
+          <span className="sr-only">Toggle Menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent side="left" className="pr-0">
+        <Link
+          href="/"
+          className="mr-6 flex items-center space-x-2"
+          onClick={() => setOpen(false)}
+        >
+           <div className="p-1.5 rounded-md bg-primary">
+            <GunIcon />
+           </div>
+          <span className="font-bold">Bind</span>
+        </Link>
+        <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
+          <div className="flex flex-col space-y-3">
+             {/* Mobile nav links can be added here */}
           </div>
-          <div className="py-4">
-            <nav className="grid gap-2">
-              {/* Add mobile nav links here */}
-            </nav>
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
-  );
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
 }
