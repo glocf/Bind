@@ -79,24 +79,13 @@ export default async function Home() {
           </div>
         </div>
         
-        <div className="w-full max-w-6xl mx-auto mt-20 relative animate-fade-in-up" style={{ animationDelay: '650ms' }}>
-          <Image 
-            src="https://picsum.photos/seed/product-preview/1200/750"
-            alt="Product preview"
-            width={1200}
-            height={750}
-            className="w-full h-auto rounded-xl shadow-2xl shadow-primary/10"
-            data-ai-hint="product screenshot"
-          />
-        </div>
-
-        <section className="w-full max-w-6xl mx-auto py-20">
+        <section className="w-full max-w-6xl mx-auto py-20 mt-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <Card 
                   key={index}
                   className="bg-card/50 backdrop-blur-sm border-white/10 text-left animate-fade-in-up"
-                  style={{ animationDelay: `${index * 150 + 800}ms` }}
+                  style={{ animationDelay: `${index * 150 + 650}ms` }}
                 >
                   <CardHeader>
                     {feature.icon}
