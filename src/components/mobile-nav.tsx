@@ -12,7 +12,7 @@ export function MobileNav({ user }: { user: User | null }) {
   if (!user) {
     return (
        <div className="md:hidden flex items-center space-x-2">
-        <Link href="/" className="flex items-center space-x-2">
+        <Link href="/" className="flex items-center space-x-2 bg-card/50 border border-white/10 hover:bg-card/90 transition-colors px-3 py-1.5 rounded-full">
           <GunIcon />
           <span className="font-bold">Bind</span>
         </Link>
@@ -23,7 +23,7 @@ export function MobileNav({ user }: { user: User | null }) {
   return (
     <div className="md:hidden flex items-center space-x-2">
       <SidebarTrigger className="h-8 w-8" />
-      <Link href="/" className="flex items-center space-x-2" onClick={() => setOpenMobile(false)}>
+      <Link href="/" className="flex items-center space-x-2 bg-card/50 border border-white/10 hover:bg-card/90 transition-colors px-3 py-1.5 rounded-full" onClick={() => setOpenMobile(false)}>
         <GunIcon />
         <span className="font-bold">Bind</span>
       </Link>
