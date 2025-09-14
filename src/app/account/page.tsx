@@ -4,6 +4,7 @@ import { AccountForm } from './account-form'
 import Header from '@/components/header'
 import { type User } from '@supabase/supabase-js'
 
+// Mock user for development purposes while auth is being built
 const mockUser: User = {
   id: 'mock-user-id',
   app_metadata: { provider: 'email' },
@@ -13,42 +14,47 @@ const mockUser: User = {
   email: 'dev@example.com'
 };
 
-
 export default async function AccountPage() {
-  // --- TEMPORARILY DISABLED FOR DEVELOPMENT ---
-  // const supabase = createClient()
+  const supabase = createClient()
 
-  // const { data: { user } } = await supabase.auth.getUser()
-  // if (!user) {
-  //   redirect('/')
-  // }
-  const user = mockUser; // Use mock user
+  // Use a real user if available, otherwise fall back to mock user for design review
+  const { data: { user: realUser } } = await supabase.auth.getUser()
+  const user = realUser || mockUser;
 
-  // const { data: profile } = await supabase
-  //   .from('profiles')
-  //   .select('*')
-  //   .eq('id', user.id)
-  //   .single()
-  const profile = {
-    id: 'mock-user-id',
-    username: 'bindprojectest',
-    bio: 'This is a mock bio for development.',
-    full_name: 'Bind Project Test',
-    avatar_url: '',
-    background_image_data_uri: null,
-    role: 'admin',
-    updated_at: new Date().toISOString(),
-  };
-  
-  // const { data: links } = await supabase
-  //   .from('links')
-  //   .select('*')
-  //   .eq('user_id', user.id)
-  //   .order('order', { ascending: true })
-  const links = [
-    { id: '1', title: 'My Portfolio', url: 'https://example.com', user_id: 'mock-user-id', created_at: new Date().toISOString(), order: 0 },
-    { id: '2', title: 'GitHub', url: 'https://github.com', user_id: 'mock-user-id', created_at: new Date().toISOString(), order: 1 },
-  ];
+  let profile = null
+  let links = []
+
+  if (realUser) {
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+    profile = profileData
+
+    const { data: linksData } = await supabase
+      .from('links')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('order', { ascending: true })
+    links = linksData || []
+  } else {
+    // Mock data for design review when no user is logged in
+    profile = {
+      id: 'mock-user-id',
+      username: 'bindprojectest',
+      bio: 'This is a mock bio for development.',
+      full_name: 'Bind Project Test',
+      avatar_url: '',
+      background_image_data_uri: null,
+      role: 'admin',
+      updated_at: new Date().toISOString(),
+    };
+    links = [
+      { id: '1', title: 'My Portfolio', url: 'https://example.com', user_id: 'mock-user-id', created_at: new Date().toISOString(), order: 0 },
+      { id: '2', title: 'GitHub', url: 'https://github.com', user_id: 'mock-user-id', created_at: new Date().toISOString(), order: 1 },
+    ];
+  }
 
 
   return (

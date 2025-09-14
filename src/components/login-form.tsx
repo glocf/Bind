@@ -20,7 +20,9 @@ export function LoginForm() {
     e.preventDefault()
     startTransition(() => {
       if (username === 'bindprojectest' && password === 'b1ndproj3ctuy1920dj') {
+        // We don't have a real session, so just navigate.
         router.push('/account')
+        router.refresh() // Refresh to ensure page re-renders
       } else {
         toast({
           title: "Error",

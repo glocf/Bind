@@ -2,10 +2,6 @@ import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  // --- TEMPORARILY DISABLED FOR DEVELOPMENT ---
-  return NextResponse.next()
-
-  /*
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -63,13 +59,14 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   if (!user && request.nextUrl.pathname.startsWith('/account')) {
-    const url = new URL(request.url)
-    url.pathname = '/'
-    return Response.redirect(url)
+    // For now, allow access to /account for design review with mock data
+    // In production, this should redirect.
+    // const url = new URL(request.url)
+    // url.pathname = '/'
+    // return Response.redirect(url)
   }
 
   return response
-  */
 }
 
 export const config = {
