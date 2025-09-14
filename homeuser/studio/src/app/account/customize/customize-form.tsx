@@ -1,3 +1,4 @@
+
 'use client'
 
 import * as React from 'react';
@@ -20,6 +21,7 @@ import { type User } from '@supabase/supabase-js';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { customizationAssistant } from '@/ai/flows/customization-assistant-flow';
+import { Avatar as UIAvatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const CustomizationControl = ({ label, children, icon: Icon, tooltip }: { label: string, children: React.ReactNode, icon?: React.ElementType, tooltip?: string }) => (
     <div className="space-y-2">
@@ -547,7 +549,11 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
     );
 }
 
-// Dummy component, replace with actual Avatar content if available
+// Dummy Avatar components until the actual one is available
+const Avatar = ({ children, className }: { children: React.ReactNode, className?: string }) => (
+    <div className={className}>{children}</div>
+);
+
 const AvatarContent = ({ children }: { children: React.ReactNode }) => (
     <div className="flex items-center justify-center h-full w-full bg-muted rounded-full">
         {children}

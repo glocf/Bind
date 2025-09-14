@@ -119,7 +119,7 @@ export type Database = {
           bio?: string | null
           full_name?: string | null
           id: string
-          role?: 'admin' | null
+          role?: string | null
           updated_at?: string | null
           username?: string | null
           unlocked_badges?: string[] | null
@@ -147,7 +147,7 @@ export type Database = {
           bio?: string | null
           full_name?: string | null
           id?: string
-          role?: 'admin' | null
+          role?: string | null
           updated_at?: string | null
           username?: string | null
           unlocked_badges?: string[] | null

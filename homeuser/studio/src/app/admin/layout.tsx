@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { Header } from '@/components/header'
