@@ -54,6 +54,16 @@ export async function signUp(formData: FormData) {
       return { error: "Account created, but failed to log in. Please try logging in manually." };
     }
 
+    // Automatically sign in the user after successful sign up
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+    });
+
+    if (signInError) {
+        return { error: 'Account created, but failed to log in. Please try logging in manually.' };
+    }
+
     return { success: true }
 }
 
