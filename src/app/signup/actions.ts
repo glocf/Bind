@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
 import { redirect } from 'next/navigation'
 
-export async function signUp(formData: FormData): Promise<{ error: string } | { success: boolean }> {
+export async function signUp(formData: FormData): Promise<{ error?: string, success?: boolean }> {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const username = formData.get('username') as string
@@ -62,6 +62,7 @@ export async function signInWithDiscord() {
         provider: 'discord',
         options: {
             scopes: 'identify email',
+            redirectTo: `https://9000-firebase-bind-1757827583567.cluster-udxxdyopu5c7cwhhtg6mmadhvs.cloudworkstations.dev/auth/callback`,
         }
     })
 
