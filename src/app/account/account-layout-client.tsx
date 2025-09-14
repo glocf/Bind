@@ -44,7 +44,7 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
   return (
     <Sidebar>
       <SidebarContent className="p-0">
-        <div className="flex h-full flex-col">
+        <div suppressHydrationWarning className="flex h-full flex-col">
           <div className="flex-1 overflow-y-auto">
             <Accordion type="multiple" defaultValue={['account']} className="w-full px-4">
               <AccordionItem value="account" className="border-b-0">
@@ -155,7 +155,7 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
 export default function AccountLayoutClient({ children, user, profile }: { children: React.ReactNode, user:User, profile: Profile | null }) {
   return (
     <SidebarProvider>
-      <div className="flex flex-col min-h-screen">
+      <div suppressHydrationWarning className="flex flex-col min-h-screen">
         <Header user={user} profile={profile} />
         <div className="flex flex-1">
           <AccountSidebar profile={profile} />

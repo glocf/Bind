@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 export function MainNav() {
   return (
-    <div className="hidden md:flex items-center space-x-6">
+    <div suppressHydrationWarning className="hidden md:flex items-center space-x-6">
       <Link href="/" className="flex items-center space-x-2">
         <GunIcon />
         <span className="font-bold">Bind</span>
