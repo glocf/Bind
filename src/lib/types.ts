@@ -1,3 +1,4 @@
+
 export type Json =
   | string
   | number
@@ -95,6 +96,11 @@ export type Database = {
           username: string | null
           unlocked_badges: string[] | null
           equipped_badges: string[] | null
+          profile_opacity: number | null
+          profile_blur: number | null
+          discord_presence: string | null
+          background_effects: string | null
+          location: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -107,6 +113,11 @@ export type Database = {
           username?: string | null
           unlocked_badges?: string[] | null
           equipped_badges?: string[] | null
+          profile_opacity?: number | null
+          profile_blur?: number | null
+          discord_presence?: string | null
+          background_effects?: string | null
+          location?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -119,6 +130,11 @@ export type Database = {
           username?: string | null
           unlocked_badges?: string[] | null
           equipped_badges?: string[] | null
+          profile_opacity?: number | null
+          profile_blur?: number | null
+          discord_presence?: string | null
+          background_effects?: string | null
+          location?: string | null
         }
         Relationships: [
           {

@@ -1,10 +1,11 @@
+
 'use server'
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { generateThemedProfileBackground } from '@/ai/flows/generate-themed-profile-background'
 import { z } from 'zod'
-import { type Link } from '@/lib/types'
+import { type Link, type Profile } from '@/lib/types'
 
 const profileSchema = z.object({
   username: z.string()
@@ -182,4 +183,58 @@ export async function trackLinkClick(linkId: string, userId: string) {
     if (error) {
         console.error('Error tracking link click:', error);
     }
+}
+
+export async function updateCustomization(data: Partial<Profile>) {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'You must be logged in to update your profile.' };
+    }
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ ...data, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
+
+    if (error) {
+        console.error('Error updating customization:', error);
+        return { error: 'Failed to update customization.' };
+    }
+
+    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
+    revalidatePath('/account/customize');
+    if (profile?.username) {
+        revalidatePath(`/${profile.username}`);
+    }
+
+    return { success: true };
+}
+
+export async function removeBackground() {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'You must be logged in.' };
+    }
+
+    const { error } = await supabase
+        .from('profiles')
+        .update({ background_image_data_uri: null, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
+
+    if (error) {
+        console.error('Error removing background:', error);
+        return { error: 'Failed to remove background.' };
+    }
+    
+    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
+    revalidatePath('/account/customize');
+    if (profile?.username) {
+        revalidatePath(`/${profile.username}`);
+    }
+
+    return { success: true };
 }
