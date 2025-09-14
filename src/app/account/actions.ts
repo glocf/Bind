@@ -159,3 +159,27 @@ export async function generateAndUpdateBackground(bio: string) {
     return { error: 'An unexpected error occurred while generating the background.' }
   }
 }
+
+export async function trackProfileView(userId: string) {
+  const supabase = createClient()
+  const { error } = await supabase.from('analytics').insert({
+    user_id: userId,
+    event_type: 'profile_view',
+  })
+  if (error) {
+    console.error('Error tracking profile view:', error)
+  }
+}
+
+export async function trackLinkClick(linkId: string, userId: string) {
+    const supabase = createClient()
+    const { error } = await supabase.from('analytics').insert({
+        user_id: userId,
+        link_id: linkId,
+        event_type: 'link_click',
+    });
+
+    if (error) {
+        console.error('Error tracking link click:', error);
+    }
+}

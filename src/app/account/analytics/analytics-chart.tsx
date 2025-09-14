@@ -5,16 +5,6 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Line, LineChart, ResponsiveContainer, Legend } from "recharts"
 
-const chartData = [
-  { date: "2024-07-15", views: 186, clicks: 80 },
-  { date: "2024-07-16", views: 305, clicks: 200 },
-  { date: "2024-07-17", views: 237, clicks: 120 },
-  { date: "2024-07-18", views: 73, clicks: 190 },
-  { date: "2024-07-19", views: 209, clicks: 130 },
-  { date: "2024-07-20", views: 214, clicks: 140 },
-  { date: "2024-07-21", views: 345, clicks: 210 },
-]
-
 const chartConfig = {
   views: {
     label: "Views",
@@ -26,12 +16,12 @@ const chartConfig = {
   },
 }
 
-export default function AnalyticsChart() {
+export default function AnalyticsChart({ data }: { data: any[] }) {
   return (
     <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
         <LineChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
             left: 12,
             right: 12,

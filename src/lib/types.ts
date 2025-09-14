@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      analytics: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          event_type: "profile_view" | "link_click"
+          link_id: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          event_type: "profile_view" | "link_click"
+          link_id?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          user_id?: string
+          event_type?: "profile_view" | "link_click"
+          link_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "analytics_link_id_fkey"
+            columns: ["link_id"]
+            isOneToOne: false
+            referencedRelation: "links"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       links: {
         Row: {
           created_at: string
@@ -103,3 +142,4 @@ export type Database = {
 
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type Link = Database['public']['Tables']['links']['Row'];
+export type AnalyticsEvent = Database['public']['Tables']['analytics']['Row'];

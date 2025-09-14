@@ -4,15 +4,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { getIconForUrl } from "@/components/icons";
 
-const topLinksData = [
-  { id: 1, title: "My Portfolio", url: "https://github.com", clicks: 1023 },
-  { id: 2, title: "Follow me on Twitter", url: "https://twitter.com", clicks: 789 },
-  { id: 3, title: "YouTube Channel", url: "https://youtube.com", clicks: 543 },
-  { id: 4, title: "LinkedIn Profile", url: "https://linkedin.com", clicks: 321 },
-  { id: 5, title: "Twitch Stream", url: "https://twitch.tv", clicks: 123 },
-];
+export default function TopLinks({ data }: { data: any[] }) {
+  if (!data || data.length === 0) {
+    return <p className="text-muted-foreground text-center">No link clicks recorded yet.</p>;
+  }
 
-export default function TopLinks() {
   return (
     <Table>
       <TableHeader>
@@ -22,7 +18,7 @@ export default function TopLinks() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {topLinksData.map((link) => {
+        {data.map((link) => {
             const Icon = getIconForUrl(link.url);
             return (
                 <TableRow key={link.id}>

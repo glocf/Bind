@@ -1,14 +1,16 @@
+'use client'
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getIconForUrl } from '@/components/icons'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
 import { Header } from '@/components/header'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
-import type { Link } from '@/lib/types'
+import type { Link as LinkType } from '@/lib/types'
+import { trackLinkClick, trackProfileView } from '../account/actions'
 
 type ProfilePageProps = {
   params: {
@@ -16,34 +18,32 @@ type ProfilePageProps = {
   }
 }
 
-async function UserLinks({ userId }: { userId: string }) {
-  const supabase = createClient()
-  const { data: links } = await supabase
-    .from('links')
-    .select('*')
-    .eq('user_id', userId)
-    .order('order', { ascending: true })
+function UserLinks({ links, userId }: { links: LinkType[], userId: string }) {
+  const router = useRouter();
+
+  const handleLinkClick = async (link: LinkType) => {
+    await trackLinkClick(link.id, userId);
+    router.push(link.url);
+  };
 
   return (
     <div className="flex flex-col space-y-4">
-      {links?.map((link: Link) => {
-        const Icon = getIconForUrl(link.url)
+      {links.map((link: LinkType) => {
+        const Icon = getIconForUrl(link.url);
         return (
           <Button
             key={link.id}
-            asChild
+            onClick={() => handleLinkClick(link)}
             className="w-full justify-start transition-transform duration-200 hover:scale-105"
             variant="secondary"
           >
-            <a href={link.url} target="_blank" rel="noopener noreferrer">
               <Icon className="mr-4" />
               {link.title}
-            </a>
           </Button>
-        )
+        );
       })}
     </div>
-  )
+  );
 }
 
 function LinksSkeleton() {
@@ -54,6 +54,17 @@ function LinksSkeleton() {
       <Skeleton className="h-10 w-full" />
     </div>
   )
+}
+
+async function UserLinksWrapper({ userId }: { userId: string }) {
+  const supabase = createClient()
+  const { data: links } = await supabase
+    .from('links')
+    .select('*')
+    .eq('user_id', userId)
+    .order('order', { ascending: true })
+
+  return <UserLinks links={links || []} userId={userId} />
 }
 
 
@@ -89,6 +100,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound()
   }
 
+  // Track the profile view
+  await trackProfileView(profile.id);
+
   const avatarPlaceholder = PlaceHolderImages.find(p => p.id === 'avatar-1')
 
   const backgroundStyle = profile.background_image_data_uri
@@ -118,7 +132,7 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             <p className="text-muted-foreground mt-2 mb-6">{profile.bio}</p>
 
             <Suspense fallback={<LinksSkeleton />}>
-              <UserLinks userId={profile.id} />
+              <UserLinksWrapper userId={profile.id} />
             </Suspense>
           </div>
         </main>
