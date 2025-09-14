@@ -62,14 +62,22 @@ export default async function Home() {
             className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
             style={{ animationDelay: '500ms' }}
           >
-            <div className="relative w-full sm:w-auto">
+             <div className="relative w-full sm:w-auto">
+              <div className="relative flex items-center w-full max-w-md mx-auto">
+                <span className="absolute left-4 text-white/40">bind.us/</span>
+                <Input
+                  type="text"
+                  placeholder="username"
+                  className="w-full h-12 pr-32 pl-20 rounded-lg bg-white/10 text-white border-white/20 placeholder:text-white/40"
+                />
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-10 w-auto bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
                   asChild
                 >
                   <Link href="/signup">Claim Now</Link>
                 </Button>
+              </div>
             </div>
           </div>
         </div>
