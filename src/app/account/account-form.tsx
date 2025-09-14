@@ -141,7 +141,7 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>Profile</CardTitle>
@@ -200,9 +200,9 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
         </CardHeader>
         <Form {...linksForm}>
           <form onSubmit={linksForm.handleSubmit(onLinksSubmit)}>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-4">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex items-start gap-2 group">
+                <div key={field.id} className="flex items-center gap-2 group">
                   <div className="flex-grow space-y-2">
                     <FormField
                       control={linksForm.control}
