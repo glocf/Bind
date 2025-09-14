@@ -52,6 +52,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           background_image_data_uri: string | null
+          role: string | null
         }
         Insert: {
           id: string
@@ -61,6 +62,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           background_image_data_uri?: string | null
+          role?: string | null
         }
         Update: {
           id?: string
@@ -70,6 +72,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           background_image_data_uri?: string | null
+          role?: string | null
         }
         Relationships: [
           {

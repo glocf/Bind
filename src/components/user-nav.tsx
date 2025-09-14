@@ -7,10 +7,25 @@ import { createClient } from "@/lib/supabase/client"
 import { type User } from "@supabase/supabase-js"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { type Profile } from "@/lib/types"
 
 export default function UserNav({ user }: { user: User }) {
   const router = useRouter()
   const supabase = createClient()
+  const [profile, setProfile] = useState<Profile | null>(null)
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+      if (data) setProfile(data)
+    }
+    fetchProfile()
+  }, [user.id, supabase])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -45,6 +60,13 @@ export default function UserNav({ user }: { user: User }) {
               Account
             </DropdownMenuItem>
           </Link>
+          {profile?.role === 'admin' && (
+            <Link href="/admin">
+              <DropdownMenuItem>
+                Admin
+              </DropdownMenuItem>
+            </Link>
+          )}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleSignOut}>
