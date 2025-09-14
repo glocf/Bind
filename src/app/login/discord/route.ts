@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       provider: 'discord',
       options: {
         scopes: 'identify email',
-        redirectTo: `${origin || process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
       }
   })
 

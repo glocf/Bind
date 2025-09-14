@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation'
 import {
   Sidebar,
   SidebarContent,
-  SidebarMenuItem,
   SidebarMenu,
+  SidebarMenuItem,
   SidebarMenuButton,
   SidebarProvider,
 } from '@/components/ui/sidebar'
@@ -34,27 +34,10 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Header from '@/components/header'
-import { createClient } from '@/lib/supabase/client'
 import { type Profile } from '@/lib/types'
 
-const AccountSidebar = () => {
+const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
   const pathname = usePathname()
-  const [username, setUsername] = React.useState<string>('')
-  const supabase = createClient()
-
-  React.useEffect(() => {
-    const fetchProfileUsername = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
-        if (profile?.username) {
-          setUsername(profile.username)
-        }
-      }
-    }
-    fetchProfileUsername()
-  }, [supabase])
-
   const isActive = (path: string) => pathname === path
 
   return (
@@ -156,7 +139,7 @@ const AccountSidebar = () => {
             <div className="p-4 mt-2 rounded-lg bg-card/80 border border-border">
                 <p className="text-sm font-medium text-white mb-2">Check out your page</p>
                 <Button variant="default" className="w-full justify-start" asChild>
-                   <Link href={`/${username || ''}`} target="_blank">
+                   <Link href={`/${profile?.username || ''}`} target="_blank">
                      <ExternalLink className="h-4 w-4 mr-2" /> My Page
                    </Link>
                 </Button>
@@ -168,14 +151,13 @@ const AccountSidebar = () => {
   );
 };
 
-
-export default function AccountLayout({ children }: { children: React.ReactNode }) {
+export default function AccountLayoutClient({ children, profile }: { children: React.ReactNode, profile: Profile | null }) {
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen">
         <Header />
         <div className="flex flex-1">
-          <AccountSidebar />
+          <AccountSidebar profile={profile} />
           <main className="flex-grow">
             {children}
           </main>

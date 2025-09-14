@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
-import { deleteLink, generateAndUpdateBackground, updateLinks, updateProfile } from "./actions"
+import { updateLinks, updateProfile, generateAndUpdateBackground } from "./actions"
 import { type User } from "@supabase/supabase-js"
 import { type Link as LinkType, type Profile } from "@/lib/types"
 import { Loader2, PlusCircle, Sparkles, Trash2, GripVertical } from "lucide-react"
@@ -89,36 +89,21 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
         }
       } else {
         toast({ title: "Success", description: "Your profile has been updated." })
+        router.refresh()
       }
     })
   }
 
   async function onLinksSubmit(data: LinksFormValues) {
     startTransition(async () => {
-      const { error: deleteError } = await removeUnusedLinks();
-      if(deleteError) {
-        toast({ title: "Error", description: "Could not remove old links.", variant: "destructive" });
-        return;
-      }
-      
-      const result = await updateLinks(data.links);
+      const result = await updateLinks(data.links, initialLinks);
       if (result.error) {
         toast({ title: "Error", description: result.error, variant: "destructive" });
       } else {
         toast({ title: "Success", description: "Your links have been updated." });
+        router.refresh()
       }
     });
-  }
-  
-  async function removeUnusedLinks() {
-    const currentLinkIds = new Set(linksForm.getValues('links').map(l => l.id));
-    const linksToDelete = initialLinks.filter(link => !currentLinkIds.has(link.id));
-    
-    for (const link of linksToDelete) {
-      const { error } = await deleteLink(link.id);
-      if (error) return { error };
-    }
-    return { error: null };
   }
 
   const handleGenerateBackground = async () => {

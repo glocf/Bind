@@ -67,12 +67,27 @@ export async function updateProfile(formData: FormData) {
 }
 
 
-export async function updateLinks(links: Partial<Link>[]) {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    return { error: 'You must be logged in to update links.' }
+    return { error: 'You must be logged in to update links.' };
+  }
+
+  const currentLinkIds = new Set(links.map(l => l.id));
+  const linksToDelete = initialLinks.filter(link => !currentLinkIds.has(link.id));
+
+  if (linksToDelete.length > 0) {
+    const { error: deleteError } = await supabase
+      .from('links')
+      .delete()
+      .in('id', linksToDelete.map(l => l.id));
+      
+    if (deleteError) {
+      console.error('Error deleting links:', deleteError);
+      return { error: 'Failed to remove old links.' };
+    }
   }
 
   const linksToUpsert = links.map((link, index) => ({
@@ -83,44 +98,21 @@ export async function updateLinks(links: Partial<Link>[]) {
     order: index,
   })).filter(link => link.title && link.url);
 
-  const { error } = await supabase.from('links').upsert(linksToUpsert, { onConflict: 'id' });
-
-  if (error) {
-    console.error('Error updating links:', error)
-    return { error: 'Failed to update links.' }
+  if (linksToUpsert.length > 0) {
+    const { error: upsertError } = await supabase.from('links').upsert(linksToUpsert, { onConflict: 'id' });
+    if (upsertError) {
+      console.error('Error upserting links:', upsertError);
+      return { error: 'Failed to update links.' };
+    }
   }
   
-  const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
-  revalidatePath('/account')
+  const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
+  revalidatePath('/account');
   if (profile?.username) {
-    revalidatePath(`/${profile.username}`)
+    revalidatePath(`/${profile.username}`);
   }
 
-  return { success: true }
-}
-
-export async function deleteLink(linkId: string) {
-    const supabase = createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-
-    if (!user) {
-        return { error: 'You must be logged in to delete a link.' }
-    }
-
-    const { error } = await supabase.from('links').delete().eq('id', linkId).eq('user_id', user.id)
-
-    if (error) {
-        console.error('Error deleting link:', error)
-        return { error: 'Failed to delete link.' }
-    }
-
-    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
-    revalidatePath('/account')
-    if (profile?.username) {
-        revalidatePath(`/${profile.username}`)
-    }
-
-    return { success: true }
+  return { success: true };
 }
 
 
