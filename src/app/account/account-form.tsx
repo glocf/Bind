@@ -159,7 +159,7 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                     <FormControl>
                       <Input placeholder="your_username" {...field} />
                     </FormControl>
-                    <FormDescription>This will be your public URL: linksmash.com/{profileForm.watch('username')}</FormDescription>
+                    <FormDescription>This will be your public URL: bind.us/{profileForm.watch('username')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

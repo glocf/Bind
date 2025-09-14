@@ -19,7 +19,7 @@ export default async function Header() {
         <div className="mr-auto flex">
           <Link href="/" className="mr-6 flex items-center space-x-2 bg-zinc-800/50 hover:bg-zinc-800/80 transition-colors px-4 py-2 rounded-full">
             <GunIcon />
-            <span className="font-bold text-lg text-white">LinkSmash</span>
+            <span className="font-bold text-lg text-white">Bind</span>
           </Link>
         </div>
         <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">

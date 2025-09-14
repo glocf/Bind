@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: ProfilePageProps) {
   }
 
   return {
-    title: `${profile.full_name || params.username} | LinkSmash`,
+    title: `${profile.full_name || params.username} | Bind`,
     description: profile.bio || 'Check out my links!',
   }
 }

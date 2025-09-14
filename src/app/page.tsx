@@ -2,8 +2,17 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/header'
+import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
+export default async function Home() {
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    redirect('/account');
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#100518] to-[#08020c]">
       <div className="absolute inset-0 opacity-[.03] bg-[url('https://www.transparenttextures.com/patterns/gplay.png')] bg-repeat"></div>
@@ -14,7 +23,7 @@ export default function Home() {
             Everything you want, right here.
           </h1>
           <p className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
-            LinkSmash is your go-to for modern, feature-rich biolinks and fast, secure file hosting. Everything you need — right here.
+            Bind is your go-to for modern, feature-rich biolinks and fast, secure file hosting. Everything you need — right here.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
