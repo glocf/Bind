@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
-export async function signUp(formData: FormData) {
+export async function signUp(formData: FormData): Promise<{ error: string } | { success: boolean }> {
     const email = formData.get('email') as string
     const password = formData.get('password') as string
     const username = formData.get('username') as string
@@ -13,7 +13,9 @@ export async function signUp(formData: FormData) {
     const signupSchema = z.object({
       email: z.string().email({ message: 'Please enter a valid email address.' }),
       password: z.string().min(6, { message: 'Password must be at least 6 characters long.' }),
-      username: z.string().min(3, { message: 'Username must be at least 3 characters long.' })
+      username: z.string()
+        .min(3, { message: 'Username must be at least 3 characters long.' })
+        .max(12, { message: 'Username must be 12 characters or less.' })
         .regex(/^[a-zA-Z0-9_]+$/, { message: 'Username can only contain letters, numbers, and underscores.' }),
     })
 
