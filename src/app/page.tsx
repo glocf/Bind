@@ -6,6 +6,31 @@ import Footer from '@/components/footer'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Input } from '@/components/ui/input'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { BarChart, Bot, Brush, Link2 } from 'lucide-react'
+
+const features = [
+  {
+    icon: <Link2 className="h-8 w-8 text-primary" />,
+    title: 'Modern Biolinks',
+    description: 'Create a stunning biolink page that houses all your important links in one place. Perfect for social media, portfolios, and more.',
+  },
+  {
+    icon: <Brush className="h-8 w-8 text-primary" />,
+    title: 'Deep Customization',
+    description: 'Make your page truly yours. Customize backgrounds, buttons, fonts, and layouts to match your personal brand.',
+  },
+  {
+    icon: <Bot className="h-8 w-8 text-primary" />,
+    title: 'AI-Powered Backgrounds',
+    description: 'Generate unique and beautiful background images for your profile simply by describing your interests in your bio.',
+  },
+  {
+    icon: <BarChart className="h-8 w-8 text-primary" />,
+    title: 'Analytics',
+    description: 'Understand your audience better. Track link clicks, page views, and other important metrics to see what\'s working.',
+  },
+]
 
 export default async function Home() {
   const supabase = createClient();
@@ -19,8 +44,8 @@ export default async function Home() {
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#100518] to-[#08020c]">
       <div className="absolute inset-0 opacity-[.03] bg-[url('https://www.transparenttextures.com/patterns/gplay.png')] bg-repeat"></div>
       <Header />
-      <main className="flex-grow flex flex-col items-center justify-center text-center px-4 relative z-10">
-        <div className="max-w-4xl mx-auto">
+      <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10">
+        <div className="max-w-4xl mx-auto pt-20">
           <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
             Everything you want, right here.
           </h1>
@@ -54,6 +79,27 @@ export default async function Home() {
             className="w-full h-auto rounded-xl shadow-2xl shadow-primary/10"
           />
         </div>
+
+        <section className="w-full max-w-6xl mx-auto py-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {features.map((feature, index) => (
+                <Card 
+                  key={index}
+                  className="bg-card/50 backdrop-blur-sm border-white/10 text-left animate-fade-in-up"
+                  style={{ animationDelay: `${index * 150}ms` }}
+                >
+                  <CardHeader>
+                    {feature.icon}
+                  </CardHeader>
+                  <CardContent>
+                    <CardTitle className="text-xl font-bold mb-2">{feature.title}</CardTitle>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
       </main>
       <Footer />
     </div>
