@@ -6,12 +6,56 @@ import { Button } from '@/components/ui/button'
 import { getIconForUrl } from '@/components/icons'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
 import { Header } from '@/components/header'
+import { Suspense } from 'react'
+import { Skeleton } from '@/components/ui/skeleton'
+import type { Link } from '@/lib/types'
 
 type ProfilePageProps = {
   params: {
     username: string
   }
 }
+
+async function UserLinks({ userId }: { userId: string }) {
+  const supabase = createClient()
+  const { data: links } = await supabase
+    .from('links')
+    .select('*')
+    .eq('user_id', userId)
+    .order('order', { ascending: true })
+
+  return (
+    <div className="flex flex-col space-y-4">
+      {links?.map((link: Link) => {
+        const Icon = getIconForUrl(link.url)
+        return (
+          <Button
+            key={link.id}
+            asChild
+            className="w-full justify-start transition-transform duration-200 hover:scale-105"
+            variant="secondary"
+          >
+            <a href={link.url} target="_blank" rel="noopener noreferrer">
+              <Icon className="mr-4" />
+              {link.title}
+            </a>
+          </Button>
+        )
+      })}
+    </div>
+  )
+}
+
+function LinksSkeleton() {
+  return (
+    <div className="flex flex-col space-y-4">
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+    </div>
+  )
+}
+
 
 export async function generateMetadata({ params }: ProfilePageProps) {
   const supabase = createClient()
@@ -45,12 +89,6 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
     notFound()
   }
 
-  const { data: links } = await supabase
-    .from('links')
-    .select('*')
-    .eq('user_id', profile.id)
-    .order('order', { ascending: true })
-
   const avatarPlaceholder = PlaceHolderImages.find(p => p.id === 'avatar-1')
 
   const backgroundStyle = profile.background_image_data_uri
@@ -79,24 +117,9 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
             {profile.full_name && <p className="text-muted-foreground mb-4">@{profile.username}</p>}
             <p className="text-muted-foreground mt-2 mb-6">{profile.bio}</p>
 
-            <div className="flex flex-col space-y-4">
-              {links?.map(link => {
-                const Icon = getIconForUrl(link.url)
-                return (
-                  <Button
-                    key={link.id}
-                    asChild
-                    className="w-full justify-start transition-transform duration-200 hover:scale-105"
-                    variant="secondary"
-                  >
-                    <a href={link.url} target="_blank" rel="noopener noreferrer">
-                      <Icon className="mr-4" />
-                      {link.title}
-                    </a>
-                  </Button>
-                )
-              })}
-            </div>
+            <Suspense fallback={<LinksSkeleton />}>
+              <UserLinks userId={profile.id} />
+            </Suspense>
           </div>
         </main>
       </div>
