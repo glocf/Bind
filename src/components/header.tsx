@@ -36,7 +36,7 @@ export default async function Header() {
                   <Link href="/login">Login</Link>
                 </Button>
                 <Button asChild className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold">
-                  <Link href="/account">Sign Up Free</Link>
+                  <Link href="/signup">Sign Up Free</Link>
                 </Button>
             </div>
           )}

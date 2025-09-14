@@ -63,19 +63,14 @@ export default async function Home() {
             style={{ animationDelay: '500ms' }}
           >
             <div className="relative w-full sm:w-auto">
-              <Input 
-                type="text" 
-                placeholder="bind.us/username" 
-                className="bg-zinc-900/50 border-white/20 text-white placeholder:text-white/40 h-12 pl-4 pr-32 rounded-lg focus:ring-primary/50" 
-              />
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
+                  asChild
+                >
+                  <Link href="/signup">Claim Now</Link>
+                </Button>
             </div>
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
-              asChild
-            >
-              <Link href="/account">Claim Now</Link>
-            </Button>
           </div>
         </div>
         

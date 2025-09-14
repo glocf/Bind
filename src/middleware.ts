@@ -58,12 +58,12 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (!user && request.nextUrl.pathname.startsWith('/account')) {
-    // For now, allow access to /account for design review with mock data
-    // In production, this should redirect.
-    // const url = new URL(request.url)
-    // url.pathname = '/'
-    // return Response.redirect(url)
+  const protectedPaths = ['/account', '/admin']
+
+  if (!user && protectedPaths.some(path => request.nextUrl.pathname.startsWith(path))) {
+    const url = new URL(request.url)
+    url.pathname = '/login'
+    return Response.redirect(url)
   }
 
   return response
@@ -80,5 +80,6 @@ export const config = {
      */
     '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
     '/account/:path*',
+    '/admin/:path*',
   ],
 }
