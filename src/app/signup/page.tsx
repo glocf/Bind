@@ -44,7 +44,8 @@ export default function SignupPage() {
       if (result?.error) {
         setMessage({ type: 'error', text: result.error })
       } else if (result?.success) {
-        setMessage({ type: 'info', text: 'Account created! Please check your email to confirm your account and log in.' })
+        router.push('/account');
+        router.refresh();
       }
     })
   }

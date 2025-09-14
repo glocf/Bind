@@ -38,7 +38,7 @@ export async function signUp(formData: FormData) {
         return { error: 'Username is already taken.' }
     }
 
-    const { error } = await supabase.auth.signUp({
+    const { data: { user }, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -49,13 +49,25 @@ export async function signUp(formData: FormData) {
       }
     })
 
-    if (error) {
-      // The handle_new_user trigger might fail if the username is already taken in a race condition.
-      // Supabase auth might return a generic error, so we provide a helpful message.
-      if (error.message.includes('duplicate key value violates unique constraint')) {
+    if (signUpError) {
+      if (signUpError.message.includes('duplicate key value violates unique constraint')) {
         return { error: 'This username is already taken. Please choose another one.'}
       }
-      return { error: error.message }
+      return { error: signUpError.message }
+    }
+
+    if (!user) {
+      return { error: "Could not create user." }
+    }
+    
+    // Manually sign in the user after successful sign up
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInError) {
+        return { error: "Account created, but failed to log in. Please try logging in manually." };
     }
 
     return { success: true }
