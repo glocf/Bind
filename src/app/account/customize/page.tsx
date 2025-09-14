@@ -8,6 +8,7 @@ import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Image as ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Social, Badge } from 'lucide-react';
 import Image from 'next/image';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 
 const CustomizationControl = ({ label, children, icon: Icon }: { label: string, children: React.ReactNode, icon?: React.ElementType }) => (
