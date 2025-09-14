@@ -19,14 +19,11 @@ export default async function AccountLayout({ children }: { children: React.Reac
     .eq('id', user.id)
     .single();
 
-  // Assign admin role to specific user for development
-  if (profile && user.email === 'camisitodecorazon@gmail.com') {
-    profile.role = 'admin';
-  }
-
   return (
     <AccountLayoutClient user={user} profile={profile}>
       {children}
     </AccountLayoutClient>
   );
 }
+
+

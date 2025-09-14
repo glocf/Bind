@@ -20,8 +20,9 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single()
 
-  // Assign admin role to specific user for development
-  if (user.email === 'camisitodecorazon@gmail.com' && profile) {
+  // This is a temporary check for development.
+  // In a real app, roles would be managed in the database.
+  if (profile && user.email === 'camisitodecorazon@gmail.com') {
     profile.role = 'admin';
   }
 

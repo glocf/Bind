@@ -49,6 +49,12 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
      )
   }
 
+  // This is a temporary check for development.
+  // In a real app, roles would be managed in the database.
+  if (user.email === 'camisitodecorazon@gmail.com') {
+    profile.role = 'admin';
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
