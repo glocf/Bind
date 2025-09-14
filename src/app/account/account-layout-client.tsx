@@ -33,7 +33,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import Header from '@/components/header'
+import { Header } from '@/components/header'
 import { type Profile } from '@/lib/types'
 
 const AccountSidebar = ({ profile }: { profile: Profile | null }) => {

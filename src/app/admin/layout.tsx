@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
-import Header from '@/components/header'
+import { Header } from '@/components/header'
 
 export default async function AdminLayout({
   children,

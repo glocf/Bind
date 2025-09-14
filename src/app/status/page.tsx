@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import Header from '@/components/header';
+import { Header } from '@/components/header';
 import Footer from '@/components/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle, AlertCircle, HelpCircle, Loader2 } from 'lucide-react';
