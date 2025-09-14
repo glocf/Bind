@@ -30,12 +30,12 @@ function LinksFormSkeleton() {
                 <Skeleton className="h-8 w-1/4" />
                 <Skeleton className="h-4 w-1/2" />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
-                <Skeleton className="h-20 w-full" />
+            <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4">
+                {[...Array(24)].map((_, i) => (
+                    <Skeleton key={i} className="h-16 w-16" />
+                ))}
             </div>
+             <Skeleton className="h-20 w-full" />
             <div className="space-y-4 pt-4">
                 <Skeleton className="h-24 w-full" />
                 <Skeleton className="h-24 w-full" />
@@ -47,7 +47,7 @@ function LinksFormSkeleton() {
 export default async function LinksPage() {
   return (
     <div className="flex-grow p-6">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
             <Suspense fallback={<LinksFormSkeleton />}>
               <LinksFormWrapper />
             </Suspense>

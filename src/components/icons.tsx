@@ -1,18 +1,16 @@
-import { Link, Github, Twitter, Instagram, Youtube, Twitch, Linkedin, Facebook, Gitlab, Globe } from 'lucide-react'
+import { Link, Globe } from 'lucide-react'
+import { socialPresets, socialIcons } from './social-icons'
 
 export function getIconForUrl(url: string): React.ComponentType<{ className?: string }> {
   try {
     if (!url || !url.startsWith('http')) return Link;
     const domain = new URL(url).hostname.replace('www.', '')
     
-    if (domain.includes('github.com')) return Github
-    if (domain.includes('twitter.com') || domain.includes('x.com')) return Twitter
-    if (domain.includes('instagram.com')) return Instagram
-    if (domain.includes('youtube.com')) return Youtube
-    if (domain.includes('twitch.tv')) return Twitch
-    if (domain.includes('linkedin.com')) return Linkedin
-    if (domain.includes('facebook.com')) return Facebook
-    if (domain.includes('gitlab.com')) return Gitlab
+    const preset = socialPresets.find(p => domain.includes(p.domain))
+    if (preset) {
+      return preset.icon
+    }
+
     if (domain.includes('')) return Globe
   } catch (e) {
     // Invalid URL

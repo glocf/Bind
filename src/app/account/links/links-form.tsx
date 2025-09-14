@@ -10,10 +10,11 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { updateLinks } from "../actions"
 import { type Link as LinkType } from "@/lib/types"
-import { Loader2, PlusCircle, Trash2, Github, Twitter, Instagram, Youtube, Twitch, Linkedin, Facebook, Gitlab, Globe } from "lucide-react"
+import { Loader2, PlusCircle, Trash2, Globe, Link } from "lucide-react"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { getIconForUrl } from "@/components/icons"
+import { socialPresets } from "@/components/social-icons"
 
 const linksSchema = z.object({
   links: z.array(
@@ -31,18 +32,6 @@ interface LinksFormProps {
   links: LinkType[]
 }
 
-const socialPresets = [
-  { name: 'GitHub', icon: Github, url: 'https://github.com/' },
-  { name: 'Twitter', icon: Twitter, url: 'https://twitter.com/' },
-  { name: 'Instagram', icon: Instagram, url: 'https://instagram.com/' },
-  { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/c/' },
-  { name: 'Twitch', icon: Twitch, url: 'https://twitch.tv/' },
-  { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/' },
-  { name: 'Facebook', icon: Facebook, url: 'https://facebook.com/' },
-  { name: 'GitLab', icon: Gitlab, url: 'https://gitlab.com/' },
-  { name: 'Website', icon: Globe, url: 'https://' },
-]
-
 export function LinksForm({ links: initialLinks }: LinksFormProps) {
   const { toast } = useToast()
   const router = useRouter()
@@ -55,7 +44,7 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
     },
   });
 
-  const { fields, append, remove, update } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control: linksForm.control,
     name: "links",
   })
@@ -84,38 +73,47 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
     <Form {...linksForm}>
       <form onSubmit={linksForm.handleSubmit(onLinksSubmit)} className="space-y-8">
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">Links</h1>
-          <p className="text-muted-foreground">Add your social media links and custom URLs.</p>
+          <div className="flex items-center gap-3">
+             <Link className="h-6 w-6 text-muted-foreground" />
+             <h1 className="text-2xl font-bold tracking-tight">Link your social media profiles.</h1>
+          </div>
+          <p className="text-muted-foreground ml-9">Pick a social media to add to your profile.</p>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-12 gap-4">
           {socialPresets.map((preset) => (
             <Button
               key={preset.name}
               type="button"
               variant="outline"
-              className="flex flex-col items-center justify-center h-24 gap-2"
+              className="flex items-center justify-center h-16 w-16 bg-card/80 hover:bg-card/100 border-border/50"
               onClick={() => addPresetLink(preset)}
             >
               <preset.icon className="h-8 w-8" />
-              <span>{preset.name}</span>
+              <span className="sr-only">{preset.name}</span>
             </Button>
           ))}
-           <Button
+        </div>
+        
+        <Button
             type="button"
-            variant="outline"
-            className="flex flex-col items-center justify-center h-24 gap-2 border-dashed"
+            variant="ghost"
+            className="h-auto w-full justify-start items-center gap-4"
             onClick={addCustomLink}
           >
-            <PlusCircle className="h-8 w-8" />
-            <span>Custom Link</span>
+            <div className="flex items-center justify-center h-16 w-16 rounded-lg bg-card/80 border border-border/50">
+                <Globe className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <div>
+                <p className="font-semibold text-base">Add Custom URL</p>
+                <p className="text-sm text-muted-foreground">Use your own URL and choose an icon to match.</p>
+            </div>
           </Button>
-        </div>
         
         <Separator />
 
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold">Your Links</h2>
+          {fields.length > 0 && <h2 className="text-xl font-semibold">Your Links</h2>}
           {fields.map((field, index) => {
             const Icon = getIconForUrl(linksForm.watch(`links.${index}.url`))
             return (
@@ -159,7 +157,7 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
           {fields.length === 0 && (
             <div className="text-center py-10 border-2 border-dashed rounded-lg">
                 <p className="text-muted-foreground">You haven't added any links yet.</p>
-                <p className="text-sm text-muted-foreground">Click a preset above or "Custom Link" to start.</p>
+                <p className="text-sm text-muted-foreground">Click a preset above or "Custom URL" to start.</p>
             </div>
           )}
         </div>
