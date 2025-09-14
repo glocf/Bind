@@ -28,8 +28,10 @@ export default async function AccountPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto py-8 px-4">
-        <AccountForm user={user} profile={profileData} links={linksData || []} />
+      <main className="flex-grow container mx-auto py-12 px-4">
+        <div className="max-w-3xl mx-auto bg-card rounded-xl border">
+          <AccountForm user={user} profile={profileData} links={linksData || []} />
+        </div>
       </main>
     </div>
   )

@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { deleteLink, generateAndUpdateBackground, updateLinks, updateProfile } from "./actions"
@@ -141,15 +140,16 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-12">
       <Form {...profileForm}>
-        <form onSubmit={profileForm.handleSubmit(onProfileSubmit)}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Profile</CardTitle>
-              <CardDescription>This is how others will see you on the site.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-8">
+          <div className="space-y-4">
+            <div className="p-6">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight">Profile</h2>
+              <p className="text-sm text-muted-foreground mt-1">This is how others will see you on the site.</p>
+            </div>
+            
+            <div className="p-6 pt-0 space-y-4">
               <FormField
                 control={profileForm.control}
                 name="username"
@@ -178,31 +178,34 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                   </FormItem>
                 )}
               />
-            </CardContent>
-            <CardFooter className="justify-between">
-              <Button onClick={handleGenerateBackground} disabled={isGenerating || isPending} variant="outline" type="button">
-                {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                Generate Background
-              </Button>
-              <Button type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Profile
-              </Button>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
+          <Separator />
+          <div className="flex items-center justify-between p-6">
+            <Button onClick={handleGenerateBackground} disabled={isGenerating || isPending} variant="outline" type="button">
+              {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+              Generate Background
+            </Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Profile
+            </Button>
+          </div>
         </form>
       </Form>
+      
+      <Separator />
 
       <Form {...linksForm}>
-        <form onSubmit={linksForm.handleSubmit(onLinksSubmit)}>
-          <Card>
-            <CardHeader>
-              <CardTitle>Links</CardTitle>
-              <CardDescription>Add, edit, and reorder your links.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+        <form onSubmit={linksForm.handleSubmit(onLinksSubmit)} className="space-y-8">
+          <div className="space-y-4">
+             <div className="p-6">
+              <h2 className="text-2xl font-semibold leading-none tracking-tight">Links</h2>
+              <p className="text-sm text-muted-foreground mt-1">Add, edit, and reorder your links.</p>
+            </div>
+            <div className="p-6 pt-0 space-y-4">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex items-center gap-2 group">
+                <div key={field.id} className="flex items-center gap-2 group p-4 border rounded-lg">
                   <div className="flex-grow space-y-2">
                     <FormField
                       control={linksForm.control}
@@ -247,14 +250,15 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add Link
               </Button>
-            </CardContent>
-            <CardFooter className="justify-end">
-              <Button type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Save Links
-              </Button>
-            </CardFooter>
-          </Card>
+            </div>
+          </div>
+          <Separator />
+           <div className="flex items-center justify-end p-6">
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Save Links
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
