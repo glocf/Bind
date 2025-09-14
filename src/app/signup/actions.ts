@@ -38,7 +38,7 @@ export async function signUp(formData: FormData) {
         return { error: 'Username is already taken.' }
     }
 
-    const { data: { user }, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -50,20 +50,12 @@ export async function signUp(formData: FormData) {
     })
 
     if (error) {
+      // The handle_new_user trigger might fail if the username is already taken in a race condition.
+      // Supabase auth might return a generic error, so we provide a helpful message.
+      if (error.message.includes('duplicate key value violates unique constraint')) {
+        return { error: 'This username is already taken. Please choose another one.'}
+      }
       return { error: error.message }
-    }
-    
-    if (user) {
-        const { error: profileError } = await supabase.from('profiles').insert({
-            id: user.id,
-            username: username,
-            full_name: username,
-        });
-
-        if (profileError) {
-             await supabase.auth.admin.deleteUser(user.id)
-             return { error: profileError.message };
-        }
     }
 
     return { success: true }
