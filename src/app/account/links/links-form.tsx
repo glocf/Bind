@@ -1,4 +1,3 @@
-
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -11,7 +10,7 @@ import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { updateLinks } from "../actions"
 import { type Link as LinkType } from "@/lib/types"
-import { Loader2, PlusCircle, Trash2, Github, Twitter, Instagram, Youtube, Twitch, Linkedin } from "lucide-react"
+import { Loader2, PlusCircle, Trash2, Github, Twitter, Instagram, Youtube, Twitch, Linkedin, Facebook, Gitlab, Globe } from "lucide-react"
 import { useTransition } from "react"
 import { useRouter } from "next/navigation"
 import { getIconForUrl } from "@/components/icons"
@@ -39,6 +38,9 @@ const socialPresets = [
   { name: 'YouTube', icon: Youtube, url: 'https://youtube.com/c/' },
   { name: 'Twitch', icon: Twitch, url: 'https://twitch.tv/' },
   { name: 'LinkedIn', icon: Linkedin, url: 'https://linkedin.com/in/' },
+  { name: 'Facebook', icon: Facebook, url: 'https://facebook.com/' },
+  { name: 'GitLab', icon: Gitlab, url: 'https://gitlab.com/' },
+  { name: 'Website', icon: Globe, url: 'https://' },
 ]
 
 export function LinksForm({ links: initialLinks }: LinksFormProps) {

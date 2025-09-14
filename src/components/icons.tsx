@@ -1,4 +1,4 @@
-import { Link, Github, Twitter, Instagram, Youtube, Twitch, Linkedin } from 'lucide-react'
+import { Link, Github, Twitter, Instagram, Youtube, Twitch, Linkedin, Facebook, Gitlab, Globe } from 'lucide-react'
 
 export function getIconForUrl(url: string): React.ComponentType<{ className?: string }> {
   try {
@@ -11,6 +11,9 @@ export function getIconForUrl(url: string): React.ComponentType<{ className?: st
     if (domain.includes('youtube.com')) return Youtube
     if (domain.includes('twitch.tv')) return Twitch
     if (domain.includes('linkedin.com')) return Linkedin
+    if (domain.includes('facebook.com')) return Facebook
+    if (domain.includes('gitlab.com')) return Gitlab
+    if (domain.includes('')) return Globe
   } catch (e) {
     // Invalid URL
   }
