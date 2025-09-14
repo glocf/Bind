@@ -20,8 +20,9 @@ export default async function AccountLayout({ children }: { children: React.Reac
     .single();
 
   return (
-    <AccountLayoutClient profile={profile}>
+    <AccountLayoutClient user={user} profile={profile}>
       {children}
     </AccountLayoutClient>
   );
 }
+

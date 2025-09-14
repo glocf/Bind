@@ -35,6 +35,7 @@ import {
 import { cn } from '@/lib/utils'
 import { Header } from '@/components/header'
 import { type Profile } from '@/lib/types'
+import { type User } from '@supabase/supabase-js'
 
 const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
   const pathname = usePathname()
@@ -151,11 +152,11 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
   );
 };
 
-export default function AccountLayoutClient({ children, profile }: { children: React.ReactNode, profile: Profile | null }) {
+export default function AccountLayoutClient({ children, user, profile }: { children: React.ReactNode, user:User, profile: Profile | null }) {
   return (
     <SidebarProvider>
       <div className="flex flex-col min-h-screen">
-        <Header />
+        <Header user={user} profile={profile} />
         <div className="flex flex-1">
           <AccountSidebar profile={profile} />
           <main className="flex-grow">

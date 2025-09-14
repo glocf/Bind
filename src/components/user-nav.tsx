@@ -1,40 +1,14 @@
+
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { createClient } from "@/lib/supabase/client"
 import { type User } from "@supabase/supabase-js"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
 import { type Profile } from "@/lib/types"
 
-export function UserNav({ user }: { user: User | null }) {
-  const router = useRouter()
-  const supabase = createClient()
-  const [profile, setProfile] = useState<Profile | null>(null)
-
-  useEffect(() => {
-    if (user) {
-      const fetchProfile = async () => {
-        const { data } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single()
-        if (data) setProfile(data)
-      }
-      fetchProfile()
-    }
-  }, [user, supabase])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/')
-    router.refresh()
-  }
-
+export function UserNav({ user, profile }: { user: User | null, profile: Profile | null}) {
+  
   if (!user) {
     return (
       <div className="flex items-center space-x-4">
@@ -48,9 +22,27 @@ export function UserNav({ user }: { user: User | null }) {
     )
   }
 
+  if (profile === null) {
+     return (
+       <Link href="/account">
+           <Button>Dashboard</Button>
+       </Link>
+     )
+  }
+
   return (
-    <Link href="/account">
-        <Button>Dashboard</Button>
-    </Link>
+    <div className="flex items-center space-x-4">
+      <span className="text-sm font-medium text-foreground/80 hidden sm:inline-block">
+        {profile?.full_name || profile?.username}
+      </span>
+      <Link href="/account">
+        <Avatar className="h-8 w-8">
+          <AvatarImage src={profile?.avatar_url || ''} alt="User avatar" />
+          <AvatarFallback>
+            {(profile?.full_name || profile?.username || 'U').charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+      </Link>
+    </div>
   )
 }
