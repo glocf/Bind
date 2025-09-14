@@ -12,6 +12,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal, Loader2 } from "lucide-react"
 import { signInWithPassword } from './actions'
 
+const GoogleIcon = () => (
+    <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110">
+        <title>Google</title>
+        <path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-5.993 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l-2.347 2.347c-1.027-.933-2.347-1.667-3.56-1.667-3.28 0-5.993 2.68-5.993 6.027s2.713 6.027 5.993 6.027c3.56 0 5.227-2.4 5.52-3.64h-5.52z" fill="currentColor"></path>
+    </svg>
+)
+
 const DiscordIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110 group-hover:-rotate-12">
         <title>Discord</title>
@@ -58,12 +65,20 @@ export default function LoginPage() {
                                 </AlertDescription>
                             </Alert>
                         )}
-                        <Button asChild type="button" variant="outline" className="w-full group" disabled={isPasswordPending}>
-                           <a href="/login/discord">
-                             <DiscordIcon />
-                             Continue with Discord
-                           </a>
-                       </Button>
+                         <div className="space-y-2">
+                            <Button asChild type="button" variant="outline" className="w-full group" disabled={isPasswordPending}>
+                               <a href="/login/google">
+                                 <GoogleIcon />
+                                 Continue with Google
+                               </a>
+                            </Button>
+                            <Button asChild type="button" variant="outline" className="w-full group" disabled={isPasswordPending}>
+                               <a href="/login/discord">
+                                 <DiscordIcon />
+                                 Continue with Discord
+                               </a>
+                           </Button>
+                        </div>
 
                         <div className="my-4 flex items-center">
                             <div className="flex-grow border-t border-muted"></div>
