@@ -1,3 +1,4 @@
+
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -10,27 +11,37 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { type Profile } from "@/lib/types"
 
-export default function UserNav({ user }: { user: User }) {
+export default function UserNav({ user }: { user: User | null }) {
   const router = useRouter()
   const supabase = createClient()
   const [profile, setProfile] = useState<Profile | null>(null)
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
-        .single()
-      if (data) setProfile(data)
+    if (user) {
+      const fetchProfile = async () => {
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single()
+        if (data) setProfile(data)
+      }
+      fetchProfile()
     }
-    fetchProfile()
-  }, [user.id, supabase])
+  }, [user, supabase])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     router.push('/')
     router.refresh()
+  }
+
+  if (!user) {
+    return (
+        <Link href="/login">
+            <Button>Login</Button>
+        </Link>
+    )
   }
 
   const userInitial = user?.user_metadata.full_name?.charAt(0).toUpperCase() ?? user?.email?.charAt(0).toUpperCase() ?? ''
