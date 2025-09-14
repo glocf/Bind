@@ -1,4 +1,3 @@
-
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
@@ -10,6 +9,10 @@ export async function signInWithPassword(prevState: any, formData: FormData) {
   const password = formData.get('password') as string
   const supabase = createClient()
 
+  console.log('Attempting to sign in with:')
+  console.log('Email:', email)
+  console.log('Password:', '********') // We log the password existence, but not the value for security
+
   if (!email || !password) {
     return { error: 'Email and password are required.' }
   }
@@ -20,11 +23,10 @@ export async function signInWithPassword(prevState: any, formData: FormData) {
   })
 
   if (error) {
+    console.error('Supabase sign-in error:', error.message)
     return { error: 'Invalid login credentials.' }
   }
 
-  // On success, Supabase client handles the session cookie.
-  // We can now redirect.
   redirect('/account')
 }
 
@@ -44,5 +46,3 @@ export async function signInWithDiscord() {
 
   return redirect(data.url)
 }
-
-    
