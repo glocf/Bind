@@ -1,10 +1,11 @@
+
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 
-export async function signInWithPassword(prevState: any, formData: FormData) {
+export async function signInWithPassword(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const supabase = createClient()
@@ -27,7 +28,7 @@ export async function signInWithPassword(prevState: any, formData: FormData) {
     return { error: 'Invalid login credentials.' }
   }
 
-  redirect('/account')
+  return { success: true }
 }
 
 export async function signInWithDiscord() {

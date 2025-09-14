@@ -2,8 +2,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useActionState, useTransition } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useRouter } from 'next/navigation'
+import { useTransition, useState, FormEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -19,20 +19,27 @@ const DiscordIcon = () => (
     </svg>
 );
 
-function LoginButton() {
-    const { pending } = useFormStatus();
-    return (
-        <Button type="submit" className="w-full" disabled={pending}>
-            {pending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Sign In
-        </Button>
-    );
-}
-
 export default function LoginPage() {
-    const [isDiscordPending, startDiscordTransition] = useTransition();
-    const [state, formAction] = useActionState(signInWithPassword, null);
+    const router = useRouter()
+    const [isPending, startTransition] = useTransition()
+    const [isDiscordPending, startDiscordTransition] = useTransition()
+    const [error, setError] = useState<string | null>(null)
 
+    const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        setError(null)
+        const formData = new FormData(event.currentTarget)
+        
+        startTransition(async () => {
+            const result = await signInWithPassword(formData)
+            if (result?.error) {
+                setError(result.error)
+            } else {
+                router.push('/account')
+            }
+        })
+    }
+    
     const handleDiscordSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
         startDiscordTransition(async () => {
@@ -49,17 +56,17 @@ export default function LoginPage() {
                         <CardDescription>Welcome back! Sign in to your account.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {state?.error && (
+                        {error && (
                             <Alert variant='destructive' className="mb-4">
                                 <Terminal className="h-4 w-4" />
                                 <AlertTitle>Error</AlertTitle>
                                 <AlertDescription>
-                                    {state.error}
+                                    {error}
                                 </AlertDescription>
                             </Alert>
                         )}
                         <form onSubmit={handleDiscordSignIn}>
-                            <Button type="submit" variant="outline" className="w-full group" disabled={isDiscordPending}>
+                            <Button type="submit" variant="outline" className="w-full group" disabled={isDiscordPending || isPending}>
                                 {isDiscordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 <DiscordIcon />
                                 Continue with Discord
@@ -72,16 +79,19 @@ export default function LoginPage() {
                             <div className="flex-grow border-t border-muted"></div>
                         </div>
 
-                        <form action={formAction} className="space-y-4">
+                        <form className="space-y-4" onSubmit={handleSignIn}>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+                                <Input id="email" name="email" type="email" placeholder="m@example.com" required disabled={isPending} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="password">Password</Label>
-                                <Input id="password" name="password" type="password" required />
+                                <Input id="password" name="password" type="password" required disabled={isPending} />
                             </div>
-                            <LoginButton />
+                            <Button type="submit" className="w-full" disabled={isPending}>
+                                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Sign In
+                            </Button>
                         </form>
                         <div className="mt-4 text-center text-sm">
                             Don&apos;t have an account?{' '}
