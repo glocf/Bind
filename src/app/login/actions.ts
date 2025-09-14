@@ -14,36 +14,23 @@ export async function signInWithPassword(formData: FormData) {
     return { error: 'Username and password are required.' }
   }
 
-  // Find user by username to get their email
-  const { data: profile, error: profileError } = await supabase
-    .from('profiles')
-    .select('id')
-    .eq('username', username)
-    .single()
+  // Step 1: Call a secure database function to get the user's email from their username.
+  const { data: emailData, error: rpcError } = await supabase.rpc('get_email_by_username', { p_username: username });
 
-  if (profileError || !profile) {
-    // Generic error to prevent username enumeration
-    return { error: 'Invalid login credentials.' }
+  if (rpcError || !emailData) {
+    // Return a generic error to prevent username enumeration.
+    return { error: 'Invalid login credentials.' };
   }
-  
-  // This is a protected call that requires the service_role key to be set in Supabase server client.
-  // It's safe to use in Server Actions.
-  const { data: user, error: userError } = await supabase.auth.admin.getUserById(profile.id)
 
-  if (userError || !user?.user?.email) {
-    return { error: 'Could not retrieve user information.' }
-  }
-  
-  const email = user.user.email
+  const email = emailData as string;
 
-  // Sign in with the found email and provided password
-  const { error } = await supabase.auth.signInWithPassword({
+  // Step 2: Sign in with the retrieved email and the provided password.
+  const { error: signInError } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
-  if (error) {
-    // Provide a generic error message for security
+  if (signInError) {
     return { error: 'Invalid login credentials.' }
   }
 
@@ -66,5 +53,3 @@ export async function signInWithDiscord() {
 
   return redirect(data.url)
 }
-
-    
