@@ -1,3 +1,4 @@
+
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
@@ -18,7 +19,7 @@ export async function Header() {
         <MobileNav />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            <UserNav user={user} />
+            {user ? <UserNav user={user} /> : null}
           </nav>
         </div>
       </div>
