@@ -55,7 +55,7 @@ export default async function CustomizePage() {
   
   return (
     <Suspense fallback={<CustomizePageSkeleton />}>
-      <CustomizeForm profile={profile} />
+      <CustomizeForm profile={profile} user={user} />
     </Suspense>
   );
 }

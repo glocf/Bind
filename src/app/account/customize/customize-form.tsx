@@ -16,6 +16,7 @@ import { updateCustomization, removeBackground, updateAvatar, updateBackground }
 import { useDebouncedCallback } from 'use-debounce';
 import { useRouter } from 'next/navigation';
 import { Switch } from '@/components/ui/switch';
+import { type User } from '@supabase/supabase-js';
 
 const CustomizationControl = ({ label, children, icon: Icon, tooltip }: { label: string, children: React.ReactNode, icon?: React.ElementType, tooltip?: string }) => (
     <div className="space-y-2">
@@ -61,7 +62,7 @@ const ColorInput = ({ label, value, onChange }: { label: string, value: string, 
 );
 
 
-export function CustomizeForm({ profile }: { profile: Profile }) {
+export function CustomizeForm({ profile, user }: { profile: Profile, user: User }) {
     const { toast } = useToast();
     const router = useRouter();
     const [isRemoving, setIsRemoving] = React.useState(false);
@@ -72,6 +73,8 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
     const backgroundInputRef = React.useRef<HTMLInputElement>(null);
 
     const [currentBio, setCurrentBio] = React.useState(profile.bio || '');
+
+    const discordIdentity = user.identities?.find(i => i.provider === 'discord');
 
     const debouncedUpdate = useDebouncedCallback(async (data: Partial<Profile>) => {
         const result = await updateCustomization(data);
@@ -270,12 +273,30 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
                              <Switch id="volume-control" disabled checked={profile.volume_control || false} onCheckedChange={(v) => debouncedUpdate({ volume_control: v })}/>
                         </div>
                         <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
-                             <Label htmlFor="use-discord-avatar" className="text-sm font-medium">Use Discord Avatar</Label>
-                             <Switch id="use-discord-avatar" checked={profile.use_discord_avatar || false} onCheckedChange={(v) => debouncedUpdate({ use_discord_avatar: v })}/>
+                            <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center justify-between w-full">
+                                            <Label htmlFor="use-discord-avatar" className="text-sm font-medium">Use Discord Avatar</Label>
+                                            <Switch id="use-discord-avatar" checked={profile.use_discord_avatar || false} onCheckedChange={(v) => debouncedUpdate({ use_discord_avatar: v })} disabled={!discordIdentity}/>
+                                        </div>
+                                    </TooltipTrigger>
+                                    {!discordIdentity && <TooltipContent><p>You need to connect your Discord account first.</p></TooltipContent>}
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                         <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
-                             <Label htmlFor="discord-avatar-decoration" className="text-sm font-medium">Discord Avatar Decoration</Label>
-                             <Switch id="discord-avatar-decoration" checked={profile.discord_avatar_decoration || false} onCheckedChange={(v) => debouncedUpdate({ discord_avatar_decoration: v })}/>
+                             <TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div className="flex items-center justify-between w-full">
+                                            <Label htmlFor="discord-avatar-decoration" className="text-sm font-medium">Discord Avatar Decoration</Label>
+                                            <Switch id="discord-avatar-decoration" checked={profile.discord_avatar_decoration || false} onCheckedChange={(v) => debouncedUpdate({ discord_avatar_decoration: v })} disabled={!discordIdentity}/>
+                                        </div>
+                                    </TooltipTrigger>
+                                    {!discordIdentity && <TooltipContent><p>You need to connect your Discord account first.</p></TooltipContent>}
+                                </Tooltip>
+                            </TooltipProvider>
                         </div>
                     </div>
                 </Card>
