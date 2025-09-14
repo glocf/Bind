@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { Header } from '@/components/header'
@@ -16,9 +17,15 @@ export default async function AdminLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('*')
     .eq('id', user.id)
     .single()
+
+  // This is a temporary check for development.
+  // In a real app, roles would be managed in the database.
+  if (profile && user.email === 'camisitodecorazon@gmail.com') {
+    profile.role = 'admin';
+  }
 
   if (profile?.role !== 'admin') {
     notFound()

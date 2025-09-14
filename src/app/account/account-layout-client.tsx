@@ -156,7 +156,7 @@ export default function AccountLayoutClient({ children, user, profile }: { child
   return (
     <SidebarProvider>
       <div suppressHydrationWarning className="flex flex-col min-h-screen">
-        <Header user={user} profile={profile} />
+        <Header />
         <div className="flex flex-1">
           <AccountSidebar profile={profile} />
           <main className="flex-grow">
