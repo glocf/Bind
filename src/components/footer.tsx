@@ -23,13 +23,15 @@ export default function Footer() {
             <div className="flex items-center space-x-2 mb-4">
               <GunIcon />
               <span className="font-bold text-lg text-white">Bind</span>
-              <Badge variant="secondary" className="bg-green-500/10 text-green-400 border-green-500/20">
-                <span className="relative flex h-2 w-2 mr-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                </span>
-                System Status
-              </Badge>
+              <Link href="/status">
+                <Badge variant="secondary" className="bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20 cursor-pointer">
+                  <span className="relative flex h-2 w-2 mr-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  System Status
+                </Badge>
+              </Link>
             </div>
             <p className="text-sm text-white/50 max-w-xs">
               Create feature-rich, customizable and modern link-in-bio pages with Bind.
@@ -48,7 +50,7 @@ export default function Footer() {
               <li><Link href="/login" className="hover:text-white transition-colors">Login</Link></li>
               <li><Link href="/account" className="hover:text-white transition-colors">Sign Up</Link></li>
               <li><Link href="#" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Website Status</Link></li>
+              <li><Link href="/status" className="hover:text-white transition-colors">Website Status</Link></li>
             </ul>
           </div>
 
