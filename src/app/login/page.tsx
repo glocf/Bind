@@ -1,13 +1,16 @@
+
+'use client'
+
 import Link from 'next/link'
-import { headers } from 'next/headers'
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Terminal } from "lucide-react"
+import { Terminal, Loader2 } from "lucide-react"
+import { signInWithPassword, signInWithDiscord } from './actions'
+import { useState, useTransition, useEffect } from 'react'
 
 const DiscordIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110 group-hover:-rotate-12">
@@ -17,43 +20,38 @@ const DiscordIcon = () => (
 );
 
 
-export default function LoginPage({ searchParams }: { searchParams: { message: string } }) {
+export default function LoginPage() {
+  const router = useRouter()
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [isPending, startTransition] = useTransition()
 
-  const signIn = async (formData: FormData) => {
-    'use server'
-
-    const email = formData.get('email') as string
-    const password = formData.get('password') as string
-    const supabase = createClient()
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
-
-    if (error) {
-      return redirect(`/login?message=${error.message}`)
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (errorMessage) {
+      timer = setTimeout(() => {
+        setErrorMessage(null)
+        router.push('/')
+      }, 15000)
     }
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [errorMessage, router])
 
-    return redirect('/account')
+  const handleSignIn = async (formData: FormData) => {
+    startTransition(async () => {
+      const result = await signInWithPassword(formData)
+      if (result?.error) {
+        setErrorMessage(result.error)
+      } else {
+        router.push('/account')
+        router.refresh()
+      }
+    })
   }
 
-  const signInWithDiscord = async () => {
-    'use server'
-    const supabase = createClient()
-    const origin = headers().get('origin')
-    const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: 'discord',
-        options: {
-            redirectTo: `${origin}/auth/callback`,
-        },
-    })
-
-    if (error) {
-        return redirect(`/login?message=Could not authenticate with Discord: ${error.message}`)
-    }
-
-    return redirect(data.url)
+  const handleDiscordSignIn = async () => {
+    await signInWithDiscord()
   }
 
   return (
@@ -65,17 +63,17 @@ export default function LoginPage({ searchParams }: { searchParams: { message: s
             <CardDescription>Enter your email below to login to your account.</CardDescription>
           </CardHeader>
           <CardContent>
-            {searchParams.message && (
+            {errorMessage && (
                 <Alert variant="destructive" className="mb-4">
                     <Terminal className="h-4 w-4" />
                     <AlertTitle>Authentication Error</AlertTitle>
                     <AlertDescription>
-                        {searchParams.message}
+                        {errorMessage}
                     </AlertDescription>
                 </Alert>
             )}
-             <form>
-                <Button formAction={signInWithDiscord} variant="outline" className="w-full group">
+             <form action={handleDiscordSignIn}>
+                <Button type="submit" variant="outline" className="w-full group">
                     <DiscordIcon />
                     Continue with Discord
                 </Button>
@@ -87,17 +85,19 @@ export default function LoginPage({ searchParams }: { searchParams: { message: s
                 <div className="flex-grow border-t border-muted"></div>
             </div>
 
-
-            <form className="space-y-4">
+            <form action={handleSignIn} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" placeholder="m@example.com" required />
+                <Input id="email" name="email" type="email" placeholder="m@example.com" required disabled={isPending} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" name="password" type="password" required />
+                <Input id="password" name="password" type="password" required disabled={isPending} />
               </div>
-              <Button formAction={signIn} className="w-full">Sign In</Button>
+              <Button type="submit" className="w-full" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Sign In
+              </Button>
             </form>
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
