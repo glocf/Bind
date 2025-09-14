@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { getIconForUrl } from '@/components/icons'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
-import Header from '@/components/header'
+import { Header } from '@/components/header'
 
 type ProfilePageProps = {
   params: {
