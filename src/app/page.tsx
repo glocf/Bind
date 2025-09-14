@@ -2,8 +2,10 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/header'
+import Footer from '@/components/footer'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { Input } from '@/components/ui/input'
 
 export default async function Home() {
   const supabase = createClient();
@@ -26,22 +28,26 @@ export default async function Home() {
             Bind is your go-to for modern, feature-rich biolinks and fast, secure file hosting. Everything you need — right here.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="relative w-full sm:w-auto">
+              <Input 
+                type="text" 
+                placeholder="bind.us/username" 
+                className="bg-zinc-900/50 border-white/20 text-white placeholder:text-white/40 h-12 pl-4 pr-32 rounded-lg focus:ring-primary/50" 
+              />
+            </div>
             <Button
               size="lg"
-              className="w-full sm:w-auto bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold"
+              className="w-full sm:w-auto bg-primary text-primary-foreground font-semibold hover:bg-primary/90"
               asChild
             >
-              <Link href="/account">Sign Up for Free</Link>
-            </Button>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto font-semibold border-white/20 hover:bg-white/5 hover:text-white">
-              View Pricing
+              <Link href="/account">Claim Now</Link>
             </Button>
           </div>
         </div>
         
         <div className="w-full max-w-6xl mx-auto mt-20 relative">
           <Image 
-            src="https://cdn.discordapp.com/attachments/1258525740131487747/1262847525227204618/image.png?ex=66981881&is=6696c701&hm=4a7c0612711d943da39d54e19b5fd00318d10b77b78a9c372f6a5b78f0b71946&"
+            src="https://cdn.discordapp.com/attachments/1258525740131487747/1262952877134381156/image.png?ex=6698797f&is&hm=13d100741275988e05c93c4113b28b6d87e35b0b2f56f43e3d93de2f7a9446f0&"
             alt="Product preview"
             width={1200}
             height={750}
@@ -49,6 +55,7 @@ export default async function Home() {
           />
         </div>
       </main>
+      <Footer />
     </div>
   )
 }
