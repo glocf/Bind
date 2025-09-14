@@ -25,14 +25,20 @@ async function LinksFormWrapper() {
 
 function LinksFormSkeleton() {
     return (
-        <div className="space-y-12">
-             <div className="space-y-4 p-6">
+        <div className="space-y-6">
+            <div className="space-y-2">
                 <Skeleton className="h-8 w-1/4" />
                 <Skeleton className="h-4 w-1/2" />
-                <div className="pt-4 space-y-4">
-                    <Skeleton className="h-24 w-full" />
-                    <Skeleton className="h-10 w-24" />
-                </div>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+                <Skeleton className="h-20 w-full" />
+            </div>
+            <div className="space-y-4 pt-4">
+                <Skeleton className="h-24 w-full" />
+                <Skeleton className="h-24 w-full" />
             </div>
         </div>
     )
@@ -41,7 +47,7 @@ function LinksFormSkeleton() {
 export default async function LinksPage() {
   return (
     <div className="flex-grow p-6">
-        <div className="max-w-3xl mx-auto bg-card rounded-xl border">
+        <div className="max-w-3xl mx-auto">
             <Suspense fallback={<LinksFormSkeleton />}>
               <LinksFormWrapper />
             </Suspense>

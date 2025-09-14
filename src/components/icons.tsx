@@ -2,7 +2,9 @@ import { Link, Github, Twitter, Instagram, Youtube, Twitch, Linkedin } from 'luc
 
 export function getIconForUrl(url: string): React.ComponentType<{ className?: string }> {
   try {
+    if (!url || !url.startsWith('http')) return Link;
     const domain = new URL(url).hostname.replace('www.', '')
+    
     if (domain.includes('github.com')) return Github
     if (domain.includes('twitter.com') || domain.includes('x.com')) return Twitter
     if (domain.includes('instagram.com')) return Instagram
