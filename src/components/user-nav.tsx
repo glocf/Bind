@@ -38,9 +38,14 @@ export function UserNav({ user }: { user: User | null }) {
 
   if (!user) {
     return (
-        <Link href="/login">
-            <Button>Login</Button>
+      <div className="flex items-center space-x-4">
+        <Link href="/login" className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60">
+            Login
         </Link>
+        <Link href="/signup">
+            <Button>Sign Up Free</Button>
+        </Link>
+      </div>
     )
   }
 
