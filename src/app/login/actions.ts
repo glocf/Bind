@@ -12,7 +12,7 @@ export async function signInWithPassword(formData: FormData) {
 
   console.log('Attempting to sign in with:')
   console.log('Email:', email)
-  console.log('Password:', '********') // We log the password existence, but not the value for security
+  console.log('Password:', '********') 
 
   if (!email || !password) {
     return { error: 'Email and password are required.' }
@@ -36,6 +36,9 @@ export async function signInWithDiscord() {
   const origin = headers().get('origin')
   const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
+      options: {
+        redirectTo: `${origin}/auth/callback`,
+      }
   })
 
   if (error) {

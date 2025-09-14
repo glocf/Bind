@@ -3,6 +3,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
+
 
 export async function signUp(formData: FormData): Promise<{ error: string } | { success: boolean }> {
     const email = formData.get('email') as string
@@ -57,17 +60,17 @@ export async function signUp(formData: FormData): Promise<{ error: string } | { 
 
 export async function signInWithDiscord() {
     const supabase = createClient()
-    const { headers } = await import('next/headers')
     const origin = headers().get('origin')
     const { data, error } = await supabase.auth.signInWithOAuth({
         provider: 'discord',
+        options: {
+            redirectTo: `${origin}/auth/callback`,
+        }
     })
 
     if (error) {
-        const { redirect } = await import('next/navigation')
         return redirect(`/login?message=Could not authenticate with Discord: ${error.message}`)
     }
     
-    const { redirect } = await import('next/navigation')
     return redirect(data.url)
 }
