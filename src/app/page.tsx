@@ -41,21 +41,27 @@ export default async function Home() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#100518] to-[#08020c]">
-      <div className="absolute inset-0 opacity-[.03] bg-[url('https://www.transparenttextures.com/patterns/gplay.png')] bg-repeat"></div>
+    <div className="flex flex-col min-h-screen bg-background">
+      <div className="fixed inset-0 -z-10 h-full w-full">
+        <Image
+          src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=80&w=2071&auto=format&fit=crop"
+          alt="Background"
+          fill
+          style={{ objectFit: 'cover' }}
+          className="opacity-10"
+        />
+      </div>
       <Header />
-      <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10">
-        <div className="max-w-4xl mx-auto pt-28 pb-24">
+      <div className="h-[50vh] w-full" />
+      <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10 bg-gradient-to-b from-transparent via-[#100518] to-[#08020c]">
+        <div className="max-w-4xl mx-auto pt-16 pb-24">
            <h1 
             className="text-5xl md:text-7xl font-bold text-white tracking-tight animate-fade-in-up"
             style={{ animationDelay: '200ms' }}
           >
             Everything you want, right here.
           </h1>
-          <p 
-            className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto animate-fade-in-up"
-            style={{ animationDelay: '350ms' }}
-          >
+          <p>
             Bind is your go-to for modern, feature-rich biolinks and fast, secure file hosting. Everything you need — right here.
           </p>
           <div 
