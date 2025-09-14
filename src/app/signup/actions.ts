@@ -2,6 +2,7 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 export async function signUp(formData: FormData) {
@@ -35,7 +36,7 @@ export async function signUp(formData: FormData) {
         return { error: 'Username is already taken.' }
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
+    const { error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -50,21 +51,8 @@ export async function signUp(formData: FormData) {
       return { error: signUpError.message }
     }
 
-    if (!data.user) {
-      return { error: "Account created, but failed to log in. Please try logging in manually." };
-    }
-
-    // Automatically sign in the user after successful sign up
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-    });
-
-    if (signInError) {
-        return { error: 'Account created, but failed to log in. Please try logging in manually.' };
-    }
-
-    return { success: true }
+    // Redirect to login page with a success message
+    return redirect('/login?message=Account created! Please log in.')
 }
 
 export async function signInWithDiscord() {
