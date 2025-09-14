@@ -9,10 +9,6 @@ export async function signInWithPassword(formData: FormData) {
   const password = formData.get('password') as string
   const supabase = createClient()
 
-  console.log('Attempting to sign in with:')
-  console.log('Email:', email)
-  console.log('Password:', '********') 
-
   if (!email || !password) {
     return { error: 'Email and password are required.' }
   }
@@ -49,4 +45,4 @@ export async function signInWithDiscord() {
   return redirect(data.url)
 }
 
-
+    
