@@ -1,18 +1,18 @@
-'use client'
+
 import { createClient } from '@/lib/supabase/server'
-import { notFound, useRouter } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { getIconForUrl } from '@/components/icons'
 import { PlaceHolderImages } from '@/lib/placeholder-images'
 import { Header } from '@/components/header'
-import { Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { Link as LinkType } from '@/lib/types'
-import { trackLinkClick, trackProfileView } from '../account/actions'
+import { trackProfileView } from '../account/actions'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Crown, Ghost, Gem, ShieldCheck, Sparkles, User } from "lucide-react";
+import UserLinks from './user-links'
 
 type ProfilePageProps = {
   params: {
@@ -28,35 +28,6 @@ const badgeMap: { [key: string]: { name: string, icon: React.ReactNode } } = {
   'ai-enthusiast': { name: 'AI Enthusiast', icon: <Sparkles className="h-4 w-4 text-pink-500" /> },
   haunted: { name: 'Haunted', icon: <Ghost className="h-4 w-4 text-gray-400" /> },
 };
-
-
-function UserLinks({ links, userId }: { links: LinkType[], userId: string }) {
-  const router = useRouter();
-
-  const handleLinkClick = async (link: LinkType) => {
-    await trackLinkClick(link.id, userId);
-    router.push(link.url);
-  };
-
-  return (
-    <div className="flex flex-col space-y-4">
-      {links.map((link: LinkType) => {
-        const Icon = getIconForUrl(link.url);
-        return (
-          <Button
-            key={link.id}
-            onClick={() => handleLinkClick(link)}
-            className="w-full justify-start transition-transform duration-200 hover:scale-105"
-            variant="secondary"
-          >
-              <Icon className="mr-4" />
-              {link.title}
-          </Button>
-        );
-      })}
-    </div>
-  );
-}
 
 function LinksSkeleton() {
   return (
