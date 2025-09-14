@@ -1,4 +1,3 @@
-
 'use server'
 
 import { revalidatePath } from 'next/cache'
@@ -174,12 +173,16 @@ export async function removeBackground() {
         return { error: 'You must be logged in.' };
     }
 
-    const { data: currentProfile } = await supabase.from('profiles').select('background_image_url').single();
+    const { data: currentProfile } = await supabase.from('profiles').select('background_image_url').eq('id', user.id).single();
     
     if (currentProfile?.background_image_url) {
-        const path = new URL(currentProfile.background_image_url).pathname.split('/backgrounds/')[1];
-        if (path) {
-            await supabase.storage.from('backgrounds').remove([path]);
+        try {
+            const path = new URL(currentProfile.background_image_url).pathname.split('/backgrounds/')[1];
+            if (path) {
+                await supabase.storage.from('backgrounds').remove([path]);
+            }
+        } catch (e) {
+            console.error("Could not parse URL or remove from storage", e)
         }
     }
 
@@ -236,7 +239,6 @@ export async function updateAvatar(formData: FormData) {
 
     if (updateError) {
         console.error('Error updating profile with new avatar:', updateError);
-        // Attempt to delete the orphaned file from storage
         await supabase.storage.from('profiles').remove([filePath]);
         return { error: 'Failed to update profile with new avatar.' };
     }
@@ -284,7 +286,6 @@ export async function updateBackground(formData: FormData) {
 
     if (updateError) {
         console.error('Error updating profile with new background:', updateError);
-        // Attempt to delete the orphaned file from storage
         await supabase.storage.from('backgrounds').remove([filePath]);
         return { error: 'Failed to update profile with new background.' };
     }
