@@ -1,7 +1,7 @@
+
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AccountForm } from './account-form'
-import Header from '@/components/header'
 import { type User } from '@supabase/supabase-js'
 
 export default async function AccountPage() {
@@ -27,7 +27,6 @@ export default async function AccountPage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
       <main className="flex-grow container mx-auto py-12 px-4">
         <div className="max-w-3xl mx-auto bg-card rounded-xl border">
           <AccountForm user={user} profile={profileData} links={linksData || []} />
