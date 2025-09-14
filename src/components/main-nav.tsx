@@ -1,5 +1,6 @@
 
 import Link from "next/link"
+import { cn } from "@/lib/utils"
 
 const GunIcon = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
@@ -7,15 +8,19 @@ const GunIcon = () => (
     </svg>
 )
 
-export function MainNav() {
+export function MainNav({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLElement>) {
   return (
-    <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
+    <nav
+      className={cn("hidden md:flex items-center space-x-2 lg:space-x-6", className)}
+      {...props}
+    >
+      <Link href="/" className="flex items-center space-x-2">
         <GunIcon />
-        <span className="hidden font-bold sm:inline-block">
-          Bind
-        </span>
+        <span className="font-bold">Bind</span>
       </Link>
-    </div>
+    </nav>
   )
 }
