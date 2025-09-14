@@ -38,7 +38,7 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
 
     if (!result.success) {
       const errorMessages = result.error.errors.map(e => e.message).join(' ');
-      return redirect(`/signup?message=Could not create user: ${errorMessages}`)
+      return redirect(`/signup?message=${errorMessages}`)
     }
     
     const supabase = createClient()
@@ -55,7 +55,7 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
     })
 
     if (error) {
-      return redirect(`/signup?message=Could not create user: ${error.message}`)
+      return redirect(`/signup?message=${error.message}`)
     }
     
     // Create profile entry
@@ -70,7 +70,7 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
              // If profile creation fails, we should probably delete the user
              // or handle this more gracefully. For now, just show an error.
              await supabase.auth.admin.deleteUser(user.id)
-             return redirect(`/signup?message=Could not create profile: ${profileError.message}`);
+             return redirect(`/signup?message=${profileError.message}`);
         }
     }
 
@@ -107,11 +107,11 @@ export default function SignupPage({ searchParams }: { searchParams: { message: 
           </CardHeader>
           <CardContent>
             {searchParams.message && (
-                <Alert variant={searchParams.message.startsWith('Could not') ? 'destructive' : 'default'} className="mb-4">
+                <Alert variant={searchParams.message.startsWith('Check your email') ? 'default' : 'destructive'} className="mb-4">
                     <Terminal className="h-4 w-4" />
-                    <AlertTitle>{searchParams.message.startsWith('Could not') ? 'Error' : 'Info'}</AlertTitle>
+                    <AlertTitle>{searchParams.message.startsWith('Check your email') ? 'Info' : 'Error'}</AlertTitle>
                     <AlertDescription>
-                        {searchParams.message.replace(/Could not (create|authenticate) user: /,'')}
+                        {searchParams.message}
                     </AlertDescription>
                 </Alert>
             )}

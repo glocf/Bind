@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Terminal, MessageCircle } from "lucide-react"
+import { Terminal } from "lucide-react"
 
 const DiscordIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110 group-hover:-rotate-12">
@@ -32,7 +32,7 @@ export default function LoginPage({ searchParams }: { searchParams: { message: s
     })
 
     if (error) {
-      return redirect(`/login?message=Could not authenticate user: ${error.message}`)
+      return redirect(`/login?message=${error.message}`)
     }
 
     return redirect('/account')
@@ -70,7 +70,7 @@ export default function LoginPage({ searchParams }: { searchParams: { message: s
                     <Terminal className="h-4 w-4" />
                     <AlertTitle>Authentication Error</AlertTitle>
                     <AlertDescription>
-                        {searchParams.message.replace('Could not authenticate user: ','')}
+                        {searchParams.message}
                     </AlertDescription>
                 </Alert>
             )}
