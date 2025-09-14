@@ -16,7 +16,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOut } from "@/app/login/actions"
-import { LogOut, Settings, LayoutDashboard, Shield } from "lucide-react"
+import { LogOut, Settings, LayoutDashboard, Shield, User as UserIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 
@@ -80,6 +80,12 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+         <DropdownMenuItem asChild>
+          <Link href={`/${profile.username}`}>
+            <UserIcon className="mr-2 h-4 w-4" />
+            <span>View Profile</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/account">
             <LayoutDashboard className="mr-2 h-4 w-4" />
