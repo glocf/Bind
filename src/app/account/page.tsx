@@ -5,7 +5,7 @@ import { AccountForm } from './account-form'
 import { type User } from '@supabase/supabase-js'
 
 export default async function AccountPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {

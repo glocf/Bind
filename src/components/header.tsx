@@ -7,7 +7,7 @@ import { UserNav } from './user-nav';
 import { MobileNav } from './mobile-nav';
 
 export async function Header() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

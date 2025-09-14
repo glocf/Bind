@@ -1,4 +1,3 @@
-
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -42,9 +41,9 @@ export function UserNav({ user }: { user: User | null }) {
         <Link href="/login" className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60">
             Login
         </Link>
-        <Link href="/signup">
-            <Button>Sign Up Free</Button>
-        </Link>
+        <Button asChild>
+          <Link href="/signup">Sign Up Free</Link>
+        </Button>
       </div>
     )
   }

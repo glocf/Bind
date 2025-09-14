@@ -89,7 +89,6 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
         }
       } else {
         toast({ title: "Success", description: "Your profile has been updated." })
-        router.refresh()
       }
     })
   }
@@ -101,7 +100,6 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
         toast({ title: "Error", description: result.error, variant: "destructive" });
       } else {
         toast({ title: "Success", description: "Your links have been updated." });
-        router.refresh()
       }
     });
   }
@@ -119,7 +117,6 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
       toast({ title: "Error generating background", description: result.error, variant: "destructive" })
     } else {
       toast({ title: "Background generated and saved!" })
-      router.refresh()
     }
     setIsGenerating(false)
   }
@@ -144,7 +141,7 @@ export function AccountForm({ user, profile, links: initialLinks }: AccountFormP
                     <FormControl>
                       <Input placeholder="your_username" {...field} />
                     </FormControl>
-                    <FormDescription>This will be your public URL: bind.us/{profileForm.watch('username')}</FormDescription>
+                    <FormDescription>This will be your public URL: bind.us/{profileForm.getValues('username')}</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

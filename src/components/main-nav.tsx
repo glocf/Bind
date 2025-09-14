@@ -1,3 +1,4 @@
+'use client'
 
 import Link from 'next/link'
 import { GunIcon } from '@/components/gun-icon'
