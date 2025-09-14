@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal, Loader2 } from "lucide-react"
-import { signInWithPassword, signInWithDiscord } from './actions'
+import { signInWithPassword } from './actions'
 
 const DiscordIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110 group-hover:-rotate-12">
@@ -22,7 +22,6 @@ const DiscordIcon = () => (
 export default function LoginPage() {
     const router = useRouter()
     const [isPasswordPending, startPasswordTransition] = useTransition()
-    const [isDiscordPending, startDiscordTransition] = useTransition();
     const [error, setError] = useState<string | null>(null)
 
     const handleSignIn = async (event: FormEvent<HTMLFormElement>) => {
@@ -40,12 +39,6 @@ export default function LoginPage() {
             }
         })
     }
-
-    const handleDiscordSignIn = async () => {
-        startDiscordTransition(async () => {
-          await signInWithDiscord();
-        });
-    };
     
     return (
         <div className="flex flex-col min-h-screen bg-background">
@@ -65,10 +58,11 @@ export default function LoginPage() {
                                 </AlertDescription>
                             </Alert>
                         )}
-                        <Button type="button" variant="outline" className="w-full group" disabled={isDiscordPending || isPasswordPending} onClick={handleDiscordSignIn}>
-                           {isDiscordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                           <DiscordIcon />
-                           Continue with Discord
+                        <Button asChild type="button" variant="outline" className="w-full group" disabled={isPasswordPending}>
+                           <a href="/login/discord">
+                             <DiscordIcon />
+                             Continue with Discord
+                           </a>
                        </Button>
 
                         <div className="my-4 flex items-center">
@@ -80,13 +74,13 @@ export default function LoginPage() {
                         <form className="space-y-4" onSubmit={handleSignIn}>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" name="email" type="email" placeholder="m@example.com" required disabled={isPasswordPending || isDiscordPending} />
+                                <Input id="email" name="email" type="email" placeholder="m@example.com" required disabled={isPasswordPending} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="password">Password</Label>
-                                <Input id="password" name="password" type="password" required disabled={isPasswordPending || isDiscordPending} />
+                                <Input id="password" name="password" type="password" required disabled={isPasswordPending} />
                             </div>
-                            <Button type="submit" className="w-full" disabled={isPasswordPending || isPasswordPending}>
+                            <Button type="submit" className="w-full" disabled={isPasswordPending}>
                                 {isPasswordPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 Sign In
                             </Button>
@@ -103,5 +97,3 @@ export default function LoginPage() {
         </div>
     );
 }
-
-    

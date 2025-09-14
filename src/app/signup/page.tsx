@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal, Loader2 } from "lucide-react"
-import { signUp, signInWithDiscord } from './actions'
+import { signUp } from './actions'
 import { useState, useTransition, FormEvent } from 'react'
 
 const DiscordIcon = () => (
@@ -22,7 +22,7 @@ const DiscordIcon = () => (
 
 export default function SignupPage() {
   const [isPending, startTransition] = useTransition()
-  const [message, setMessage] = useState<{ type: 'error'; text: string } | null>(null)
+  const [message, setMessage] = useState<{ type: 'error' | 'success'; text: string } | null>(null)
   const router = useRouter()
 
   const handleSignUp = async (event: FormEvent<HTMLFormElement>) => {
@@ -35,14 +35,8 @@ export default function SignupPage() {
         setMessage({ type: 'error', text: result.error });
       }
       if (result?.success) {
-        router.push('/login?message=Account created! Please log in.');
+        setMessage({ type: 'success', text: 'Account created! Please check your email to verify your account.'});
       }
-    });
-  };
-
-  const handleDiscordSignIn = async () => {
-    startTransition(async () => {
-      await signInWithDiscord();
     });
   };
 
@@ -56,21 +50,20 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent>
             {message && (
-                <Alert variant={'destructive'} className="mb-4">
+                <Alert variant={message.type === 'error' ? 'destructive' : 'default'} className="mb-4">
                     <Terminal className="h-4 w-4" />
-                    <AlertTitle>{'Error'}</AlertTitle>
+                    <AlertTitle>{message.type === 'error' ? 'Error' : 'Success'}</AlertTitle>
                     <AlertDescription>
                         {message.text}
                     </AlertDescription>
                 </Alert>
             )}
-            <form onSubmit={(e) => { e.preventDefault(); handleDiscordSignIn(); }}>
-                <Button type="submit" variant="outline" className="w-full group" disabled={isPending}>
-                    {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button asChild type="button" variant="outline" className="w-full group" disabled={isPending}>
+                <a href="/login/discord">
                     <DiscordIcon />
                     Continue with Discord
-                </Button>
-            </form>
+                </a>
+            </Button>
 
             <div className="my-4 flex items-center">
                 <div className="flex-grow border-t border-muted"></div>

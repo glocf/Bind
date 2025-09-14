@@ -25,24 +25,3 @@ export async function signInWithPassword(formData: FormData) {
 
   return { success: true }
 }
-
-export async function signInWithDiscord() {
-  const supabase = createClient()
-  const origin = 'https://9000-firebase-bind-1757827583567.cluster-udxxdyopu5c7cwhhtg6mmadhvs.cloudworkstations.dev';
-
-  const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'discord',
-      options: {
-        scopes: 'identify email',
-        redirectTo: `${origin}/auth/callback`,
-      }
-  })
-
-  if (error) {
-      return redirect(`/login?message=Could not authenticate with Discord: ${error.message}`)
-  }
-
-  return redirect(data.url)
-}
-
-    
