@@ -15,19 +15,20 @@ export default async function Header() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-sm">
-      <div className="container flex h-20 items-center">
-        <div className="mr-auto flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2">
+      <div className="container flex h-20 items-center justify-between">
+        <div className="flex items-center gap-6">
+          <Link href="/" className="flex items-center space-x-2">
             <GunIcon />
             <span className="font-bold text-lg text-white">Bind</span>
           </Link>
+          <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+              <Link href="#" className="text-white/70 hover:text-white transition-colors">Help Center</Link>
+              <Link href="#" className="text-white/70 hover:text-white transition-colors">Discord</Link>
+              <Link href="#" className="text-white/70 hover:text-white transition-colors">Pricing</Link>
+          </nav>
         </div>
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-            <Link href="#" className="text-white/70 hover:text-white transition-colors">Help Center</Link>
-            <Link href="#" className="text-white/70 hover:text-white transition-colors">Discord</Link>
-            <Link href="#" className="text-white/70 hover:text-white transition-colors">Pricing</Link>
-        </nav>
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        
+        <div className="flex items-center space-x-2">
           {user ? (
             <UserNav user={user} />
           ) : (
