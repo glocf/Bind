@@ -59,38 +59,8 @@ function UserLinksWrapper({ userId }: { userId: string }) {
   return <UserLinks links={links || []} userId={userId} />
 }
 
-export default function ProfilePage({ params }: ProfilePageProps) {
-  const [profile, setProfile] = useState<Profile | null>(null);
+function ProfileClientView({ profile }: { profile: Profile }) {
   const [isEntered, setIsEntered] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const supabase = createClient()
-      const { data } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('username', params.username)
-        .single()
-      
-      if (data) {
-        setProfile(data as Profile)
-        // Preload background image
-        if (data.background_image_url) {
-          const img = new (window as any).Image();
-          img.src = data.background_image_url;
-          img.onload = () => setLoading(false);
-          img.onerror = () => setLoading(false);
-        } else {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-        notFound()
-      }
-    }
-    fetchProfile();
-  }, [params.username])
   
   useEffect(() => {
     if (profile) {
@@ -98,15 +68,6 @@ export default function ProfilePage({ params }: ProfilePageProps) {
     }
   }, [profile])
 
-
-  if (loading || !profile) {
-    return (
-        <div className="flex items-center justify-center min-h-screen bg-background">
-            <Skeleton className="w-full max-w-md h-96 rounded-2xl" />
-        </div>
-    );
-  }
-  
   const avatarPlaceholder = PlaceHolderImages.find(p => p.id === 'avatar-1')
 
   const backgroundStyle = profile.background_image_url
@@ -195,5 +156,52 @@ export default function ProfilePage({ params }: ProfilePageProps) {
         </main>
       </div>
     </>
-  )
+  );
+}
+
+
+export default function ProfilePage({ params }: ProfilePageProps) {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      const supabase = createClient()
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('username', params.username)
+        .single()
+      
+      if (data) {
+        setProfile(data as Profile)
+        // Preload background image
+        if (data.background_image_url) {
+          const img = new (window as any).Image();
+          img.src = data.background_image_url;
+          img.onload = () => setLoading(false);
+          img.onerror = () => setLoading(false);
+        } else {
+          setLoading(false);
+        }
+      } else {
+        setLoading(false);
+        notFound()
+      }
+    }
+    fetchProfile();
+  }, [params.username])
+
+  if (loading || !profile) {
+    return (
+        <div className="flex items-center justify-center min-h-screen bg-background">
+            <div className="fixed inset-0 z-50 flex items-center justify-center text-white text-2xl font-semibold bg-black/80">
+              <p className="animate-pulse">Loading...</p>
+            </div>
+        </div>
+    );
+  }
+
+  return <ProfileClientView profile={profile} />;
 }
