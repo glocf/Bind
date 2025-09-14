@@ -101,6 +101,17 @@ export type Database = {
           discord_presence: string | null
           background_effects: string | null
           location: string | null
+          accent_color: string | null
+          text_color: string | null
+          background_color: string | null
+          icon_color: string | null
+          enable_profile_gradient: boolean | null
+          monochrome_icons: boolean | null
+          animated_title: boolean | null
+          swap_box_colors: boolean | null
+          volume_control: boolean | null
+          use_discord_avatar: boolean | null
+          discord_avatar_decoration: boolean | null
         }
         Insert: {
           avatar_url?: string | null
@@ -118,6 +129,17 @@ export type Database = {
           discord_presence?: string | null
           background_effects?: string | null
           location?: string | null
+          accent_color?: string | null
+          text_color?: string | null
+          background_color?: string | null
+          icon_color?: string | null
+          enable_profile_gradient?: boolean | null
+          monochrome_icons?: boolean | null
+          animated_title?: boolean | null
+          swap_box_colors?: boolean | null
+          volume_control?: boolean | null
+          use_discord_avatar?: boolean | null
+          discord_avatar_decoration?: boolean | null
         }
         Update: {
           avatar_url?: string | null
@@ -135,6 +157,17 @@ export type Database = {
           discord_presence?: string | null
           background_effects?: string | null
           location?: string | null
+          accent_color?: string | null
+          text_color?: string | null
+          background_color?: string | null
+          icon_color?: string | null
+          enable_profile_gradient?: boolean | null
+          monochrome_icons?: boolean | null
+          animated_title?: boolean | null
+          swap_box_colors?: boolean | null
+          volume_control?: boolean | null
+          use_discord_avatar?: boolean | null
+          discord_avatar_decoration?: boolean | null
         }
         Relationships: [
           {

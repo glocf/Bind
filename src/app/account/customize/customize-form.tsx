@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Sparkles, Loader2 } from 'lucide-react';
+import { ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Sparkles, Loader2, HelpCircle } from 'lucide-react';
 import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { type Profile } from '@/lib/types';
@@ -16,16 +16,51 @@ import { useToast } from '@/hooks/use-toast';
 import { updateCustomization, removeBackground, updateAvatar, updateBackground } from '../actions';
 import { useDebouncedCallback } from 'use-debounce';
 import { useRouter } from 'next/navigation';
+import { Switch } from '@/components/ui/switch';
 
-const CustomizationControl = ({ label, children, icon: Icon }: { label: string, children: React.ReactNode, icon?: React.ElementType }) => (
+const CustomizationControl = ({ label, children, icon: Icon, tooltip }: { label: string, children: React.ReactNode, icon?: React.ElementType, tooltip?: string }) => (
     <div className="space-y-2">
-        <Label className="text-sm font-medium text-muted-foreground flex items-center">
-            {Icon && <Icon className="h-4 w-4 mr-2" />}
-            {label}
-        </Label>
+        <div className="flex items-center">
+            <Label className="text-sm font-medium text-muted-foreground flex items-center">
+                {Icon && <Icon className="h-4 w-4 mr-2" />}
+                {label}
+            </Label>
+            {tooltip && (
+                <TooltipProvider>
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{tooltip}</p>
+                        </TooltipContent>
+                    </Tooltip>
+                </TooltipProvider>
+            )}
+        </div>
         {children}
     </div>
 );
+
+const ColorInput = ({ label, value, onChange }: { label: string, value: string, onChange: (value: string) => void }) => (
+    <div className="space-y-2">
+        <Label className="text-sm font-medium text-muted-foreground">{label}</Label>
+        <div className="relative">
+            <Input 
+                type="color" 
+                className="absolute h-full w-10 p-1 bg-transparent border-none cursor-pointer"
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+            />
+            <Input 
+                className="bg-zinc-800 border-zinc-700 pl-12" 
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+            />
+        </div>
+    </div>
+);
+
 
 export function CustomizeForm({ profile }: { profile: Profile }) {
     const { toast } = useToast();
@@ -193,6 +228,58 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
             <div className="p-4 rounded-lg bg-gradient-to-r from-primary/30 to-purple-500/30 flex items-center justify-center text-center">
                 <Diamond className="h-5 w-5 mr-3 text-primary" />
                 <p className="font-semibold">Want exclusive features? Unlock more with <span className="text-primary font-bold">Premium</span></p>
+            </div>
+            
+             <div>
+                <h2 className="text-xl font-bold mb-6">Color Customization</h2>
+                <Card className="bg-card/50 border-white/10 p-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <ColorInput label="Accent Color" value={profile.accent_color || '#1b1b1b'} onChange={(v) => debouncedUpdate({ accent_color: v })} />
+                            <ColorInput label="Text Color" value={profile.text_color || '#ffffff'} onChange={(v) => debouncedUpdate({ text_color: v })} />
+                            <ColorInput label="Background Color" value={profile.background_color || '#080808'} onChange={(v) => debouncedUpdate({ background_color: v })} />
+                            <ColorInput label="Icon Color" value={profile.icon_color || '#ffffff'} onChange={(v) => debouncedUpdate({ icon_color: v })} />
+                        </div>
+                        <div className="flex items-center justify-center">
+                             <div className="flex items-center space-x-2">
+                                <Switch id="profile-gradient" checked={profile.enable_profile_gradient || false} onCheckedChange={(v) => debouncedUpdate({ enable_profile_gradient: v })} />
+                                <Label htmlFor="profile-gradient">Enable Profile Gradient</Label>
+                            </div>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+
+            <div>
+                <h2 className="text-xl font-bold mb-6">Other Customization</h2>
+                <Card className="bg-card/50 border-white/10 p-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="monochrome-icons" className="flex items-center text-sm font-medium">Monochrome Icons <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" /></Label>
+                             <Switch id="monochrome-icons" checked={profile.monochrome_icons || false} onCheckedChange={(v) => debouncedUpdate({ monochrome_icons: v })} />
+                        </div>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="animated-title" className="text-sm font-medium">Animated Title</Label>
+                             <Switch id="animated-title" checked={profile.animated_title || false} onCheckedChange={(v) => debouncedUpdate({ animated_title: v })}/>
+                        </div>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="swap-box-colors" className="flex items-center text-sm font-medium">Swap Box Colors <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" /></Label>
+                             <Switch id="swap-box-colors" checked={profile.swap_box_colors || false} onCheckedChange={(v) => debouncedUpdate({ swap_box_colors: v })}/>
+                        </div>
+                         <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="volume-control" className="text-sm font-medium">Volume Control</Label>
+                             <Switch id="volume-control" disabled checked={profile.volume_control || false} onCheckedChange={(v) => debouncedUpdate({ volume_control: v })}/>
+                        </div>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="use-discord-avatar" className="text-sm font-medium">Use Discord Avatar</Label>
+                             <Switch id="use-discord-avatar" checked={profile.use_discord_avatar || false} onCheckedChange={(v) => debouncedUpdate({ use_discord_avatar: v })}/>
+                        </div>
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                             <Label htmlFor="discord-avatar-decoration" className="text-sm font-medium">Discord Avatar Decoration</Label>
+                             <Switch id="discord-avatar-decoration" checked={profile.discord_avatar_decoration || false} onCheckedChange={(v) => debouncedUpdate({ discord_avatar_decoration: v })}/>
+                        </div>
+                    </div>
+                </Card>
             </div>
 
             <div>
