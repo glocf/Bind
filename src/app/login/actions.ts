@@ -33,11 +33,12 @@ export async function signInWithPassword(formData: FormData) {
 
 export async function signInWithDiscord() {
   const supabase = createClient()
-  const origin = headers().get('origin')
+  const origin = "https://9000-firebase-bind-1757827583567.cluster-udxxdyopu5c7cwhhtg6mmadhvs.cloudworkstations.dev"
   const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'discord',
       options: {
         redirectTo: `${origin}/auth/callback`,
+        scopes: 'identify email',
       }
   })
 
@@ -47,3 +48,4 @@ export async function signInWithDiscord() {
 
   return redirect(data.url)
 }
+
