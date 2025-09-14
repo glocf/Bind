@@ -2,7 +2,8 @@
 'use client'
 
 import Link from 'next/link'
-import { useFormState, useFormStatus } from 'react-dom'
+import { useActionState, useTransition } from 'react'
+import { useFormStatus } from 'react-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,7 +11,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal, Loader2 } from "lucide-react"
 import { signInWithPassword, signInWithDiscord } from './actions'
-import { useTransition } from 'react'
 
 const DiscordIcon = () => (
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 transition-transform duration-200 ease-in-out group-hover:scale-110 group-hover:-rotate-12">
@@ -31,7 +31,7 @@ function LoginButton() {
 
 export default function LoginPage() {
     const [isDiscordPending, startDiscordTransition] = useTransition();
-    const [state, formAction] = useFormState(signInWithPassword, null);
+    const [state, formAction] = useActionState(signInWithPassword, null);
 
     const handleDiscordSignIn = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -95,5 +95,3 @@ export default function LoginPage() {
         </div>
     );
 }
-
-    
