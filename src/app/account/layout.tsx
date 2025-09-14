@@ -14,6 +14,7 @@ import {
   SidebarFooter,
   SidebarTrigger,
   SidebarInset,
+  SidebarProvider,
 } from '@/components/ui/sidebar'
 import {
   Accordion,
@@ -176,14 +177,16 @@ const AccountSidebar = () => {
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <div className="flex flex-1">
-        <AccountSidebar />
-        <main className="flex-grow">
-          {children}
-        </main>
+    <SidebarProvider>
+      <div className="flex flex-col min-h-screen">
+        <Header />
+        <div className="flex flex-1">
+          <AccountSidebar />
+          <main className="flex-grow">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }
