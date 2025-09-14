@@ -44,11 +44,7 @@ export default function SignupPage() {
       if (result?.error) {
         setMessage({ type: 'error', text: result.error })
       } else if (result?.success) {
-        setMessage({ type: 'info', text: 'Account created! Redirecting you to your account...' })
-        setTimeout(() => {
-            router.push('/account')
-            router.refresh()
-        }, 2000)
+        setMessage({ type: 'info', text: 'Account created! Please check your email to confirm your account and log in.' })
       }
     })
   }
