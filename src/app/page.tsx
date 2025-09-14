@@ -45,7 +45,7 @@ export default async function Home() {
       <div className="absolute inset-0 opacity-[.03] bg-[url('https://www.transparenttextures.com/patterns/gplay.png')] bg-repeat"></div>
       <Header />
       <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10">
-        <div className="max-w-4xl mx-auto pt-20">
+        <div className="max-w-4xl mx-auto pt-20 pb-16">
            <h1 
             className="text-5xl md:text-7xl font-bold text-white tracking-tight animate-fade-in-up"
             style={{ animationDelay: '200ms' }}
@@ -79,7 +79,7 @@ export default async function Home() {
           </div>
         </div>
         
-        <section className="w-full max-w-6xl mx-auto py-20 mt-12">
+        <section className="w-full max-w-6xl mx-auto py-12">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <Card 

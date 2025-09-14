@@ -14,7 +14,7 @@ export default async function Header() {
   const { data: { user } } = await supabase.auth.getUser()
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-transparent">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-20 items-center">
         <div className="mr-auto flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
