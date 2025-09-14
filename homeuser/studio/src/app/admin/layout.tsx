@@ -16,7 +16,7 @@ export default async function AdminLayout({
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('*')
     .eq('id', user.id)
     .single()
 
@@ -32,7 +32,7 @@ export default async function AdminLayout({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header user={user} />
+      <Header user={user} profile={profile} />
       <main className="flex-grow container mx-auto py-8 px-4">
         {children}
       </main>
