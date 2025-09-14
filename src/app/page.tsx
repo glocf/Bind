@@ -9,17 +9,7 @@ export default async function Home() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('username')
-      .eq('id', user.id)
-      .single()
-    
-    if (profile?.username) {
-      redirect(`/${profile.username}`)
-    } else {
-      redirect('/account')
-    }
+    redirect('/account');
   }
 
   return (
