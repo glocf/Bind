@@ -89,8 +89,8 @@ export default async function ProfilePage({ params }: ProfilePageProps) {
 
   const avatarPlaceholder = PlaceHolderImages.find(p => p.id === 'avatar-1')
 
-  const backgroundStyle = profile.background_image_data_uri
-    ? { backgroundImage: `url(${profile.background_image_data_uri})` }
+  const backgroundStyle = profile.background_image_url
+    ? { backgroundImage: `url(${profile.background_image_url})` }
     : {};
 
   const equippedBadges = profile.equipped_badges || [];

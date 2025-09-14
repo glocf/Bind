@@ -13,7 +13,7 @@ import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { type Profile } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
-import { updateCustomization, removeBackground, generateAndUpdateBackground, updateAvatar } from '../actions';
+import { updateCustomization, removeBackground, updateAvatar, updateBackground } from '../actions';
 import { useDebouncedCallback } from 'use-debounce';
 import { useRouter } from 'next/navigation';
 
@@ -31,9 +31,11 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
     const { toast } = useToast();
     const router = useRouter();
     const [isRemoving, setIsRemoving] = React.useState(false);
-    const [isGenerating, setIsGenerating] = React.useState(false);
     const [isUploading, setIsUploading] = React.useState(false);
+    const [isBgUploading, setIsBgUploading] = React.useState(false);
+
     const avatarInputRef = React.useRef<HTMLInputElement>(null);
+    const backgroundInputRef = React.useRef<HTMLInputElement>(null);
 
     const [currentBio, setCurrentBio] = React.useState(profile.bio || '');
 
@@ -58,24 +60,7 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
         }
         setIsRemoving(false);
     }
-
-    const handleGenerateBackground = async () => {
-        setIsGenerating(true);
-        if (!currentBio) {
-            toast({ title: "Please enter a bio first.", description: "The AI uses your bio to generate the background.", variant: "destructive" });
-            setIsGenerating(false);
-            return;
-        }
-        const result = await generateAndUpdateBackground(currentBio);
-        if (result.error) {
-            toast({ title: "Error generating background", description: result.error, variant: "destructive" });
-        } else {
-            toast({ title: "Background generated and saved!" });
-        }
-        setIsGenerating(false);
-        router.refresh();
-    };
-
+    
     const handleAvatarUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -94,6 +79,25 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
         }
         setIsUploading(false);
     };
+
+    const handleBackgroundUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        setIsBgUploading(true);
+        const formData = new FormData();
+        formData.append('background', file);
+
+        const result = await updateBackground(formData);
+
+        if (result.error) {
+            toast({ title: "Error uploading background", description: result.error, variant: "destructive" });
+        } else {
+            toast({ title: "Background updated successfully!" });
+            router.refresh();
+        }
+        setIsBgUploading(false);
+    };
     
     return (
         <div className="container mx-auto py-12 px-4 space-y-12 text-white">
@@ -103,29 +107,42 @@ export function CustomizeForm({ profile }: { profile: Profile }) {
                     <Card className="bg-card/50 border-white/10 aspect-video flex flex-col">
                         <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm">Background</p>
-                            {profile.background_image_data_uri ? (
-                                <div className="relative flex-grow rounded-md overflow-hidden bg-zinc-900 flex items-center justify-center">
-                                    <Image src={profile.background_image_data_uri} alt="Background Preview" layout="fill" objectFit="cover" />
-                                    <div className="absolute top-1 right-1 flex items-center gap-1">
-                                        <Button 
-                                            variant="destructive" 
-                                            size="icon" 
-                                            className="h-6 w-6 bg-red-500/80 hover:bg-red-500"
-                                            onClick={handleRemoveBackground}
-                                            disabled={isRemoving}
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors">
-                                     <Button onClick={handleGenerateBackground} disabled={isGenerating} variant="ghost" className="w-full h-full flex-col gap-2">
-                                        {isGenerating ? <Loader2 className="h-8 w-8 animate-spin" /> : <Sparkles className="h-8 w-8" />}
-                                        <span className="text-sm text-center font-normal">Generate Background</span>
-                                    </Button>
-                                </div>
-                            )}
+                            <div 
+                                className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer relative"
+                                onClick={() => backgroundInputRef.current?.click()}
+                            >
+                                {isBgUploading ? (
+                                    <Loader2 className="h-8 w-8 animate-spin" />
+                                ) : profile.background_image_url ? (
+                                    <>
+                                        <Image src={profile.background_image_url} alt="Background Preview" layout="fill" objectFit="cover" className="rounded-md"/>
+                                        <div className="absolute top-1 right-1 flex items-center gap-1 z-10">
+                                            <Button 
+                                                variant="destructive" 
+                                                size="icon" 
+                                                className="h-6 w-6 bg-red-500/80 hover:bg-red-500"
+                                                onClick={(e) => { e.stopPropagation(); handleRemoveBackground(); }}
+                                                disabled={isRemoving}
+                                            >
+                                                {isRemoving ? <Loader2 className="h-3 w-3 animate-spin"/> : <X className="h-3 w-3" />}
+                                            </Button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <ImageIcon className="h-8 w-8 mb-2" />
+                                        <span className="text-sm">Click to upload a file</span>
+                                    </>
+                                )}
+                            </div>
+                             <input 
+                                type="file" 
+                                ref={backgroundInputRef} 
+                                className="hidden" 
+                                accept="image/png, image/jpeg, image/gif, image/webp"
+                                onChange={handleBackgroundUpload}
+                                disabled={isBgUploading}
+                            />
                         </CardContent>
                     </Card>
                     <Card className="bg-card/50 border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">

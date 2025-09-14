@@ -3,7 +3,6 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
-import { generateThemedProfileBackground } from '@/ai/flows/generate-themed-profile-background'
 import { z } from 'zod'
 import { type Link, type Profile } from '@/lib/types'
 
@@ -116,51 +115,6 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
   return { success: true };
 }
 
-
-export async function generateAndUpdateBackground(bio: string) {
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  
-  if (!user) {
-    return { error: 'You must be logged in.' }
-  }
-
-  if (!bio) {
-    return { error: 'Please provide a bio to generate a background.' }
-  }
-
-  try {
-    const result = await generateThemedProfileBackground({ bio })
-    const dataUri = result.backgroundImageDataUri
-
-    if (!dataUri) {
-      return { error: 'AI failed to generate a background. Please try again.' }
-    }
-
-    const { error: updateError } = await supabase
-      .from('profiles')
-      .update({ background_image_data_uri: dataUri })
-      .eq('id', user.id)
-
-    if (updateError) {
-      console.error(updateError)
-      return { error: 'Failed to save the generated background.' }
-    }
-
-    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single()
-
-    revalidatePath('/account')
-    if (profile?.username) {
-      revalidatePath(`/${profile.username}`)
-    }
-    
-    return { success: true, dataUri }
-  } catch (e) {
-    console.error(e)
-    return { error: 'An unexpected error occurred while generating the background.' }
-  }
-}
-
 export async function trackProfileView(userId: string) {
   const supabase = createClient()
   const { error } = await supabase.from('analytics').insert({
@@ -220,9 +174,18 @@ export async function removeBackground() {
         return { error: 'You must be logged in.' };
     }
 
+    const { data: currentProfile } = await supabase.from('profiles').select('background_image_url').single();
+    
+    if (currentProfile?.background_image_url) {
+        const path = new URL(currentProfile.background_image_url).pathname.split('/backgrounds/')[1];
+        if (path) {
+            await supabase.storage.from('backgrounds').remove([path]);
+        }
+    }
+
     const { error } = await supabase
         .from('profiles')
-        .update({ background_image_data_uri: null, updated_at: new Date().toISOString() })
+        .update({ background_image_url: null, updated_at: new Date().toISOString() })
         .eq('id', user.id);
 
     if (error) {
@@ -276,6 +239,54 @@ export async function updateAvatar(formData: FormData) {
         // Attempt to delete the orphaned file from storage
         await supabase.storage.from('profiles').remove([filePath]);
         return { error: 'Failed to update profile with new avatar.' };
+    }
+    
+    const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
+    revalidatePath('/account/customize');
+    if (profile?.username) {
+        revalidatePath(`/${profile.username}`);
+    }
+
+    return { success: true, url: publicUrl };
+}
+
+export async function updateBackground(formData: FormData) {
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+        return { error: 'You must be logged in.' };
+    }
+
+    const file = formData.get('background') as File;
+    if (!file) {
+        return { error: 'No file selected.' };
+    }
+
+    const filePath = `backgrounds/${user.id}/${Date.now()}`;
+    const { error: uploadError } = await supabase.storage
+        .from('backgrounds')
+        .upload(filePath, file);
+
+    if (uploadError) {
+        console.error('Error uploading background:', uploadError);
+        return { error: 'Failed to upload background.' };
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+        .from('backgrounds')
+        .getPublicUrl(filePath);
+
+    const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ background_image_url: publicUrl })
+        .eq('id', user.id);
+
+    if (updateError) {
+        console.error('Error updating profile with new background:', updateError);
+        // Attempt to delete the orphaned file from storage
+        await supabase.storage.from('backgrounds').remove([filePath]);
+        return { error: 'Failed to update profile with new background.' };
     }
     
     const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
