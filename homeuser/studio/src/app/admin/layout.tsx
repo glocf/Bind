@@ -20,13 +20,18 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single()
 
+  // Assign admin role to specific user for development
+  if (user.email === 'camisitodecorazon@gmail.com' && profile) {
+    profile.role = 'admin';
+  }
+
   if (profile?.role !== 'admin') {
     notFound()
   }
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      <Header user={user} />
       <main className="flex-grow container mx-auto py-8 px-4">
         {children}
       </main>
