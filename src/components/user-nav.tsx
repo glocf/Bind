@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { type Profile } from "@/lib/types"
 
-export default function UserNav({ user }: { user: User | null }) {
+export function UserNav({ user }: { user: User | null }) {
   const router = useRouter()
   const supabase = createClient()
   const [profile, setProfile] = useState<Profile | null>(null)

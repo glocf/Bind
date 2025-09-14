@@ -19,7 +19,7 @@ export async function Header() {
         <MobileNav user={user} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-1">
-            {user ? <UserNav user={user} /> : null}
+            <UserNav user={user} />
           </nav>
         </div>
       </div>
