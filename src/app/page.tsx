@@ -11,22 +11,22 @@ import { BarChart, Bot, Brush, Link2 } from 'lucide-react'
 
 const features = [
   {
-    icon: <Link2 className="h-8 w-8 text-primary" />,
+    icon: <Link2 className="h-10 w-10 text-primary" />,
     title: 'Modern Biolinks',
     description: 'Create a stunning biolink page that houses all your important links in one place. Perfect for social media, portfolios, and more.',
   },
   {
-    icon: <Brush className="h-8 w-8 text-primary" />,
+    icon: <Brush className="h-10 w-10 text-primary" />,
     title: 'Deep Customization',
     description: 'Make your page truly yours. Customize backgrounds, buttons, fonts, and layouts to match your personal brand.',
   },
   {
-    icon: <Bot className="h-8 w-8 text-primary" />,
+    icon: <Bot className="h-10 w-10 text-primary" />,
     title: 'AI-Powered Backgrounds',
     description: 'Generate unique and beautiful background images for your profile simply by describing your interests in your bio.',
   },
   {
-    icon: <BarChart className="h-8 w-8 text-primary" />,
+    icon: <BarChart className="h-10 w-10 text-primary" />,
     title: 'Analytics',
     description: 'Understand your audience better. Track link clicks, page views, and other important metrics to see what\'s working.',
   },
@@ -45,7 +45,7 @@ export default async function Home() {
       <div className="absolute inset-0 opacity-[.03] bg-[url('https://www.transparenttextures.com/patterns/gplay.png')] bg-repeat"></div>
       <Header />
       <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10">
-        <div className="max-w-4xl mx-auto pt-20 pb-16">
+        <div className="max-w-4xl mx-auto pt-28 pb-24">
            <h1 
             className="text-5xl md:text-7xl font-bold text-white tracking-tight animate-fade-in-up"
             style={{ animationDelay: '200ms' }}
@@ -82,7 +82,7 @@ export default async function Home() {
           </div>
         </div>
         
-        <section className="w-full max-w-6xl mx-auto py-12">
+        <section className="w-full max-w-6xl mx-auto pb-24">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {features.map((feature, index) => (
                 <Card 
