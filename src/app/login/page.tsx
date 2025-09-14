@@ -25,28 +25,16 @@ export default function LoginPage() {
     const [isPending, startTransition] = useTransition()
     const [message, setMessage] = useState<{ type: 'info' | 'error'; text: string } | null>(null)
 
-    useEffect(() => {
-        let timer: NodeJS.Timeout
-        if (message?.type === 'error') {
-            timer = setTimeout(() => {
-                setMessage(null)
-            }, 5000)
-        }
-        return () => {
-            if (timer) clearTimeout(timer)
-        }
-    }, [message])
-
     const handleSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         const formData = new FormData(event.currentTarget)
+        setMessage(null)
         startTransition(async () => {
+            // signInWithPassword will now either redirect on success or throw an error.
+            // The action itself has been updated to return an error object that we can catch.
             const result = await signInWithPassword(formData)
             if (result?.error) {
                 setMessage({ type: 'error', text: result.error })
-            } else if (result?.success) {
-                router.push('/account')
-                router.refresh() // Ensures the layout refetches user state
             }
         })
     }

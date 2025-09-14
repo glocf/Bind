@@ -23,7 +23,9 @@ export async function signInWithPassword(formData: FormData) {
     return { error: 'Invalid login credentials.' }
   }
 
-  return { success: true }
+  // On success, Supabase client handles the session cookie.
+  // We can now redirect.
+  redirect('/account')
 }
 
 export async function signInWithDiscord() {
