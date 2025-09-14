@@ -46,13 +46,22 @@ export default async function Home() {
       <Header />
       <main className="flex-grow flex flex-col items-center text-center px-4 relative z-10">
         <div className="max-w-4xl mx-auto pt-20">
-          <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight">
+           <h1 
+            className="text-5xl md:text-7xl font-bold text-white tracking-tight animate-fade-in-up"
+            style={{ animationDelay: '200ms' }}
+          >
             Everything you want, right here.
           </h1>
-          <p className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto">
+          <p 
+            className="mt-6 text-lg md:text-xl text-white/70 max-w-2xl mx-auto animate-fade-in-up"
+            style={{ animationDelay: '350ms' }}
+          >
             Bind is your go-to for modern, feature-rich biolinks and fast, secure file hosting. Everything you need — right here.
           </p>
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div 
+            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up"
+            style={{ animationDelay: '500ms' }}
+          >
             <div className="relative w-full sm:w-auto">
               <Input 
                 type="text" 
@@ -70,13 +79,14 @@ export default async function Home() {
           </div>
         </div>
         
-        <div className="w-full max-w-6xl mx-auto mt-20 relative">
+        <div className="w-full max-w-6xl mx-auto mt-20 relative animate-fade-in-up" style={{ animationDelay: '650ms' }}>
           <Image 
-            src="https://cdn.discordapp.com/attachments/1258525740131487747/1262952877134381156/image.png?ex=6698797f&is&hm=13d100741275988e05c93c4113b28b6d87e35b0b2f56f43e3d93de2f7a9446f0&"
+            src="https://picsum.photos/seed/product-preview/1200/750"
             alt="Product preview"
             width={1200}
             height={750}
             className="w-full h-auto rounded-xl shadow-2xl shadow-primary/10"
+            data-ai-hint="product screenshot"
           />
         </div>
 
@@ -86,7 +96,7 @@ export default async function Home() {
                 <Card 
                   key={index}
                   className="bg-card/50 backdrop-blur-sm border-white/10 text-left animate-fade-in-up"
-                  style={{ animationDelay: `${index * 150}ms` }}
+                  style={{ animationDelay: `${index * 150 + 800}ms` }}
                 >
                   <CardHeader>
                     {feature.icon}
