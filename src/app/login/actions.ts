@@ -25,3 +25,8 @@ export async function signInWithPassword(formData: FormData) {
 
   return { success: true }
 }
+
+export async function signOut() {
+  const supabase = createClient()
+  await supabase.auth.signOut()
+}
