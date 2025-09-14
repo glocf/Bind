@@ -49,46 +49,9 @@ export function UserNav({ user }: { user: User | null }) {
     )
   }
 
-  const userInitial = user?.user_metadata.full_name?.charAt(0).toUpperCase() ?? user?.email?.charAt(0).toUpperCase() ?? ''
-  const avatarUrl = user?.user_metadata.avatar_url
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <Avatar className="h-10 w-10 border-2 border-primary/50">
-            {avatarUrl && <AvatarImage src={avatarUrl} alt={user.user_metadata.full_name ?? ''} />}
-            <AvatarFallback className="bg-primary text-primary-foreground">{userInitial}</AvatarFallback>
-          </Avatar>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56" align="end" forceMount>
-        <DropdownMenuLabel className="font-normal">
-          <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{user.user_metadata.full_name ?? 'User'}</p>
-            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
-          </div>
-        </DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <Link href="/account">
-            <DropdownMenuItem>
-              Account
-            </DropdownMenuItem>
-          </Link>
-          {profile?.role === 'admin' && (
-            <Link href="/admin">
-              <DropdownMenuItem>
-                Admin
-              </DropdownMenuItem>
-            </Link>
-          )}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleSignOut}>
-          Log out
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Link href="/account">
+        <Button>Dashboard</Button>
+    </Link>
   )
 }
