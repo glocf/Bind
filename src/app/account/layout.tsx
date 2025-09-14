@@ -102,7 +102,7 @@ const AccountSidebar = () => {
                        <Link href="/account/settings" className={cn("w-full", isActive('/account/settings') ? 'text-primary' : 'text-muted-foreground hover:text-white')}>
                         <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account/settings')} className="justify-start w-full">
                            <Settings className="inline-block mr-2 h-4 w-4" /> Settings
-                        </SiderbarMenuButton>
+                        </SidebarMenuButton>
                       </Link>
                     </SidebarMenuItem>
                   </SidebarMenu>
@@ -187,3 +187,5 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
     </div>
   )
 }
+
+    
