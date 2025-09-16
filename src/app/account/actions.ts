@@ -111,19 +111,16 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
   }
 
   if (existingLinks.length > 0) {
-      const linksToUpdate = existingLinks.map((link, index) => ({
-        id: link.id,
-        title: link.title,
-        url: link.url,
-        order: links.findIndex(l => l.id === link.id),
-      }));
-
-      for (const link of linksToUpdate) {
+      for (const link of existingLinks) {
         const { error: updateError } = await supabase
             .from('links')
-            .update({ title: link.title, url: link.url, order: link.order })
-            .eq('id', link.id)
-            .eq('user_id', user.id); // Ensure user can only update their own links
+            .update({ 
+              title: link.title, 
+              url: link.url, 
+              order: links.findIndex(l => l.id === link.id) 
+            })
+            .eq('id', link.id as string)
+            .eq('user_id', user.id); 
 
         if (updateError) {
             console.error(`Error updating link ${link.id}:`, updateError);

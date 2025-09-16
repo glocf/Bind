@@ -21,13 +21,7 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single()
 
-  // This is a temporary check for development.
-  // In a real app, roles would be managed in the database.
-  if (profile && user.email === 'camisitodecorazon@gmail.com') {
-    profile.role = 'admin';
-  }
-
-  if (profile?.role !== 'admin') {
+  if (profile?.email !== 'camisitodecorazon@gmail.com' && profile?.role !== 'admin') {
     notFound()
   }
 

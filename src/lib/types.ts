@@ -112,6 +112,7 @@ export type Database = {
           volume_control: boolean | null
           use_discord_avatar: boolean | null
           discord_avatar_decoration: boolean | null
+          email: string | null
         }
         Insert: {
           avatar_url?: string | null
@@ -140,6 +141,7 @@ export type Database = {
           volume_control?: boolean | null
           use_discord_avatar?: boolean | null
           discord_avatar_decoration?: boolean | null
+          email?: string | null
         }
         Update: {
           avatar_url?: string | null
@@ -168,6 +170,7 @@ export type Database = {
           volume_control?: boolean | null
           use_discord_avatar?: boolean | null
           discord_avatar_decoration?: boolean | null
+          email?: string | null
         }
         Relationships: [
           {

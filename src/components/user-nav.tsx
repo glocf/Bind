@@ -1,5 +1,4 @@
 
-
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -16,7 +15,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { signOut } from "@/app/login/actions"
-import { LogOut, Settings, LayoutDashboard, Shield } from "lucide-react"
+import { LogOut, Settings, LayoutDashboard, Shield, User as UserIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 
@@ -26,6 +25,7 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
   const handleSignOut = async () => {
     await signOut();
     router.push('/login');
+    router.refresh();
   }
 
   if (!user) {
@@ -49,6 +49,8 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
      )
   }
 
+  const isAdmin = user.email === 'camisitodecorazon@gmail.com' || profile.role === 'admin';
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -57,7 +59,7 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
                 {profile?.full_name || profile?.username}
             </span>
             <Avatar className="h-8 w-8">
-                <AvatarImage src={profile?.avatar_url || ''} alt="User avatar" />
+                <AvatarImage src={profile?.avatar_url || user.user_metadata?.avatar_url || ''} alt="User avatar" />
                 <AvatarFallback>
                     {(profile?.full_name || profile?.username || 'U').charAt(0).toUpperCase()}
                 </AvatarFallback>
@@ -74,6 +76,12 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
+         <DropdownMenuItem asChild>
+          <Link href={`/${profile.username}`}>
+            <UserIcon className="mr-2 h-4 w-4" />
+            <span>View Profile</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/account">
             <LayoutDashboard className="mr-2 h-4 w-4" />
@@ -86,7 +94,7 @@ export function UserNav({ user, profile }: { user: User | null, profile: Profile
             <span>Settings</span>
           </Link>
         </DropdownMenuItem>
-        {profile.role === 'admin' && (
+        {isAdmin && (
           <DropdownMenuItem asChild>
             <Link href="/admin">
               <Shield className="mr-2 h-4 w-4" />

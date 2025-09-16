@@ -1,3 +1,4 @@
+
 'use client'
 
 import * as React from 'react';
@@ -7,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Sparkles, Loader2, HelpCircle } from 'lucide-react';
+import { ImageIcon, FolderKanban, MousePointer2, Diamond, TriangleAlert, Star, MapPin, Settings, X, Sparkles, Loader2, HelpCircle, Bot } from 'lucide-react';
 import Image from 'next/image';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { type Profile } from '@/lib/types';
@@ -17,6 +18,10 @@ import { useDebouncedCallback } from 'use-debounce';
 import { useRouter } from 'next/navigation';
 import { Switch } from '@/components/ui/switch';
 import { type User } from '@supabase/supabase-js';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { customizationAssistant } from '@/ai/flows/customization-assistant-flow';
+import { Avatar as UIAvatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const CustomizationControl = ({ label, children, icon: Icon, tooltip }: { label: string, children: React.ReactNode, icon?: React.ElementType, tooltip?: string }) => (
     <div className="space-y-2">
@@ -61,6 +66,11 @@ const ColorInput = ({ label, value, onChange }: { label: string, value: string, 
     </div>
 );
 
+type ChatMessage = {
+    role: 'user' | 'assistant';
+    content: string;
+};
+
 
 export function CustomizeForm({ profile, user }: { profile: Profile, user: User }) {
     const { toast } = useToast();
@@ -75,6 +85,11 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
     const [currentBio, setCurrentBio] = React.useState(profile.bio || '');
 
     const discordIdentity = user.identities?.find(i => i.provider === 'discord');
+
+    const [isAssistantOpen, setIsAssistantOpen] = React.useState(false);
+    const [chatMessages, setChatMessages] = React.useState<ChatMessage[]>([]);
+    const [isAssistantLoading, setIsAssistantLoading] = React.useState(false);
+    const [currentMessage, setCurrentMessage] = React.useState('');
 
     const debouncedUpdate = useDebouncedCallback(async (data: Partial<Profile>) => {
         const result = await updateCustomization(data);
@@ -134,6 +149,33 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
             router.refresh();
         }
         setIsBgUploading(false);
+    };
+
+    const handleChatSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!currentMessage.trim() || isAssistantLoading) return;
+
+        const newUserMessage: ChatMessage = { role: 'user', content: currentMessage };
+        setChatMessages(prev => [...prev, newUserMessage]);
+        setCurrentMessage('');
+        setIsAssistantLoading(true);
+
+        try {
+            const profileContext = {
+                username: profile.username,
+                bio: profile.bio,
+                accent_color: profile.accent_color,
+            };
+            const response = await customizationAssistant({ prompt: currentMessage, profile: profileContext });
+            const assistantMessage: ChatMessage = { role: 'assistant', content: response };
+            setChatMessages(prev => [...prev, assistantMessage]);
+        } catch (error) {
+            console.error("Assistant error:", error);
+            const errorMessage: ChatMessage = { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again later." };
+            setChatMessages(prev => [...prev, errorMessage]);
+        } finally {
+            setIsAssistantLoading(false);
+        }
     };
     
     return (
@@ -429,6 +471,87 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                     </div>
                 </div>
             </div>
+
+            <Button
+                onClick={() => setIsAssistantOpen(true)}
+                className="fixed bottom-8 right-8 h-16 w-16 rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-transform hover:scale-110"
+            >
+                <Sparkles className="h-8 w-8" />
+                <span className="sr-only">Open AI Assistant</span>
+            </Button>
+
+            <Sheet open={isAssistantOpen} onOpenChange={setIsAssistantOpen}>
+                <SheetContent className="flex flex-col">
+                    <SheetHeader>
+                        <SheetTitle>Customization Assistant</SheetTitle>
+                        <SheetDescription>
+                            Get ideas and suggestions for your profile from our AI assistant.
+                        </SheetDescription>
+                    </SheetHeader>
+                    <ScrollArea className="flex-grow my-4 pr-4">
+                        <div className="space-y-4">
+                            {chatMessages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex gap-3 text-sm ${
+                                        message.role === 'user' ? 'justify-end' : ''
+                                    }`}
+                                >
+                                    {message.role === 'assistant' && (
+                                        <UIAvatar className="w-8 h-8">
+                                            <AvatarContent>
+                                                <Bot />
+                                            </AvatarContent>
+                                        </UIAvatar>
+                                    )}
+                                    <div
+                                        className={`rounded-lg px-4 py-2 ${
+                                            message.role === 'user'
+                                                ? 'bg-primary text-primary-foreground'
+                                                : 'bg-muted'
+                                        }`}
+                                    >
+                                        <p>{message.content}</p>
+                                    </div>
+                                </div>
+                            ))}
+                            {isAssistantLoading && (
+                                <div className="flex gap-3 text-sm">
+                                     <UIAvatar className="w-8 h-8">
+                                        <AvatarContent>
+                                            <Bot />
+                                        </AvatarContent>
+                                    </UIAvatar>
+                                    <div className="rounded-lg px-4 py-2 bg-muted flex items-center">
+                                        <Loader2 className="h-4 w-4 animate-spin" />
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </ScrollArea>
+                    <SheetFooter>
+                        <form onSubmit={handleChatSubmit} className="flex w-full space-x-2">
+                            <Input
+                                value={currentMessage}
+                                onChange={e => setCurrentMessage(e.target.value)}
+                                placeholder="Ask for customization ideas..."
+                                disabled={isAssistantLoading}
+                            />
+                            <Button type="submit" disabled={isAssistantLoading}>
+                                {isAssistantLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send'}
+                            </Button>
+                        </form>
+                    </SheetFooter>
+                </SheetContent>
+            </Sheet>
+
         </div>
     );
 }
+
+// Dummy Avatar components until the actual one is available
+const AvatarContent = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex items-center justify-center h-full w-full bg-muted rounded-full">
+        {children}
+    </div>
+);

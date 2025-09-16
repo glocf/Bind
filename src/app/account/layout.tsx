@@ -19,12 +19,6 @@ export default async function AccountLayout({ children }: { children: React.Reac
     .eq('id', user.id)
     .single();
 
-  // This is a temporary check for development.
-  // In a real app, roles would be managed in the database.
-  if (profile && user.email === 'camisitodecorazon@gmail.com') {
-    profile.role = 'admin';
-  }
-
   return (
     <AccountLayoutClient user={user} profile={profile}>
       {children}

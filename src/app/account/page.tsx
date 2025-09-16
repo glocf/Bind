@@ -24,7 +24,7 @@ async function AccountPageContent() {
     .select('*')
     .eq('id', user.id)
     .single()
-
+  
   const { count: viewCount } = await supabase
     .from('analytics')
     .select('*', { count: 'exact', head: true })
