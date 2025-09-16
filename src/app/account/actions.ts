@@ -14,7 +14,7 @@ const profileSchema = z.object({
 })
 
 export async function updateProfile(formData: FormData) {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -68,7 +68,7 @@ export async function updateProfile(formData: FormData) {
 
 
 export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) {
-  const supabase = await createClient();
+  const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -90,43 +90,31 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
     }
   }
 
-  const newLinks = links.filter(link => link.id?.startsWith('new-'));
-  const existingLinks = links.filter(link => !link.id?.startsWith('new-'));
-
-  if (newLinks.length > 0) {
-      const linksToInsert = newLinks.map((link, index) => ({
+  for (const link of links) {
+    const { id, ...linkData } = link;
+    if (id?.startsWith('new-')) {
+      const { error: insertError } = await supabase.from('links').insert({
+        ...linkData,
         user_id: user.id,
-        title: link.title,
-        url: link.url,
-        order: links.findIndex(l => l.id === link.id),
-      })).filter(link => link.title && link.url);
-
-      if (linksToInsert.length > 0) {
-        const { error: insertError } = await supabase.from('links').insert(linksToInsert);
-        if (insertError) {
-            console.error('Error inserting new links:', insertError);
-            return { error: 'Failed to add new links.' };
-        }
+        order: links.findIndex(l => l.id === id),
+      });
+      if (insertError) {
+        console.error('Error inserting new link:', insertError);
+        return { error: 'Failed to add new link.' };
       }
-  }
-
-  if (existingLinks.length > 0) {
-      for (const link of existingLinks) {
-        const { error: updateError } = await supabase
-            .from('links')
-            .update({ 
-              title: link.title, 
-              url: link.url, 
-              order: links.findIndex(l => l.id === link.id) 
-            })
-            .eq('id', link.id as string)
-            .eq('user_id', user.id); 
-
-        if (updateError) {
-            console.error(`Error updating link ${link.id}:`, updateError);
-            return { error: 'Failed to update links.' };
-        }
+    } else {
+      const { error: updateError } = await supabase
+        .from('links')
+        .update({
+          ...linkData,
+          order: links.findIndex(l => l.id === id),
+        })
+        .eq('id', id as string);
+      if (updateError) {
+        console.error(`Error updating link ${id}:`, updateError);
+        return { error: 'Failed to update link.' };
       }
+    }
   }
   
   const { data: profile } = await supabase.from('profiles').select('username').eq('id', user.id).single();
@@ -139,7 +127,7 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
 }
 
 export async function trackProfileView(userId: string) {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { error } = await supabase.from('analytics').insert({
     user_id: userId,
     event_type: 'profile_view',
@@ -150,7 +138,7 @@ export async function trackProfileView(userId: string) {
 }
 
 export async function trackLinkClick(linkId: string, userId: string) {
-    const supabase = await createClient()
+    const supabase = createClient()
     const { error } = await supabase.from('analytics').insert({
         user_id: userId,
         link_id: linkId,
@@ -163,7 +151,7 @@ export async function trackLinkClick(linkId: string, userId: string) {
 }
 
 export async function updateCustomization(data: Partial<Profile>) {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -190,7 +178,7 @@ export async function updateCustomization(data: Partial<Profile>) {
 }
 
 export async function removeBackground() {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -230,7 +218,7 @@ export async function removeBackground() {
 }
 
 export async function updateAvatar(formData: FormData) {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -277,7 +265,7 @@ export async function updateAvatar(formData: FormData) {
 }
 
 export async function updateBackground(formData: FormData) {
-    const supabase = await createClient();
+    const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -322,3 +310,5 @@ export async function updateBackground(formData: FormData) {
 
     return { success: true, url: publicUrl };
 }
+
+    

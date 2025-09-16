@@ -15,7 +15,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default async function AdminDashboardPage() {
-  const supabase = await createClient()
+  const supabase = createClient()
   const { data: profiles, error } = await supabase
     .from('profiles')
     .select('*')

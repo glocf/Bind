@@ -21,24 +21,28 @@ import { useEffect, useState } from "react"
 import { createClient } from "@/lib/supabase/client"
 
 
-export function UserNav({ user }: { user: User | null }) {
+export function UserNav() {
   const router = useRouter()
+  const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchUserAndProfile = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+
       if (user) {
-        const supabase = createClient();
-        const { data } = await supabase
+        const { data: profileData } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', user.id)
           .single();
-        setProfile(data);
+        setProfile(profileData);
       }
     };
-    fetchProfile();
-  }, [user]);
+    fetchUserAndProfile();
+  }, []);
 
   const handleSignOut = async () => {
     await signOut();

@@ -6,7 +6,7 @@ import AccountLayoutClient from './account-layout-client';
 import { redirect } from 'next/navigation';
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
+  const supabase = createClient();
   
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
