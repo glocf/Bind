@@ -14,7 +14,7 @@ const profileSchema = z.object({
 })
 
 export async function updateProfile(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -68,7 +68,7 @@ export async function updateProfile(formData: FormData) {
 
 
 export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -127,7 +127,7 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
 }
 
 export async function trackProfileView(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from('analytics').insert({
     user_id: userId,
     event_type: 'profile_view',
@@ -138,7 +138,7 @@ export async function trackProfileView(userId: string) {
 }
 
 export async function trackLinkClick(linkId: string, userId: string) {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { error } = await supabase.from('analytics').insert({
         user_id: userId,
         link_id: linkId,
@@ -151,7 +151,7 @@ export async function trackLinkClick(linkId: string, userId: string) {
 }
 
 export async function updateCustomization(data: Partial<Profile>) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -178,7 +178,7 @@ export async function updateCustomization(data: Partial<Profile>) {
 }
 
 export async function removeBackground() {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -218,7 +218,7 @@ export async function removeBackground() {
 }
 
 export async function updateAvatar(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -265,7 +265,7 @@ export async function updateAvatar(formData: FormData) {
 }
 
 export async function updateBackground(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -311,4 +311,60 @@ export async function updateBackground(formData: FormData) {
     return { success: true, url: publicUrl };
 }
 
+export async function updatePassword(formData: FormData) {
+    const supabase = await createClient();
+    const newPassword = formData.get('newPassword') as string;
+    
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+
+    if (error) {
+        console.error('Password update error:', error);
+        return { error: 'Failed to update password. Make sure it is at least 6 characters long.' };
+    }
+    return { success: true };
+}
+
+
+export async function enrollTwoFactorAuth() {
+    const supabase = await createClient();
+    const { data, error } = await supabase.auth.mfa.enroll({
+        factorType: 'totp',
+    });
+
+    if (error) {
+        return { error: `Failed to enroll 2FA: ${error.message}` };
+    }
+
+    return { data };
+}
+
+export async function verifyTwoFactorAuth(formData: FormData) {
+    const supabase = await createClient();
+    const factorId = formData.get('factorId') as string;
+    const code = formData.get('code') as string;
+
+    const { error } = await supabase.auth.mfa.challengeAndVerify({
+        factorId,
+        code,
+    });
+
+    if (error) {
+        return { error: `Failed to verify 2FA: ${error.message}` };
+    }
+    
+    revalidatePath('/account/settings');
+    return { success: true };
+}
+
+export async function disableTwoFactorAuth(factorId: string) {
+    const supabase = await createClient();
+    const { error } = await supabase.auth.mfa.unenroll({ factorId });
+
+    if (error) {
+        return { error: `Failed to disable 2FA: ${error.message}` };
+    }
+
+    revalidatePath('/account/settings');
+    return { success: true };
+}
     

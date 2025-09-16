@@ -1,10 +1,25 @@
 
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ShieldCheck } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/components/ui/card";
+import { createClient } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { SecurityForms } from "./security-forms";
+import type { Factor } from '@/lib/types';
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect('/login');
+  }
+
+  const { data, error } = await supabase.auth.mfa.listFactors();
+  if (error) {
+    console.error('Error listing MFA factors:', error);
+  }
+
+  const totpFactor = data?.totp[0] as Factor | undefined;
+
   return (
     <div className="container mx-auto py-12 px-4 space-y-8">
       <div>
@@ -16,29 +31,26 @@ export default function SettingsPage() {
         <CardHeader>
           <CardTitle>Account Security</CardTitle>
           <CardDescription>
-            Enhance your account's security by enabling two-factor authentication.
+            Manage your password and two-factor authentication settings.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 rounded-lg border bg-card/50">
-            <div className="flex items-start md:items-center gap-4">
-              <ShieldCheck className="h-8 w-8 text-primary mt-1 md:mt-0" />
-              <div>
-                <h3 className="font-semibold">Two-Factor Authentication (2FA)</h3>
-                <p className="text-sm text-muted-foreground">
-                  Protect your account with an extra layer of security.
-                </p>
-              </div>
-            </div>
-            <Button disabled className="mt-4 md:mt-0 shrink-0">Enable 2FA</Button>
-          </div>
+        <CardContent className="space-y-8">
+          <SecurityForms totpFactor={totpFactor} />
         </CardContent>
-         <CardFooter className="flex justify-end">
-            <p className="text-sm text-muted-foreground">
-                2FA feature is coming soon.
-            </p>
-        </CardFooter>
+      </Card>
+      
+       <Card>
+        <CardHeader>
+          <CardTitle>Delete Account</CardTitle>
+          <CardDescription>
+            Permanently delete your account and all of your content. This action is not reversible.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+             <p className="text-sm text-muted-foreground">Account deletion feature is coming soon.</p>
+        </CardContent>
       </Card>
     </div>
   );
 }
+

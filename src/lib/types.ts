@@ -1,4 +1,5 @@
 
+
 export type Json =
   | string
   | number
@@ -201,3 +202,12 @@ export type Database = {
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type Link = Database['public']['Tables']['links']['Row'];
 export type AnalyticsEvent = Database['public']['Tables']['analytics']['Row'];
+
+export type Factor = {
+  id: string;
+  friendly_name: string;
+  factor_type: 'totp';
+  status: 'verified' | 'unverified';
+  created_at: string;
+  updated_at: string;
+};
