@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server'
 import {
   Table,
@@ -14,7 +15,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 
 export default async function AdminDashboardPage() {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: profiles, error } = await supabase
     .from('profiles')
     .select('*')

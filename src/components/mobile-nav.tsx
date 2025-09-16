@@ -5,9 +5,20 @@ import Link from 'next/link'
 import { SidebarTrigger, useSidebar } from '@/components/ui/sidebar'
 import { GunIcon } from '@/components/gun-icon'
 import { type User } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/client'
 
-export function MobileNav({ user }: { user: User | null }) {
+export function MobileNav() {
   const { setOpenMobile } = useSidebar()
+  const [user, setUser] = React.useState<User | null>(null);
+
+  React.useEffect(() => {
+    const checkUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    }
+    checkUser();
+  }, []);
   
   if (!user) {
     return (

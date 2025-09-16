@@ -8,7 +8,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -21,7 +21,7 @@ export default async function AdminLayout({
     .eq('id', user.id)
     .single()
 
-  if (profile?.email !== 'camisitodecorazon@gmail.com' && profile?.role !== 'admin') {
+  if (profile?.role !== 'admin') {
     notFound()
   }
 

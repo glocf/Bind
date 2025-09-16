@@ -14,7 +14,7 @@ const profileSchema = z.object({
 })
 
 export async function updateProfile(formData: FormData) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
@@ -68,7 +68,7 @@ export async function updateProfile(formData: FormData) {
 
 
 export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
@@ -139,7 +139,7 @@ export async function updateLinks(links: Partial<Link>[], initialLinks: Link[]) 
 }
 
 export async function trackProfileView(userId: string) {
-  const supabase = createClient()
+  const supabase = await createClient()
   const { error } = await supabase.from('analytics').insert({
     user_id: userId,
     event_type: 'profile_view',
@@ -150,7 +150,7 @@ export async function trackProfileView(userId: string) {
 }
 
 export async function trackLinkClick(linkId: string, userId: string) {
-    const supabase = createClient()
+    const supabase = await createClient()
     const { error } = await supabase.from('analytics').insert({
         user_id: userId,
         link_id: linkId,
@@ -163,7 +163,7 @@ export async function trackLinkClick(linkId: string, userId: string) {
 }
 
 export async function updateCustomization(data: Partial<Profile>) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -190,7 +190,7 @@ export async function updateCustomization(data: Partial<Profile>) {
 }
 
 export async function removeBackground() {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -230,7 +230,7 @@ export async function removeBackground() {
 }
 
 export async function updateAvatar(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
@@ -277,7 +277,7 @@ export async function updateAvatar(formData: FormData) {
 }
 
 export async function updateBackground(formData: FormData) {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {

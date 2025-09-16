@@ -17,10 +17,28 @@ import {
 import { signOut } from "@/app/login/actions"
 import { LogOut, Settings, LayoutDashboard, Shield, User as UserIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
+import { createClient } from "@/lib/supabase/client"
 
 
-export function UserNav({ user, profile }: { user: User | null, profile: Profile | null}) {
+export function UserNav({ user }: { user: User | null }) {
   const router = useRouter()
+  const [profile, setProfile] = useState<Profile | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (user) {
+        const supabase = createClient();
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        setProfile(data);
+      }
+    };
+    fetchProfile();
+  }, [user]);
 
   const handleSignOut = async () => {
     await signOut();

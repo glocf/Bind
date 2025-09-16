@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -33,7 +34,7 @@ const features = [
 ]
 
 export default async function Home() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (user) {
