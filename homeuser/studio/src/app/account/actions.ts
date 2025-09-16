@@ -310,3 +310,5 @@ export async function updateBackground(formData: FormData) {
 
     return { success: true, url: publicUrl };
 }
+
+    
