@@ -22,6 +22,9 @@ const linksSchema = z.object({
       id: z.string(),
       title: z.string().min(1, { message: "Title is required." }),
       url: z.string().url({ message: "Please enter a valid URL." }),
+      order: z.number(),
+      created_at: z.string(),
+      user_id: z.string(),
     })
   ),
 })
@@ -62,11 +65,11 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
   }
 
   const addPresetLink = (preset: typeof socialPresets[0]) => {
-    append({ id: `new-${Date.now()}`, title: preset.name, url: preset.url })
+    append({ id: `new-${Date.now()}`, title: preset.name, url: preset.url, order: fields.length, created_at: new Date().toISOString(), user_id: '' })
   }
 
   const addCustomLink = () => {
-    append({ id: `new-${Date.now()}`, title: "", url: "https://" })
+    append({ id: `new-${Date.now()}`, title: "", url: "https://", order: fields.length, created_at: new Date().toISOString(), user_id: '' })
   }
 
   return (
