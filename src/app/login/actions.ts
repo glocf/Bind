@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation'
 export async function signInWithPassword(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
-  const supabase = createClient()
+  const supabase = await createClient()
 
   if (!email || !password) {
     return { error: 'Email and password are required.' }
@@ -27,6 +27,6 @@ export async function signInWithPassword(formData: FormData) {
 }
 
 export async function signOut() {
-  const supabase = createClient()
+  const supabase = await createClient()
   await supabase.auth.signOut()
 }

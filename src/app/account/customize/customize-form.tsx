@@ -20,7 +20,7 @@ import { Switch } from '@/components/ui/switch';
 import { type User } from '@supabase/supabase-js';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetFooter } from "@/components/ui/sheet";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { customizationAssistant } from '@/ai/flows/customization-assistant-flow';
+import { customizationAssistant } from '@/ai/actions/customization-assistant';
 import { Avatar as UIAvatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const CustomizationControl = ({ label, children, icon: Icon, tooltip }: { label: string, children: React.ReactNode, icon?: React.ElementType, tooltip?: string }) => (

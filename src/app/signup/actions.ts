@@ -26,7 +26,7 @@ export async function signUp(formData: FormData): Promise<{ error?: string, succ
       return { error: errorMessages }
     }
     
-    const supabase = createClient()
+    const supabase = await createClient()
 
     const { data: existingProfile } = await supabase
         .from('profiles')
@@ -55,5 +55,3 @@ export async function signUp(formData: FormData): Promise<{ error?: string, succ
 
     return { success: true }
 }
-
-    

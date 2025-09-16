@@ -1,3 +1,4 @@
+
 import { createClient } from '@/lib/supabase/server';
 import { Header } from '@/components/header';
 import Footer from '@/components/footer';
@@ -64,7 +65,7 @@ const ServiceStatusCheck = async ({ statusFetcher }: { statusFetcher: () => Prom
 
 const checkSupabaseDb = async (): Promise<ServiceStatus> => {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const { error } = await supabase.from('profiles').select('id').limit(1);
     if (error) throw error;
     return 'operational';

@@ -1,9 +1,9 @@
-"use server";
 /**
  * @fileOverview An AI assistant to help with profile customization.
  * 
- * - customizationAssistant - A function that provides customization advice.
- * - CustomizationAssistantInput - The input type for the assistant.
+ * - customizationAssistantFlow - A Genkit flow that provides customization advice.
+ * - CustomizationAssistantInputSchema - The Zod schema for the assistant's input.
+ * - CustomizationAssistantInput - The TypeScript type for the assistant's input.
  */
 
 import { ai } from '@/ai/genkit';
@@ -44,8 +44,14 @@ Please provide a helpful and encouraging response. Be specific with your suggest
 Keep your responses concise and easy to read, using markdown for formatting if needed.`,
 });
 
-
-export async function customizationAssistant(input: CustomizationAssistantInput): Promise<string> {
-    const { output } = await assistantPrompt(input);
-    return output || "I'm sorry, I couldn't come up with a suggestion right now. Please try a different question!";
-}
+export const customizationAssistantFlow = ai.defineFlow(
+    {
+        name: 'customizationAssistantFlow',
+        inputSchema: CustomizationAssistantInputSchema,
+        outputSchema: z.string(),
+    },
+    async (input) => {
+        const { output } = await assistantPrompt(input);
+        return output || "I'm sorry, I couldn't come up with a suggestion right now. Please try a different question!";
+    }
+);

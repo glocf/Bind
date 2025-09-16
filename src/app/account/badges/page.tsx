@@ -61,7 +61,7 @@ function BadgeCard({ badge, isUnlocked, isEquipped }: { badge: typeof allBadges[
 
 
 export default async function BadgesPage() {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
