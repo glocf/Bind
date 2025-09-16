@@ -13,8 +13,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Crown, Ghost, Gem, ShieldCheck, Sparkles, User } from "lucide-react";
 import UserLinks from './user-links'
 import type { Profile } from '@/lib/types'
-import { createClient as createServerClient } from '@/lib/supabase/server'
-
 
 type ProfilePageProps = {
   params: {
@@ -162,14 +160,13 @@ function ProfileClientView({ profile }: { profile: Profile }) {
 }
 
 
-export default function ProfilePage({ params }: { params: { username: string } }) {
+export default function ProfilePage({ params }: ProfilePageProps) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
-      // We are in a client component, so we use the client supabase
       const supabase = createClient()
       const { data } = await supabase
         .from('profiles')
