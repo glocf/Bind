@@ -121,18 +121,24 @@ async function AccountPageContent() {
                    <div>
                       <h4 className="text-sm font-medium text-muted-foreground mb-3">Complete your profile</h4>
                       <div className="space-y-3">
-                         <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                           {profile?.avatar_url ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                           Upload Avatar
-                         </Button>
-                         <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                            {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                            Add a Description/Bio
-                         </Button>
-                         <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                           {(linkCount ?? 0) > 0 ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                           Add your first link
-                         </Button>
+                         <Link href="/account/customize">
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'hover:bg-zinc-800'}`}>
+                             {profile?.avatar_url ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                             Upload Avatar
+                           </Button>
+                         </Link>
+                         <Link href="/account/customize">
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'hover:bg-zinc-800'}`}>
+                              {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                              Add a Description/Bio
+                           </Button>
+                         </Link>
+                         <Link href="/account/links">
+                           <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'hover:bg-zinc-800'}`}>
+                             {(linkCount ?? 0) > 0 ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                             Add your first link
+                           </Button>
+                         </Link>
                       </div>
                    </div>
 
