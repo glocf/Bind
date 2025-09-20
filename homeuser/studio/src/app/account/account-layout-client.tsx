@@ -12,12 +12,6 @@ import {
   SidebarMenuButton,
   SidebarProvider,
 } from '@/components/ui/sidebar'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import {
   UserCog,
@@ -45,19 +39,13 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
     <Sidebar>
       <SidebarContent className="p-0">
         <div suppressHydrationWarning className="flex h-full flex-col">
-          <div className="flex-1 overflow-y-auto">
-            <Accordion type="multiple" defaultValue={['account']} className="w-full px-4">
-              <AccordionItem value="account" className="border-b-0">
-                <AccordionTrigger className="py-3 text-sm text-muted-foreground hover:no-underline [&[data-state=open]]:text-white rounded-md px-3">
-                  <div className="flex items-center gap-3">
-                    <span className="font-semibold uppercase">account</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pt-2">
-                  <SidebarMenu>
+          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              <div className="space-y-1">
+                <p className="text-xs uppercase text-muted-foreground font-semibold tracking-wider px-2">Account</p>
+                <SidebarMenu>
                     <SidebarMenuItem>
                       <Link href="/account" className={cn("w-full", isActive('/account') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account')} className="justify-start w-full">
+                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account')} className="justify-start w-full font-semibold">
                           <UserCog className="inline-block mr-2 h-4 w-4" /> Overview
                         </SidebarMenuButton>
                       </Link>
@@ -84,43 +72,41 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
                       </Link>
                     </SidebarMenuItem>
                   </SidebarMenu>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
+              </div>
             
-            <SidebarMenu className="px-4 mt-2">
+            <SidebarMenu className="space-y-1">
               <SidebarMenuItem>
                  <Link href="/account/customize" className={cn("w-full", isActive('/account/customize') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/customize')} className="justify-start w-full">
-                      <Brush className="h-4 w-4 mr-2" /> customize
+                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/customize')} className="justify-start w-full font-semibold">
+                      <Brush className="h-4 w-4 mr-2" /> Customize
                     </SidebarMenuButton>
                  </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                  <Link href="/account/links" className={cn("w-full", isActive('/account/links') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/links')} className="justify-start w-full">
-                      <Link2 className="h-4 w-4 mr-2" /> links
+                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/links')} className="justify-start w-full font-semibold">
+                      <Link2 className="h-4 w-4 mr-2" /> Links
                     </SidebarMenuButton>
                  </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                  <Link href="/account/premium" className={cn("w-full", isActive('/account/premium') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/premium')} className="justify-start w-full">
-                      <Diamond className="h-4 w-4 mr-2" /> premium
+                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/premium')} className="justify-start w-full font-semibold">
+                      <Diamond className="h-4 w-4 mr-2" /> Premium
                     </SidebarMenuButton>
                  </Link>
               </SidebarMenuItem>
                <SidebarMenuItem>
                  <Link href="/account/image-host" className={cn("w-full", isActive('/account/image-host') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/image-host')} className="justify-start w-full">
-                      <ImageUp className="h-4 w-4 mr-2" /> image host
+                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/image-host')} className="justify-start w-full font-semibold">
+                      <ImageUp className="h-4 w-4 mr-2" /> Image Host
                     </SidebarMenuButton>
                  </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                  <Link href="/account/templates" className={cn("w-full", isActive('/account/templates') ? 'text-white' : 'text-muted-foreground hover:text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/templates')} className="justify-start w-full">
-                      <LayoutTemplate className="h-4 w-4 mr-2" /> templates
+                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/templates')} className="justify-start w-full font-semibold">
+                      <LayoutTemplate className="h-4 w-4 mr-2" /> Templates
                     </SidebarMenuButton>
                  </Link>
               </SidebarMenuItem>
@@ -128,18 +114,18 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
           </div>
 
           <div className="p-4 mt-auto space-y-4">
-             <div className="p-4 rounded-lg bg-card/80 border border-border">
+             <div className="p-4 rounded-lg bg-card">
                 <p className="text-sm font-medium text-white mb-2">Have a question or need support?</p>
-                <Button variant="secondary" className="w-full justify-start text-white" asChild>
+                <Button variant="outline" className="w-full justify-start text-white" asChild>
                     <Link href="#">
                         <HelpCircle className="h-4 w-4 mr-2" /> Help Center
                     </Link>
                 </Button>
             </div>
             {profile?.username && (
-              <div className="p-4 rounded-lg bg-card/80 border border-border">
+              <div className="p-4 rounded-lg bg-card">
                   <p className="text-sm font-medium text-white mb-2">Check out your page</p>
-                  <Button variant="default" className="w-full justify-start" asChild>
+                  <Button variant="primary" className="w-full justify-start" asChild>
                     <Link href={`/${profile.username}`} target="_blank">
                         <ExternalLink className="h-4 w-4 mr-2" /> My Page
                     </Link>

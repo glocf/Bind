@@ -183,7 +183,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
             <div>
                 <h2 className="text-xl font-bold mb-4">Assets Uploader</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <Card className="bg-card border-white/10 aspect-video flex flex-col">
+                    <Card className="bg-card aspect-video flex flex-col">
                         <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm text-white">Background</p>
                             <div 
@@ -224,14 +224,14 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             />
                         </CardContent>
                     </Card>
-                    <Card className="bg-card border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">
+                    <Card className="bg-card aspect-video flex flex-col items-center justify-center text-center p-4">
                         <p className="font-semibold mb-2 text-white">Audio</p>
                         <div className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer">
                             <FolderKanban className="h-8 w-8 mb-2" />
                             <span className="text-sm">Click to open audio manager</span>
                         </div>
                     </Card>
-                    <Card className="bg-card border-white/10 aspect-video flex flex-col">
+                    <Card className="bg-card aspect-video flex flex-col">
                          <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm text-white">Profile Avatar</p>
                              <div 
@@ -259,7 +259,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             />
                         </CardContent>
                     </Card>
-                    <Card className="bg-card border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">
+                    <Card className="bg-card aspect-video flex flex-col items-center justify-center text-center p-4">
                         <p className="font-semibold mb-2 text-white">Custom Cursor</p>
                         <div className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer">
                             <MousePointer2 className="h-8 w-8 mb-2" />
@@ -276,7 +276,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
             
              <div>
                 <h2 className="text-xl font-bold mb-6">Color Customization</h2>
-                <Card className="bg-card border-white/10 p-6">
+                <Card className="bg-card p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <ColorInput label="Accent Color" value={profile.accent_color || '#1b1b1b'} onChange={(v) => debouncedUpdate({ accent_color: v })} />
@@ -296,7 +296,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
 
             <div>
                 <h2 className="text-xl font-bold mb-6">Other Customization</h2>
-                <Card className="bg-card border-white/10 p-6">
+                <Card className="bg-card p-6">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <Label htmlFor="monochrome-icons" className="flex items-center text-sm font-medium">Monochrome Icons <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" /></Label>

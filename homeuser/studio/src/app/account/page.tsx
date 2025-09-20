@@ -5,6 +5,7 @@ import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { AlertTriangle, CheckCircle, Diamond, Eye, Hash, Link as LinkIcon, PenSquare, User, UserCog, X } from 'lucide-react'
 import Link from 'next/link'
 import { Progress } from '@/components/ui/progress'
@@ -47,7 +48,7 @@ async function AccountPageContent() {
       <div>
         <h2 className="text-2xl font-semibold mb-4 text-white">Account Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-card border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Username</span>
@@ -57,7 +58,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-green-400 mt-1">Change available now</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Alias</span>
@@ -67,7 +68,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-muted-foreground mt-1">Premium Only</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">UID</span>
@@ -77,7 +78,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-muted-foreground mt-1">Joined after 85% of all users</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Profile Views</span>
@@ -92,7 +93,7 @@ async function AccountPageContent() {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-           <Card className="bg-card border-white/10">
+           <Card>
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4 text-white">Account Statistics</h3>
                  <div className="space-y-6">
@@ -105,34 +106,32 @@ async function AccountPageContent() {
                    </div>
                    
                     {completionPercent < 100 && (
-                      <div className="p-4 rounded-md bg-yellow-500/10 border border-yellow-500/20 text-yellow-300">
-                          <div className="flex items-start">
-                              <AlertTriangle className="h-5 w-5 mr-3 mt-0.5" />
-                              <div>
-                                  <h5 className="font-semibold">Your profile isn't complete yet!</h5>
-                                  <p className="text-sm text-yellow-400/80">Completing your profile will enhance your visibility.</p>
-                              </div>
-                          </div>
-                      </div>
+                      <Alert variant="default" className="bg-yellow-500/10 border-yellow-500/30 text-yellow-300 [&>svg]:text-yellow-400">
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertTitle className="font-semibold">Your profile isn't complete yet!</AlertTitle>
+                          <AlertDescription className="text-yellow-400/80">
+                              Completing your profile will enhance your visibility.
+                          </AlertDescription>
+                      </Alert>
                     )}
 
                    <div>
                       <h4 className="text-sm font-medium text-muted-foreground mb-3">Complete your profile</h4>
                       <div className="space-y-3">
                          <Link href="/account/customize">
-                           <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary hover:bg-secondary/15'}`}>
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary-foreground hover:bg-secondary/15'}`}>
                              {profile?.avatar_url ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
                              Upload Avatar
                            </Button>
                          </Link>
                          <Link href="/account/settings">
-                           <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary hover:bg-secondary/15'}`}>
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary-foreground hover:bg-secondary/15'}`}>
                               {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
                               Add a Description/Bio
                            </Button>
                          </Link>
                          <Link href="/account/links">
-                           <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary hover:bg-secondary/15'}`}>
+                           <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border-green-500/20 text-green-400 hover:bg-green-500/15' : 'bg-secondary/10 border-secondary/20 text-secondary-foreground hover:bg-secondary/15'}`}>
                              {(linkCount ?? 0) > 0 ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
                              Add your first link
                            </Button>
@@ -147,25 +146,25 @@ async function AccountPageContent() {
 
         <div className="space-y-8">
            <div>
-              <h2 className="text-2xl font-semibold mb-4 text-white">Manage your account</h2>
-              <Card className="bg-card border-white/10">
+              <h2 className="text-xl font-semibold mb-4 text-white">Manage your account</h2>
+              <Card>
                 <CardContent className="p-6 space-y-3">
                   <p className="text-sm text-muted-foreground">Change your username, display name and more.</p>
                   <Link href="/account/settings">
-                    <Button variant="secondary" className="w-full justify-start bg-secondary/10 border-secondary/20 text-secondary hover:bg-secondary/15"><PenSquare className="mr-2 h-4 w-4" />Change Username/Bio</Button>
+                    <Button variant="secondary" className="w-full justify-start bg-secondary/10 border-secondary/20 text-secondary-foreground hover:bg-secondary/15"><PenSquare className="mr-2 h-4 w-4" />Change Username/Bio</Button>
                   </Link>
                   <Link href="/account/premium">
-                    <Button variant="default" className="w-full justify-start"><Diamond className="mr-2 h-4 w-4" />Want more? Unlock with Premium</Button>
+                    <Button variant="primary" className="w-full justify-start"><Diamond className="mr-2 h-4 w-4" />Want more? Unlock with Premium</Button>
                   </Link>
                   <Link href="/account/settings">
-                    <Button variant="secondary" className="w-full justify-start bg-secondary/10 border-secondary/20 text-secondary hover:bg-secondary/15"><UserCog className="mr-2 h-4 w-4" />Account Settings</Button>
+                    <Button variant="secondary" className="w-full justify-start bg-secondary/10 border-secondary/20 text-secondary-foreground hover:bg-secondary/15"><UserCog className="mr-2 h-4 w-4" />Account Settings</Button>
                   </Link>
                 </CardContent>
               </Card>
            </div>
            <div>
-              <h2 className="text-2xl font-semibold mb-4 text-white">Connections</h2>
-               <Card className="bg-card border-white/10">
+              <h2 className="text-xl font-semibold mb-4 text-white">Connections</h2>
+               <Card>
                  <CardContent className="p-6">
                     <p className="text-sm text-muted-foreground mb-4">Link your Discord account to bind.us</p>
                      {discordIdentity ? (
