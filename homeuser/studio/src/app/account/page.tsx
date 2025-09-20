@@ -5,11 +5,9 @@ import { Suspense } from 'react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, CheckCircle, Diamond, Eye, Hash, Link as LinkIcon, LogOut, PenSquare, Shield, User, UserCog, X } from 'lucide-react'
+import { AlertTriangle, CheckCircle, Diamond, Eye, Hash, Link as LinkIcon, PenSquare, User, UserCog, X } from 'lucide-react'
 import Link from 'next/link'
 import { Progress } from '@/components/ui/progress'
-import { AccountForm } from './account-form'
-import { Separator } from '@/components/ui/separator'
 
 async function AccountPageContent() {
   const supabase = await createClient()
@@ -19,17 +17,12 @@ async function AccountPageContent() {
     redirect('/login')
   }
 
-  let { data: profile } = await supabase
+  const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
   
-  // Forcing admin role for development
-  if (profile && !profile.role) {
-    profile.role = 'admin';
-  }
-
   const { count: viewCount } = await supabase
     .from('analytics')
     .select('*', { count: 'exact', head: true })
@@ -54,7 +47,7 @@ async function AccountPageContent() {
       <div>
         <h2 className="text-2xl font-semibold mb-4">Account Overview</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="bg-card/50 border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Username</span>
@@ -64,7 +57,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-green-400 mt-1">Change available now</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card/50 border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Alias</span>
@@ -74,7 +67,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-muted-foreground mt-1">Premium Only</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card/50 border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">UID</span>
@@ -84,7 +77,7 @@ async function AccountPageContent() {
                     <p className="text-xs text-muted-foreground mt-1">Joined after 85% of all users</p>
                 </CardContent>
             </Card>
-            <Card className="bg-card/50 border-white/10">
+            <Card>
                 <CardContent className="p-6">
                     <div className="flex justify-between items-start">
                         <span className="text-sm text-muted-foreground">Profile Views</span>
@@ -99,7 +92,7 @@ async function AccountPageContent() {
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-           <Card className="bg-card/50 border-white/10">
+           <Card>
               <CardContent className="p-6">
                 <h3 className="text-xl font-semibold mb-4">Account Statistics</h3>
                  <div className="space-y-6">
@@ -126,18 +119,24 @@ async function AccountPageContent() {
                    <div>
                       <h4 className="text-sm font-medium text-muted-foreground mb-3">Complete your profile</h4>
                       <div className="space-y-3">
-                         <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                           {profile?.avatar_url ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                           Upload Avatar
-                         </Button>
-                         <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                            {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                            Add a Description/Bio
-                         </Button>
-                         <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/10' : ''}`} disabled>
-                           {(linkCount ?? 0) > 0 ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
-                           Add your first link
-                         </Button>
+                         <Link href="/account/customize">
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.avatar_url ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'}`}>
+                             {profile?.avatar_url ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                             Upload Avatar
+                           </Button>
+                         </Link>
+                         <Link href="/account/settings">
+                           <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'}`}>
+                              {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                              Add a Description/Bio
+                           </Button>
+                         </Link>
+                         <Link href="/account/links">
+                           <Button variant="secondary" className={`w-full justify-start ${(linkCount ?? 0) > 0 ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'bg-secondary hover:bg-secondary/90 text-secondary-foreground'}`}>
+                             {(linkCount ?? 0) > 0 ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
+                             Add your first link
+                           </Button>
+                         </Link>
                       </div>
                    </div>
 
@@ -149,19 +148,24 @@ async function AccountPageContent() {
         <div className="space-y-8">
            <div>
               <h2 className="text-2xl font-semibold mb-4">Manage your account</h2>
-              <Card className="bg-card/50 border-white/10">
+              <Card>
                 <CardContent className="p-6 space-y-3">
-                  <p className="text-sm text-muted-foreground">Change your email, username and more.</p>
-                  <Button variant="secondary" className="w-full justify-start"><PenSquare className="mr-2 h-4 w-4" />Change Username</Button>
-                  <Button variant="secondary" className="w-full justify-start"><UserCog className="mr-2 h-4 w-4" />Change Display Name</Button>
-                  <Button variant="default" className="w-full justify-start bg-primary/80 hover:bg-primary"><Diamond className="mr-2 h-4 w-4" />Want more? Unlock with Premium</Button>
-                  <Button variant="secondary" className="w-full justify-start"><LogOut className="mr-2 h-4 w-4" />Account Settings</Button>
+                  <p className="text-sm text-muted-foreground">Change your username, display name and more.</p>
+                  <Link href="/account/settings">
+                    <Button variant="secondary" className="w-full justify-start bg-secondary hover:bg-secondary/90 text-secondary-foreground"><PenSquare className="mr-2 h-4 w-4" />Change Username/Bio</Button>
+                  </Link>
+                  <Link href="/account/premium">
+                    <Button variant="default" className="w-full justify-start"><Diamond className="mr-2 h-4 w-4" />Want more? Unlock with Premium</Button>
+                  </Link>
+                  <Link href="/account/settings">
+                    <Button variant="secondary" className="w-full justify-start bg-secondary hover:bg-secondary/90 text-secondary-foreground"><UserCog className="mr-2 h-4 w-4" />Account Settings</Button>
+                  </Link>
                 </CardContent>
               </Card>
            </div>
            <div>
               <h2 className="text-2xl font-semibold mb-4">Connections</h2>
-               <Card className="bg-card/50 border-white/10">
+               <Card>
                  <CardContent className="p-6">
                     <p className="text-sm text-muted-foreground mb-4">Link your Discord account to bind.us</p>
                      {discordIdentity ? (
@@ -218,7 +222,7 @@ function AccountPageSkeleton() {
 
 export default function AccountPage() {
   return (
-    <div className="flex-grow p-6">
+    <div className="flex-grow p-6 md:p-8 lg:p-12">
       <Suspense fallback={<AccountPageSkeleton />}>
         <AccountPageContent />
       </Suspense>

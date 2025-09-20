@@ -1,7 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { Header } from '@/components/header'
-import Footer from '@/components/footer'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Input } from '@/components/ui/input'
@@ -138,7 +137,6 @@ export default async function Home() {
            </div>
         </section>
       </main>
-      <Footer />
     </div>
   )
 }
