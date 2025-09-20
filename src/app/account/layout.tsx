@@ -1,5 +1,4 @@
 
-import { Header } from '@/components/header';
 import { createClient } from '@/lib/supabase/server';
 import { type Profile } from '@/lib/types';
 import AccountLayoutClient from './account-layout-client';

@@ -4,20 +4,6 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarProvider,
-} from '@/components/ui/sidebar'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import {
   UserCog,
@@ -33,139 +19,86 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Header } from '@/components/header'
 import { type Profile } from '@/lib/types'
 import { type User } from '@supabase/supabase-js'
+import { UserNav } from '@/components/user-nav'
+
+const menuItems = [
+  { href: '/account', label: 'Overview', icon: UserCog },
+  { href: '/account/analytics', label: 'Analytics', icon: BarChart2 },
+  { href: '/account/links', label: 'Links', icon: Link2 },
+  { href: '/account/customize', label: 'Customize', icon: Brush },
+  { href: '/account/badges', label: 'Badges', icon: BadgeIcon },
+  { href: '/account/premium', label: 'Premium', icon: Diamond },
+  { href: '/account/settings', label: 'Settings', icon: Settings },
+]
 
 const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
   const pathname = usePathname()
-  const isActive = (path: string) => pathname === path
 
   return (
-    <Sidebar>
-      <SidebarContent className="p-0">
-        <div suppressHydrationWarning className="flex h-full flex-col">
-          <div className="flex-1 overflow-y-auto">
-            <Accordion type="multiple" defaultValue={['account']} className="w-full px-4">
-              <AccordionItem value="account" className="border-b-0">
-                <AccordionTrigger className="py-3 text-white hover:no-underline [&[data-state=open]]:bg-primary/10 rounded-md px-3">
-                  <div className="flex items-center gap-3">
-                    <UserCog className="h-5 w-5" />
-                    <span className="font-semibold">account</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pt-2">
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <Link href="/account" className={cn("w-full", isActive('/account') ? 'text-primary' : 'text-muted-foreground hover:text-white')}>
-                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account')} className="justify-start w-full">
-                          Overview
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                       <Link href="/account/analytics" className={cn("w-full", isActive('/account/analytics') ? 'text-primary' : 'text-muted-foreground hover:text-white')}>
-                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account/analytics')} className="justify-start w-full">
-                           <BarChart2 className="inline-block mr-2 h-4 w-4" /> Analytics
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                       <Link href="/account/badges" className={cn("w-full", isActive('/account/badges') ? 'text-primary' : 'text-muted-foreground hover:text-white')}>
-                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account/badges')} className="justify-start w-full">
-                          <BadgeIcon className="inline-block mr-2 h-4 w-4" /> Badges
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                       <Link href="/account/settings" className={cn("w-full", isActive('/account/settings') ? 'text-primary' : 'text-muted-foreground hover:text-white')}>
-                        <SidebarMenuButton size="sm" variant="ghost" isActive={isActive('/account/settings')} className="justify-start w-full">
-                           <Settings className="inline-block mr-2 h-4 w-4" /> Settings
-                        </SidebarMenuButton>
-                      </Link>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-            
-            <SidebarMenu className="px-4 mt-2">
-              <SidebarMenuItem>
-                 <Link href="/account/customize" className={cn("w-full", isActive('/account/customize') ? 'text-primary' : 'text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/customize')} className="justify-start w-full font-semibold">
-                      <Brush className="h-5 w-5" /> customize
-                    </SidebarMenuButton>
-                 </Link>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                 <Link href="/account/links" className={cn("w-full", isActive('/account/links') ? 'text-primary' : 'text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/links')} className="justify-start w-full font-semibold">
-                      <Link2 className="h-5 w-5" /> links
-                    </SidebarMenuButton>
-                 </Link>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                 <Link href="/account/premium" className={cn("w-full", isActive('/account/premium') ? 'text-primary' : 'text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/premium')} className="justify-start w-full font-semibold">
-                      <Diamond className="h-5 w-5" /> premium
-                    </SidebarMenuButton>
-                 </Link>
-              </SidebarMenuItem>
-               <SidebarMenuItem>
-                 <Link href="/account/image-host" className={cn("w-full", isActive('/account/image-host') ? 'text-primary' : 'text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/image-host')} className="justify-start w-full font-semibold">
-                      <ImageUp className="h-5 w-5" /> image host
-                    </SidebarMenuButton>
-                 </Link>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                 <Link href="/account/templates" className={cn("w-full", isActive('/account/templates') ? 'text-primary' : 'text-white')}>
-                    <SidebarMenuButton variant="ghost" isActive={isActive('/account/templates')} className="justify-start w-full font-semibold">
-                      <LayoutTemplate className="h-5 w-5" /> templates
-                    </SidebarMenuButton>
-                 </Link>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </div>
-
-          <div className="p-4 mt-auto">
-             <div className="p-4 rounded-lg bg-card/80 border border-border">
-                <p className="text-sm font-medium text-white mb-2">Have a question or need support?</p>
-                <Button variant="secondary" className="w-full justify-start bg-zinc-800 hover:bg-zinc-700 text-white" asChild>
-                    <Link href="#">
-                        <HelpCircle className="h-4 w-4 mr-2" /> Help Center
-                    </Link>
-                </Button>
-            </div>
-            {profile?.username && (
-              <div className="p-4 mt-2 rounded-lg bg-card/80 border border-border">
-                  <p className="text-sm font-medium text-white mb-2">Check out your page</p>
-                  <Button variant="default" className="w-full justify-start" asChild>
-                    <Link href={`/${profile.username}`} target="_blank">
-                        <ExternalLink className="h-4 w-4 mr-2" /> My Page
-                    </Link>
-                  </Button>
-              </div>
+    <aside className="w-64 bg-black border-r border-zinc-800 p-4 flex-col hidden md:flex">
+      <Link href="/" className="text-xl font-bold mb-8 flex items-center gap-2">
+        ⚡ Bind
+      </Link>
+      <nav className="space-y-2 flex-grow">
+        {menuItems.map(({ href, label, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className={cn(
+              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+              pathname === href && "bg-primary/10 text-primary"
             )}
-          </div>
+          >
+            <Icon className="h-4 w-4" />
+            {label}
+          </Link>
+        ))}
+      </nav>
+      <div className="space-y-4">
+        <div className="p-4 rounded-lg bg-zinc-900 border border-zinc-800">
+            <p className="text-sm font-medium text-white mb-2">Have a question?</p>
+            <Button variant="secondary" className="w-full justify-start text-white" asChild>
+                <Link href="#">
+                    <HelpCircle className="h-4 w-4 mr-2" /> Help Center
+                </Link>
+            </Button>
         </div>
-      </SidebarContent>
-    </Sidebar>
+        {profile?.username && (
+          <div className="p-4 rounded-lg bg-zinc-900 border border-zinc-800">
+              <p className="text-sm font-medium text-white mb-2">Check out your page</p>
+              <Button variant="outline" className="w-full justify-start" asChild>
+                <Link href={`/${profile.username}`} target="_blank">
+                    <ExternalLink className="h-4 w-4 mr-2" /> My Page
+                </Link>
+              </Button>
+          </div>
+        )}
+      </div>
+    </aside>
   );
 };
 
 export default function AccountLayoutClient({ children, user, profile }: { children: React.ReactNode, user:User, profile: Profile | null }) {
   return (
-    <SidebarProvider>
-      <div suppressHydrationWarning className="flex flex-col min-h-screen">
-        <Header />
-        <div className="flex flex-1">
-          <AccountSidebar profile={profile} />
-          <main className="flex-grow bg-background">
+    <div className="flex min-h-screen bg-background text-white">
+      <AccountSidebar profile={profile} />
+      <div className="flex-1 flex flex-col">
+          <header className="sticky top-0 z-40 border-b border-zinc-800 bg-background/80 backdrop-blur-lg">
+            <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-8">
+               <div>
+                  {/* Search bar can go here */}
+               </div>
+               <div className="flex items-center gap-4">
+                  <UserNav />
+               </div>
+            </div>
+         </header>
+         <main className="flex-1 p-4 md:p-8 overflow-auto">
             {children}
-          </main>
-        </div>
+         </main>
       </div>
-    </SidebarProvider>
+    </div>
   )
 }
