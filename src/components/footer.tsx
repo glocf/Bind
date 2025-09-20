@@ -42,30 +42,30 @@ export default function Footer() {
           <div className="text-sm">
             <h4 className="font-semibold text-white mb-4">General</h4>
             <ul className="space-y-3">
-              <li><Link href="/login" className="hover:text-white transition-colors">Login</Link></li>
-              <li><Link href="/signup" className="hover:text-white transition-colors">Sign Up</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Pricing</Link></li>
-              <li><Link href="/status" className="hover:text-white transition-colors">Website Status</Link></li>
+              <li><Link href="/login" className="text-white/80 hover:text-white transition-colors">Login</Link></li>
+              <li><Link href="/signup" className="text-white/80 hover:text-white transition-colors">Sign Up</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link href="/status" className="text-white/80 hover:text-white transition-colors">Website Status</Link></li>
             </ul>
           </div>
 
           <div className="text-sm">
             <h4 className="font-semibold text-white mb-4">Resources</h4>
             <ul className="space-y-3">
-              <li><Link href="#" className="hover:text-white transition-colors">Help Center</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Changelog</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Redeem Code</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Salad.com Product</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Help Center</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Changelog</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Redeem Code</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Salad.com Product</Link></li>
             </ul>
           </div>
 
           <div className="text-sm">
             <h4 className="font-semibold text-white mb-4">Contact</h4>
             <ul className="space-y-3">
-              <li><Link href="#" className="hover:text-white transition-colors">Discord Server</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Support Email</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Business Email</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">Legal Email</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Discord Server</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Support Email</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Business Email</Link></li>
+              <li><Link href="#" className="text-white/80 hover:text-white transition-colors">Legal Email</Link></li>
             </ul>
           </div>
         </div>
@@ -82,5 +82,3 @@ export default function Footer() {
     </footer>
   )
 }
-
-    
