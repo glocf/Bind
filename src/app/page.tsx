@@ -46,7 +46,7 @@ export default async function Home() {
       <main className="flex-grow flex flex-col items-center text-center px-4 pt-24 md:pt-32">
         <div className="max-w-4xl mx-auto pb-24">
           <div className="animate-fade-in-up" style={{ animationDelay: '200ms' }}>
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tight bg-gradient-to-b from-white to-white/70 bg-clip-text text-transparent">
               Everything you want, right here.
             </h1>
             <p className="mt-6 text-lg text-white/70 max-w-2xl mx-auto">
