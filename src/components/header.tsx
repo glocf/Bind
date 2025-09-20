@@ -10,16 +10,20 @@ import { GunIcon } from './gun-icon';
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 max-w-screen-2xl items-center justify-between">
+      <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center space-x-2">
           <GunIcon />
           <span className="font-bold hidden sm:inline-block">Bind</span>
         </Link>
+        
         <div className="hidden md:flex">
           <MainNav />
         </div>
-        <MobileNav />
+        
         <div className="flex items-center justify-end space-x-4">
+          <div className="md:hidden">
+            <MobileNav />
+          </div>
           <UserNav />
         </div>
       </div>
