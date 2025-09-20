@@ -97,12 +97,26 @@ export default {
             opacity: '1',
             transform: 'translateY(0)'
           }
-        }
+        },
+        'background-pan': {
+          '0%': { backgroundPosition: '0% center' },
+          '100%': { backgroundPosition: '-200% center' },
+        },
+        'aurora': {
+          from: {
+            backgroundPosition: '50% 50%, 50% 50%',
+          },
+          to: {
+            backgroundPosition: '350% 50%, 350% 50%',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in-up': 'fade-in-up 0.5s ease-out forwards',
+        'background-pan': 'background-pan 10s linear infinite',
+        'aurora': 'aurora 6s linear infinite',
       },
     },
   },
