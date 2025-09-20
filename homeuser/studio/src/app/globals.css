@@ -4,64 +4,64 @@
 
 @layer base {
   :root {
-    --background: 240 10% 4%;
+    --background: 240 7% 10%; /* #1A1A1E */
     --foreground: 0 0% 98%;
 
-    --card: 240 5% 14%;
+    --card: 240 6% 14%; /* #222228 */
     --card-foreground: 0 0% 98%;
 
     --popover: 220 17% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 262 84% 58%;
+    --primary: 262 84% 58%; /* Purple */
     --primary-foreground: 0 0% 98%;
     
-    --secondary: 188 85% 50%;
+    --secondary: 188 85% 50%; /* Cyan */
     --secondary-foreground: 222 47% 11%;
 
     --muted: 240 5% 25%;
-    --muted-foreground: 220 9% 64%;
+    --muted-foreground: 220 9% 64%; /* #9CA3AF */
 
     --accent: 240 5% 18%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 20%;
-    --input: 240 4% 15%;
+    --border: 240 4% 20%; /* #333238 */
+    --input: 240 6% 16%; /* #2A2A30 */
     --ring: 262 84% 58%;
     
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 240 10% 4%;
+    --background: 240 7% 10%; /* #1A1A1E */
     --foreground: 0 0% 98%;
 
-    --card: 240 5% 14%;
+    --card: 240 6% 14%; /* #222228 */
     --card-foreground: 0 0% 98%;
 
     --popover: 220 17% 6%;
     --popover-foreground: 0 0% 98%;
 
-    --primary: 262 84% 58%;
+    --primary: 262 84% 58%; /* Purple */
     --primary-foreground: 0 0% 98%;
     
-    --secondary: 188 85% 50%;
+    --secondary: 188 85% 50%; /* Cyan */
     --secondary-foreground: 222 47% 11%;
 
     --muted: 240 5% 25%;
-    --muted-foreground: 220 9% 64%;
+    --muted-foreground: 220 9% 64%; /* #9CA3AF */
 
     --accent: 240 5% 18%;
     --accent-foreground: 0 0% 98%;
 
-    --destructive: 0 72% 51%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 240 4% 20%;
-    --input: 240 4% 15%;
+    --border: 240 4% 20%; /* #333238 */
+    --input: 240 6% 16%; /* #2A2A30 */
     --ring: 262 84% 58%;
   }
 }
@@ -72,5 +72,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 }
