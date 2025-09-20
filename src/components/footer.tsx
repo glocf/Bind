@@ -31,7 +31,7 @@ export default function Footer() {
             <p className="text-sm text-white/50 max-w-xs">
               Create feature-rich, customizable and modern link-in-bio pages with Bind.
             </p>
-            <div className="flex items-center space-x-4 mt-4">
+            <div className="flex items-center space-x-4 mt-6">
                 <SocialIcon href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2Z"/><path d="M12 18.5c-4.3 0-8.2-2.3-10-5.5.3-.8.7-1.5 1.2-2.1.2-.3.5-.6.8-.8 1.1-.9 2.4-1.5 3.8-1.9 1-.3 2-.5 3.1-.5h.1c1.1 0 2.2.2 3.2.5 1.4.4 2.7 1 3.8 1.9.3.2.6.5.8.8.6.6 1 1.3 1.2 2.1-1.8 3.2-5.7 5.5-10 5.5Z"/></svg></SocialIcon>
                 <SocialIcon href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg></SocialIcon>
                 <SocialIcon href="#"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg></SocialIcon>
