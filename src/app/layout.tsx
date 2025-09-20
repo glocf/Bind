@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider } from '@/components/ui/sidebar';
+import ScrollProgress from '@/components/scroll-progress';
 
 export const metadata: Metadata = {
   title: 'Bind',
@@ -22,6 +23,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased min-h-screen bg-background">
         <SidebarProvider>
+          <ScrollProgress />
           {children}
         </SidebarProvider>
         <Toaster />
