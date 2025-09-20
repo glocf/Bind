@@ -48,9 +48,9 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
           <div className="flex-1 overflow-y-auto">
             <Accordion type="multiple" defaultValue={['account']} className="w-full px-4">
               <AccordionItem value="account" className="border-b-0">
-                <AccordionTrigger className="py-3 text-white hover:no-underline [&[data-state=open]]:bg-transparent rounded-md px-3">
+                <AccordionTrigger className="py-3 text-sm text-muted-foreground hover:no-underline [&[data-state=open]]:text-white rounded-md px-3">
                   <div className="flex items-center gap-3">
-                    <span className="font-semibold uppercase text-xs text-muted-foreground">account</span>
+                    <span className="font-semibold uppercase">account</span>
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className="pt-2">
@@ -127,9 +127,18 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
             </SidebarMenu>
           </div>
 
-          <div className="p-4 mt-auto">
+          <div className="p-4 mt-auto space-y-4">
+             <div className="p-4 rounded-lg bg-card/80 border border-border">
+                <p className="text-sm font-medium text-white mb-2">Have a question or need support?</p>
+                <Button variant="secondary" className="w-full justify-start text-white" asChild>
+                    <Link href="#">
+                        <HelpCircle className="h-4 w-4 mr-2" /> Help Center
+                    </Link>
+                </Button>
+            </div>
             {profile?.username && (
-              <div className="p-2 mt-2 rounded-lg bg-card border border-border">
+              <div className="p-4 rounded-lg bg-card/80 border border-border">
+                  <p className="text-sm font-medium text-white mb-2">Check out your page</p>
                   <Button variant="default" className="w-full justify-start" asChild>
                     <Link href={`/${profile.username}`} target="_blank">
                         <ExternalLink className="h-4 w-4 mr-2" /> My Page
