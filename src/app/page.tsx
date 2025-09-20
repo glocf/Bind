@@ -6,33 +6,34 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { BarChart, Bot, Brush, Globe, Link2, Users } from 'lucide-react'
+import { BarChart, Bot, Brush, CheckCircle, Globe, Link2, Users } from 'lucide-react'
+import Image from 'next/image'
 
 const features = [
   {
-    icon: <Globe className="h-8 w-8 text-white" />,
+    icon: <Globe className="h-5 w-5 text-secondary" />,
     title: 'Modern Biolinks',
     description: 'Create a stunning biolink page that houses all your important links in one place.',
   },
   {
-    icon: <Brush className="h-8 w-8 text-white" />,
+    icon: <Brush className="h-5 w-5 text-secondary" />,
     title: 'Advanced Customization',
     description: 'Make your page truly yours. Customize backgrounds, buttons, fonts, and layouts.',
   },
   {
-    icon: <Bot className="h-8 w-8 text-white" />,
-    title: 'AI-Powered Backgrounds',
-    description: 'Generate unique background images for your profile simply by describing your interests.',
+    icon: <Bot className="h-5 w-5 text-secondary" />,
+    title: 'AI-Powered Features',
+    description: 'Generate unique backgrounds and get customization advice from our AI assistant.',
   },
   {
-    icon: <BarChart className="h-8 w-8 text-white" />,
+    icon: <BarChart className="h-5 w-5 text-secondary" />,
     title: 'Detailed Analytics',
     description: 'Track link clicks and page views to understand your audience better.',
   },
 ]
 
 export default async function Home() {
-  const supabase = await createClient();
+  const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser();
 
   if (user) {
@@ -75,26 +76,51 @@ export default async function Home() {
           </div>
         </div>
         
-        <section className="w-full max-w-6xl mx-auto pb-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="relative group animate-fade-in-up"
-                style={{ animationDelay: `${index * 150 + 650}ms` }}
-              >
-                <div className="absolute -inset-0.5 bg-gradient-to-r from-primary to-secondary rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200 animate-aurora"></div>
-                <Card className="relative bg-card text-left h-full">
-                  <CardHeader>
-                    {feature.icon}
-                  </CardHeader>
-                  <CardContent>
-                    <CardTitle className="text-xl font-bold mb-2 text-white">{feature.title}</CardTitle>
-                    <p className="text-muted-foreground">{feature.description}</p>
-                  </CardContent>
-                </Card>
+         <section className="w-full max-w-6xl mx-auto pb-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <div className="relative w-full max-w-sm mx-auto animate-fade-in-up" style={{ animationDelay: '800ms' }}>
+              <div className="absolute inset-0 bg-primary/20 rounded-3xl blur-2xl -z-10"></div>
+              <div className="p-2 bg-zinc-800/50 rounded-3xl border border-white/10 shadow-2xl">
+                 <div className="aspect-[9/19] bg-[#0E0E12] rounded-2xl p-4 overflow-hidden">
+                    <div className="flex flex-col items-center text-white text-center">
+                       <Image 
+                         src="https://picsum.photos/seed/profile-avatar/200/200" 
+                         width={96}
+                         height={96}
+                         alt="User Avatar"
+                         data-ai-hint="profile avatar"
+                         className="rounded-full border-4 border-primary mb-4"
+                       />
+                       <h2 className="font-bold text-xl">@username</h2>
+                       <p className="text-sm text-muted-foreground mt-1 mb-6">This is a bio, telling you about the user. Welcome to my page!</p>
+                       <div className="w-full space-y-3">
+                          <div className="bg-white/10 p-3 rounded-lg w-full text-center">Link 1</div>
+                          <div className="bg-white/10 p-3 rounded-lg w-full text-center">Link 2</div>
+                          <div className="bg-white/10 p-3 rounded-lg w-full text-center">Link 3</div>
+                       </div>
+                    </div>
+                 </div>
               </div>
-            ))}
+            </div>
+            <div className="text-left animate-fade-in-up" style={{ animationDelay: '1000ms' }}>
+               <h2 className="text-3xl md:text-4xl font-bold font-headline tracking-tight mb-6">All your links, one identity.</h2>
+               <p className="text-muted-foreground mb-8 max-w-lg">
+                  Stop juggling multiple links. Bind provides a single, beautiful page to house all your content, from social profiles to personal projects. It’s your digital identity, simplified.
+               </p>
+               <ul className="space-y-4">
+                  {features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <div className="p-1.5 bg-secondary/10 rounded-full border border-secondary/20 mt-1">
+                        {feature.icon}
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-white">{feature.title}</h3>
+                        <p className="text-muted-foreground text-sm">{feature.description}</p>
+                      </div>
+                    </li>
+                  ))}
+               </ul>
+            </div>
           </div>
         </section>
 
