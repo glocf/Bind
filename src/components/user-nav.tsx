@@ -53,12 +53,12 @@ export function UserNav() {
 
   if (!user) {
     return (
-      <div className="flex items-center space-x-4">
-        <Link href="/login" className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60">
-            Login
-        </Link>
-        <Button asChild>
-          <Link href="/signup">Sign Up Free</Link>
+      <div className="flex items-center space-x-2">
+        <Button variant="ghost" asChild>
+          <Link href="/login">Login</Link>
+        </Button>
+        <Button asChild className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white">
+          <Link href="/signup">Sign Up</Link>
         </Button>
       </div>
     )

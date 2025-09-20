@@ -11,19 +11,25 @@ export function MainNav() {
         href="#"
         className="transition-colors hover:text-foreground/80 text-foreground/60"
       >
-        Help Center
-      </Link>
-      <Link
-        href="#"
-        className="transition-colors hover:text-foreground/80 text-foreground/60"
-      >
-        Discord
+        Features
       </Link>
       <Link
         href="#"
         className="transition-colors hover:text-foreground/80 text-foreground/60"
       >
         Pricing
+      </Link>
+      <Link
+        href="#"
+        className="transition-colors hover:text-foreground/80 text-foreground/60"
+      >
+        Community
+      </Link>
+       <Link
+        href="#"
+        className="transition-colors hover:text-foreground/80 text-foreground/60"
+      >
+        Docs
       </Link>
     </nav>
   )
