@@ -1,7 +1,6 @@
 
 import Link from 'next/link'
 import { Badge } from './ui/badge'
-import { Button } from './ui/button'
 import { GunIcon } from './gun-icon'
 
 const SocialIcon = ({ href, children }: { href: string, children: React.ReactNode }) => (
@@ -83,3 +82,5 @@ export default function Footer() {
     </footer>
   )
 }
+
+    
