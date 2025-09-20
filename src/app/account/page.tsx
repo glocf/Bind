@@ -127,7 +127,7 @@ async function AccountPageContent() {
                              Upload Avatar
                            </Button>
                          </Link>
-                         <Link href="/account/customize">
+                         <Link href="/account/settings">
                            <Button variant="secondary" className={`w-full justify-start ${profile?.bio ? 'bg-green-500/10 border border-green-500/20 text-green-400 hover:bg-green-500/20' : 'hover:bg-zinc-800'}`}>
                               {profile?.bio ? <CheckCircle className="mr-2 h-4 w-4" /> : <LinkIcon className="mr-2 h-4 w-4" />}
                               Add a Description/Bio
@@ -152,11 +152,14 @@ async function AccountPageContent() {
               <h2 className="text-2xl font-semibold mb-4">Manage your account</h2>
               <Card className="bg-card/50 border-white/10">
                 <CardContent className="p-6 space-y-3">
-                  <p className="text-sm text-muted-foreground">Change your email, username and more.</p>
-                  <Button variant="secondary" className="w-full justify-start"><PenSquare className="mr-2 h-4 w-4" />Change Username</Button>
-                  <Button variant="secondary" className="w-full justify-start"><UserCog className="mr-2 h-4 w-4" />Change Display Name</Button>
+                  <p className="text-sm text-muted-foreground">Change your username, display name and more.</p>
+                  <Link href="/account/settings">
+                    <Button variant="secondary" className="w-full justify-start"><PenSquare className="mr-2 h-4 w-4" />Change Username/Bio</Button>
+                  </Link>
                   <Button variant="default" className="w-full justify-start bg-primary/80 hover:bg-primary"><Diamond className="mr-2 h-4 w-4" />Want more? Unlock with Premium</Button>
-                  <Button variant="secondary" className="w-full justify-start"><LogOut className="mr-2 h-4 w-4" />Account Settings</Button>
+                  <Link href="/account/settings">
+                    <Button variant="secondary" className="w-full justify-start"><UserCog className="mr-2 h-4 w-4" />Account Settings</Button>
+                  </Link>
                 </CardContent>
               </Card>
            </div>
@@ -219,7 +222,7 @@ function AccountPageSkeleton() {
 
 export default function AccountPage() {
   return (
-    <div className="flex-grow p-6">
+    <div className="flex-grow p-6 md:p-8 lg:p-12">
       <Suspense fallback={<AccountPageSkeleton />}>
         <AccountPageContent />
       </Suspense>

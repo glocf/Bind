@@ -46,7 +46,7 @@ function LinksFormSkeleton() {
 
 export default async function LinksPage() {
   return (
-    <div className="flex-grow p-6">
+    <div className="flex-grow p-6 md:p-8 lg:p-12">
         <div className="max-w-4xl mx-auto">
             <Suspense fallback={<LinksFormSkeleton />}>
               <LinksFormWrapper />

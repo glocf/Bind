@@ -89,7 +89,7 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
               key={preset.name}
               type="button"
               variant="outline"
-              className="flex items-center justify-center h-16 w-16 bg-card/80 hover:bg-card/100 border-border/50"
+              className="flex items-center justify-center h-16 w-16 bg-card hover:bg-accent"
               onClick={() => addPresetLink(preset)}
             >
               <preset.icon className="h-8 w-8" />
@@ -104,7 +104,7 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
             className="h-auto w-full justify-start items-center gap-4"
             onClick={addCustomLink}
           >
-            <div className="flex items-center justify-center h-16 w-16 rounded-lg bg-card/80 border border-border/50">
+            <div className="flex items-center justify-center h-16 w-16 rounded-lg bg-card border">
                 <Globe className="h-8 w-8 text-muted-foreground" />
             </div>
             <div>
@@ -120,7 +120,7 @@ export function LinksForm({ links: initialLinks }: LinksFormProps) {
           {fields.map((field, index) => {
             const Icon = getIconForUrl(linksForm.watch(`links.${index}.url`))
             return (
-              <div key={field.id} className="flex items-start gap-4 group p-4 border rounded-lg bg-card/50">
+              <div key={field.id} className="flex items-start gap-4 group p-4 border rounded-lg bg-card">
                 <Icon className="h-6 w-6 text-muted-foreground mt-2" />
                 <div className="flex-grow space-y-2">
                   <FormField

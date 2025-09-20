@@ -58,7 +58,7 @@ const ColorInput = ({ label, value, onChange }: { label: string, value: string, 
                 onChange={(e) => onChange(e.target.value)}
             />
             <Input 
-                className="bg-zinc-800 border-zinc-700 pl-12" 
+                className="pl-12" 
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
             />
@@ -179,15 +179,15 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
     };
     
     return (
-        <div className="container mx-auto py-12 px-4 space-y-12 text-white">
+        <div className="space-y-12 text-white">
             <div>
                 <h2 className="text-xl font-bold mb-4">Assets Uploader</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <Card className="bg-card/50 border-white/10 aspect-video flex flex-col">
+                    <Card className="bg-card aspect-video flex flex-col">
                         <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm">Background</p>
                             <div 
-                                className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer relative"
+                                className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer relative"
                                 onClick={() => backgroundInputRef.current?.click()}
                             >
                                 {isBgUploading ? (
@@ -224,18 +224,18 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             />
                         </CardContent>
                     </Card>
-                    <Card className="bg-card/50 border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">
+                    <Card className="bg-card aspect-video flex flex-col items-center justify-center text-center p-4">
                         <p className="font-semibold mb-2">Audio</p>
-                        <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer">
+                        <div className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer">
                             <FolderKanban className="h-8 w-8 mb-2" />
                             <span className="text-sm">Click to open audio manager</span>
                         </div>
                     </Card>
-                    <Card className="bg-card/50 border-white/10 aspect-video flex flex-col">
+                    <Card className="bg-card aspect-video flex flex-col">
                          <CardContent className="p-3 flex-grow flex flex-col">
                             <p className="font-semibold mb-2 text-sm">Profile Avatar</p>
                              <div 
-                                className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer relative"
+                                className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer relative"
                                 onClick={() => avatarInputRef.current?.click()}
                             >
                                 {isUploading ? (
@@ -259,9 +259,9 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             />
                         </CardContent>
                     </Card>
-                    <Card className="bg-card/50 border-white/10 aspect-video flex flex-col items-center justify-center text-center p-4">
+                    <Card className="bg-card aspect-video flex flex-col items-center justify-center text-center p-4">
                         <p className="font-semibold mb-2">Custom Cursor</p>
-                        <div className="w-full h-full border-2 border-dashed border-white/20 rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-white/5 transition-colors cursor-pointer">
+                        <div className="w-full h-full border-2 border-dashed border-border rounded-md flex flex-col items-center justify-center text-muted-foreground hover:bg-accent transition-colors cursor-pointer">
                             <MousePointer2 className="h-8 w-8 mb-2" />
                             <span className="text-sm">Click to upload a file</span>
                         </div>
@@ -276,7 +276,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
             
              <div>
                 <h2 className="text-xl font-bold mb-6">Color Customization</h2>
-                <Card className="bg-card/50 border-white/10 p-6">
+                <Card className="bg-card p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <ColorInput label="Accent Color" value={profile.accent_color || '#1b1b1b'} onChange={(v) => debouncedUpdate({ accent_color: v })} />
@@ -296,25 +296,25 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
 
             <div>
                 <h2 className="text-xl font-bold mb-6">Other Customization</h2>
-                <Card className="bg-card/50 border-white/10 p-6">
+                <Card className="bg-card p-6">
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <Label htmlFor="monochrome-icons" className="flex items-center text-sm font-medium">Monochrome Icons <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" /></Label>
                              <Switch id="monochrome-icons" checked={profile.monochrome_icons || false} onCheckedChange={(v) => debouncedUpdate({ monochrome_icons: v })} />
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <Label htmlFor="animated-title" className="text-sm font-medium">Animated Title</Label>
                              <Switch id="animated-title" checked={profile.animated_title || false} onCheckedChange={(v) => debouncedUpdate({ animated_title: v })}/>
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <Label htmlFor="swap-box-colors" className="flex items-center text-sm font-medium">Swap Box Colors <HelpCircle className="h-3 w-3 ml-1.5 text-muted-foreground" /></Label>
                              <Switch id="swap-box-colors" checked={profile.swap_box_colors || false} onCheckedChange={(v) => debouncedUpdate({ swap_box_colors: v })}/>
                         </div>
-                         <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                         <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <Label htmlFor="volume-control" className="text-sm font-medium">Volume Control</Label>
                              <Switch id="volume-control" disabled checked={profile.volume_control || false} onCheckedChange={(v) => debouncedUpdate({ volume_control: v })}/>
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                             <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
@@ -327,7 +327,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                                 </Tooltip>
                             </TooltipProvider>
                         </div>
-                        <div className="flex items-center justify-between p-4 rounded-lg bg-zinc-900/50">
+                        <div className="flex items-center justify-between p-4 rounded-lg bg-background">
                              <TooltipProvider>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
@@ -350,7 +350,6 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
 
                     <CustomizationControl label="Description" icon={TriangleAlert}>
                         <Input 
-                            className="bg-zinc-800 border-zinc-700" 
                             placeholder="Maybe we'll see each other in an..." 
                             defaultValue={currentBio}
                             onChange={(e) => {
@@ -365,7 +364,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             defaultValue={profile.discord_presence || 'enabled'}
                             onValueChange={(value) => debouncedUpdate({ discord_presence: value })}
                         >
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700">
+                            <SelectTrigger>
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -412,7 +411,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                             defaultValue={profile.background_effects || 'none'}
                             onValueChange={(value) => debouncedUpdate({ background_effects: value })}
                         >
-                            <SelectTrigger className="bg-zinc-800 border-zinc-700">
+                            <SelectTrigger>
                                 <div className="flex items-center">
                                     <Star className="h-4 w-4 mr-2 text-yellow-400" />
                                     <SelectValue />
@@ -428,7 +427,7 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                     </CustomizationControl>
 
                     <CustomizationControl label="Username Effects">
-                        <Button className="w-full justify-center bg-zinc-800 hover:bg-zinc-700 border border-zinc-700">
+                        <Button className="w-full justify-center" variant="outline">
                             <Star className="h-4 w-4 mr-2 text-yellow-400" />
                             Choose Username Effects
                         </Button>
@@ -436,7 +435,6 @@ export function CustomizeForm({ profile, user }: { profile: Profile, user: User 
                     
                     <CustomizationControl label="Location" icon={MapPin}>
                         <Input 
-                            className="bg-zinc-800 border-zinc-700" 
                             placeholder="Afghanistan" 
                             defaultValue={profile.location || ''}
                             onChange={(e) => debouncedUpdate({ location: e.target.value })}

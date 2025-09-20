@@ -137,14 +137,16 @@ const AccountSidebar = ({ profile }: { profile: Profile | null }) => {
                     </Link>
                 </Button>
             </div>
-            <div className="p-4 mt-2 rounded-lg bg-card/80 border border-border">
-                <p className="text-sm font-medium text-white mb-2">Check out your page</p>
-                <Button variant="default" className="w-full justify-start" asChild>
-                   <Link href={`/${profile?.username || ''}`} target="_blank">
-                     <ExternalLink className="h-4 w-4 mr-2" /> My Page
-                   </Link>
-                </Button>
-            </div>
+            {profile?.username && (
+              <div className="p-4 mt-2 rounded-lg bg-card/80 border border-border">
+                  <p className="text-sm font-medium text-white mb-2">Check out your page</p>
+                  <Button variant="default" className="w-full justify-start" asChild>
+                    <Link href={`/${profile.username}`} target="_blank">
+                        <ExternalLink className="h-4 w-4 mr-2" /> My Page
+                    </Link>
+                  </Button>
+              </div>
+            )}
           </div>
         </div>
       </SidebarContent>
@@ -159,7 +161,7 @@ export default function AccountLayoutClient({ children, user, profile }: { child
         <Header />
         <div className="flex flex-1">
           <AccountSidebar profile={profile} />
-          <main className="flex-grow">
+          <main className="flex-grow bg-background">
             {children}
           </main>
         </div>

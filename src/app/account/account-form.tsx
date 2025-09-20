@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Separator } from "@/components/ui/separator"
 import { useToast } from "@/hooks/use-toast"
 import { updateProfile } from "./actions"
 import { type User } from "@supabase/supabase-js"
@@ -71,55 +70,43 @@ export function AccountForm({ user, profile }: AccountFormProps) {
   }
 
   return (
-    <div className="space-y-12">
-      <Form {...profileForm}>
-        <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-8">
-          <div className="space-y-4">
-            <div className="p-6">
-              <h2 className="text-2xl font-semibold leading-none tracking-tight">Profile</h2>
-              <p className="text-sm text-muted-foreground mt-1">This is how others will see you on the site.</p>
-            </div>
-            
-            <div className="p-6 pt-0 space-y-4">
-              <FormField
-                control={profileForm.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Username</FormLabel>
-                    <FormControl>
-                      <Input placeholder="your_username" {...field} />
-                    </FormControl>
-                    <FormDescription>This will be your public URL: bind.us/{profileForm.getValues('username')}</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={profileForm.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Bio</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
-                    </FormControl>
-                    <FormDescription>A short and sweet bio. Used for AI background generation.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-end p-6">
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Profile
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+    <Form {...profileForm}>
+      <form onSubmit={profileForm.handleSubmit(onProfileSubmit)} className="space-y-6">
+        <FormField
+          control={profileForm.control}
+          name="username"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Username</FormLabel>
+              <FormControl>
+                <Input placeholder="your_username" {...field} />
+              </FormControl>
+              <FormDescription>This will be your public URL: bind.us/{profileForm.getValues('username')}</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={profileForm.control}
+          name="bio"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Bio</FormLabel>
+              <FormControl>
+                <Textarea placeholder="Tell us a little bit about yourself" className="resize-none" {...field} />
+              </FormControl>
+              <FormDescription>A short and sweet bio. Used for AI background generation.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+         <div className="flex items-center justify-end">
+          <Button type="submit" disabled={isPending}>
+            {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Save Profile
+          </Button>
+        </div>
+      </form>
+    </Form>
   )
 }

@@ -3,7 +3,9 @@ import { Card, CardHeader, CardTitle, CardContent, CardDescription } from "@/com
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SecurityForms } from "./security-forms";
-import type { Factor } from '@/lib/types';
+import type { Factor, Profile } from '@/lib/types';
+import { AccountForm } from "../account-form";
+import { Separator } from "@/components/ui/separator";
 
 export default async function SettingsPage() {
   const supabase = await createClient();
@@ -12,6 +14,12 @@ export default async function SettingsPage() {
   if (!user) {
     redirect('/login');
   }
+  
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
 
   const { data, error } = await supabase.auth.mfa.listFactors();
   if (error) {
@@ -26,6 +34,18 @@ export default async function SettingsPage() {
         <h1 className="text-3xl font-bold tracking-tight">Settings</h1>
         <p className="text-muted-foreground">Manage your account settings and preferences.</p>
       </div>
+
+       <Card>
+        <CardHeader>
+          <CardTitle>Profile</CardTitle>
+          <CardDescription>
+            This is how others will see you on the site.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AccountForm user={user} profile={profile} />
+        </CardContent>
+      </Card>
 
       <Card>
         <CardHeader>

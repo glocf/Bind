@@ -1,5 +1,4 @@
 
-
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -26,6 +25,7 @@ export function UserNav() {
   const router = useRouter()
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -41,6 +41,7 @@ export function UserNav() {
           .single();
         setProfile(profileData);
       }
+      setLoading(false);
     };
     fetchUserAndProfile();
   }, []);
@@ -51,13 +52,17 @@ export function UserNav() {
     router.refresh();
   }
 
+  if (loading) {
+    return <div className="h-9 w-24 animate-pulse bg-muted rounded-md" />
+  }
+
   if (!user) {
     return (
       <div className="flex items-center space-x-2">
         <Button variant="ghost" asChild>
           <Link href="/login">Login</Link>
         </Button>
-        <Button asChild className="bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white">
+        <Button asChild>
           <Link href="/signup">Sign Up</Link>
         </Button>
       </div>

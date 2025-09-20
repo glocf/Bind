@@ -54,8 +54,10 @@ export default async function CustomizePage() {
   }
   
   return (
-    <Suspense fallback={<CustomizePageSkeleton />}>
-      <CustomizeForm profile={profile} user={user} />
-    </Suspense>
+    <div className="flex-grow p-6 md:p-8 lg:p-12">
+      <Suspense fallback={<CustomizePageSkeleton />}>
+        <CustomizeForm profile={profile} user={user} />
+      </Suspense>
+    </div>
   );
 }

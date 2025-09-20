@@ -19,7 +19,7 @@ const allBadges = [
 
 function BadgeCard({ badge, isUnlocked, isEquipped }: { badge: typeof allBadges[0], isUnlocked: boolean, isEquipped: boolean }) {
   return (
-    <div className="flex items-center justify-between space-x-4 rounded-lg border p-4 bg-card/50">
+    <div className="flex items-center justify-between space-x-4 rounded-lg border p-4 bg-card">
       <div className="flex items-center space-x-4">
         <TooltipProvider>
             <Tooltip>
@@ -92,7 +92,7 @@ export default async function BadgesPage() {
                             key={badge.id} 
                             badge={badge} 
                             isUnlocked={true} 
-                            isEquipped={equippedBadges.has(badge.id)} 
+                            isEquipped={equippedBadges.has(b.id)} 
                         />
                     ))}
                 </div>
