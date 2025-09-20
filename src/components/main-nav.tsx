@@ -1,3 +1,4 @@
+
 'use client'
 
 import Link from 'next/link'
@@ -7,7 +8,7 @@ import { cn } from '@/lib/utils'
 export function MainNav() {
   return (
     <div suppressHydrationWarning className="hidden md:flex items-center space-x-6">
-      <Link href="/" className="flex items-center space-x-2 bg-card/50 border border-white/10 hover:bg-card/90 transition-colors px-3 py-1.5 rounded-full">
+      <Link href="/" className="flex items-center space-x-2">
         <GunIcon />
         <span className="font-bold">Bind</span>
       </Link>
